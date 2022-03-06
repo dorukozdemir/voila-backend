@@ -1,7 +1,7 @@
 package com.viola.backend.voilabackend;
 
 import com.viola.backend.voilabackend.jwt.JwtUtil;
-import com.viola.backend.voilabackend.model.AuthRequest;
+import com.viola.backend.voilabackend.model.User;
 import com.viola.backend.voilabackend.security.CustomUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class AuthRestController {
     private CustomUserDetailsService userDetailsService;
 
     @PostMapping("/login")
-    public String creteToken(@RequestBody AuthRequest authRequest) throws Exception {
+    public String creteToken(@RequestBody User authRequest) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException ex) {

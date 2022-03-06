@@ -4,6 +4,8 @@
 Spring boot
 Spring security
 JWT
+JPA
+Hibernate
 
 ## Çalıştırma
 Hızlı çalıştırma için Visual Studio Code'da Debug ile çalıştırılabilinir.
