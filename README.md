@@ -11,7 +11,8 @@ Hibernate
 Hızlı çalıştırma için Visual Studio Code'da Debug ile çalıştırılabilinir.
 `./mnvw spring-boot` komutu ile çalışıtılabilinir
 Docker ile çalıştırmak için klasör içindeyken docker-compose up kullanılabilir. 
-localhost:8080 portunda uygulama çalışacaktır. 
+* 5432 portunda postgresql çalışacak ve test verileri hazır olacak
+* localhost:8080 portunda uygulama çalışacaktır. 
 
 **Örnek:**
 localhost:8080/login üzerinden token oluşturulabilir.
