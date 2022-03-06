@@ -8,6 +8,11 @@ JPA
 Hibernate
 
 ## Çalıştırma
+Çalıştırmadan önce src/main/resources/application.properties oluşturulmalı. 
+* Eğer docker'da çalışan postgresql kullanılacaksa application-docker.properties'deki içerik kopyalanıp application.properties oluşturulup içine eklenmeli.
+* Eğer localhost'ta 5432 portunda çalışan bir postgresql varsa application-local.properties'deli içerik kopyalanıp application.properties oluşturulup içine eklenmeli.
+* Bunlar dışında bir bağlantı sağlanacaksa da gerekli bağlantı bilgileri application.properties oluşturulup sağlanmalı.
+
 Hızlı çalıştırma için Visual Studio Code'da Debug ile çalıştırılabilinir.
 `./mnvw spring-boot` komutu ile çalışıtılabilinir
 Docker ile çalıştırmak için klasör içindeyken docker-compose up kullanılabilir. 
