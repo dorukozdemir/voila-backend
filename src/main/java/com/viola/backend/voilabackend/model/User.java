@@ -21,6 +21,7 @@ public class User implements UserDetails{
 
     private String username;
     private String password;
+    private String name;
     private Long id;
 
     public User() {
@@ -41,6 +42,7 @@ public class User implements UserDetails{
     public void setId(Long id) {
         this.id = id;
     }
+
     @Column(name="eposta")
     public String getUsername() {
         return username;
@@ -56,6 +58,15 @@ public class User implements UserDetails{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Column(name="adsoyad")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
