@@ -19,6 +19,12 @@ Docker ile çalıştırmak için klasör içindeyken docker-compose up kullanıl
 * 5432 portunda postgresql çalışacak ve test verileri hazır olacak
 * localhost:8080 portunda uygulama çalışacaktır. 
 
+## Dokümantasyon
+Swagger dokümantasyonuna ${HOST}/doc.html adresinden ulaşılabilir. 
+```
+http:localhost:8080/doc.html
+```
+
 **Örnek:**
 localhost:8080/login üzerinden token oluşturulabilir.
 ```
