@@ -21,3 +21,9 @@ body:
     "password": "doruk123"
 }
 ```
+**Veritabanındaki Test Kullanıcıları**
+Eposta  | Şifre
+------------- | -------------
+mete@voila.com  | mete123
+harun@voila.com  | harun123
+doruk@voila.com  | doruk123

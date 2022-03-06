@@ -1,8 +1,23 @@
 version: '3.4'
 
 services:
+  database:
+    build:
+      context: ./voila-database
+    image: voila-database
+    # set default postgres root password, change as needed
+    environment:
+      POSTGRES_PASSWORD: password
+    # Expose port 3306 to host. Not for the application but
+    # handy to inspect the database from the host machine.
+    ports:
+      - "5432:5432" 
+    restart: always
+
   voilabackend:
     image: voilabackend
+    links:
+      - "database:voila-db"
     build:
       context: .
       dockerfile: ./Dockerfile
