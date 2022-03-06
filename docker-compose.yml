@@ -17,7 +17,7 @@ services:
   voilabackend:
     image: voilabackend
     links:
-      - "database:voila-db"
+      - "database:voiladb"
     build:
       context: .
       dockerfile: ./Dockerfile
