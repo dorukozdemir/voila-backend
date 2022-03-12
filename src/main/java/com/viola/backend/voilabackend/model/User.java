@@ -2,6 +2,7 @@ package com.viola.backend.voilabackend.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ public class User implements UserDetails{
     private String password;
     private String name;
     private Long id;
+    private Date kayitTarihi = new Date();
 
     public User() {
 
@@ -34,7 +36,7 @@ public class User implements UserDetails{
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return this.id;
     }
@@ -67,6 +69,15 @@ public class User implements UserDetails{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name="kayittarihi")
+    public Date getKayitTarihi() {
+        return kayitTarihi;
+    }
+
+    public void setKayitTarihi(Date kayitTarihi) {
+        this.kayitTarihi = kayitTarihi;
     }
 
     @Override
