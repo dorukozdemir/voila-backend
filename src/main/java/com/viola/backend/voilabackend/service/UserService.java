@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import com.viola.backend.voilabackend.model.User;
@@ -14,6 +17,8 @@ import com.viola.backend.voilabackend.repository.UserRepository;
 public class UserService {
     @Autowired
 	UserRepository userRepository;
+
+    private final int RESETPASSWORDTOKENDURATION = 15;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
@@ -37,5 +42,27 @@ public class UserService {
 
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    public boolean isForgotTokenValid(User user) {
+        if (user == null) {
+            return false;
+        }
+        if (user.getResetPasswordToken() == null) {
+            return false;
+        }
+        if (user.getResetPasswordTokenExpiry() == null || user.getResetPasswordTokenExpiry().before(new Date())) {
+            return false;
+        }
+        return true;
+    }
+
+    public void createResetPasswordToken(User user) {
+        Calendar currentTimeNow = Calendar.getInstance();
+        currentTimeNow.add(Calendar.MINUTE, RESETPASSWORDTOKENDURATION);
+        Date expiry = currentTimeNow.getTime();
+        user.setResetPasswordToken(UUID.randomUUID().toString());
+        user.setResetPasswordTokenExpiry(expiry);
+        userRepository.save(user);
     }
 }

@@ -1,5 +1,6 @@
 package com.viola.backend.voilabackend;
 
+import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.jwt.JwtUtil;
 import com.viola.backend.voilabackend.model.User;
 import com.viola.backend.voilabackend.model.UserRequest;
@@ -33,6 +34,9 @@ public class AuthRestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailSenderService emailSenderService;
+
     @PostMapping("/login")
     public String login(@RequestBody UserRequest authRequest) throws Exception {
         try {
@@ -58,6 +62,19 @@ public class AuthRestController {
             final String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.ok()
                 .body(jwt);
+        }
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<String> forgot(@RequestBody UserRequest authRequest) throws Exception {
+        String username = authRequest.getUsername();
+        if (userService.isUserExist(username)) {
+            User user = userService.getUserByUsername(username);
+            userService.createResetPasswordToken(user);
+            emailSenderService.sendForgotPasswordEmail(user.getUsername(), user.getResetPasswordToken());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
     }
 }

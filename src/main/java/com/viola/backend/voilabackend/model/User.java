@@ -25,6 +25,8 @@ public class User implements UserDetails{
     private String name;
     private Long id;
     private Date kayitTarihi = new Date();
+    private String resetPasswordToken;
+    private Date resetPasswordTokenExpiry = new Date();
 
     public User() {
 
@@ -78,6 +80,22 @@ public class User implements UserDetails{
 
     public void setKayitTarihi(Date kayitTarihi) {
         this.kayitTarihi = kayitTarihi;
+    }  
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+
+    public Date getResetPasswordTokenExpiry() {
+        return resetPasswordTokenExpiry;
+    }
+
+    public void setResetPasswordTokenExpiry(Date resetPasswordTokenExpiry) {
+        this.resetPasswordTokenExpiry = resetPasswordTokenExpiry;
     }
 
     @Override
