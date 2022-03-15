@@ -2,13 +2,13 @@ package com.viola.backend.voilabackend;
 
 import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.jwt.JwtUtil;
+import com.viola.backend.voilabackend.model.ResetRequest;
 import com.viola.backend.voilabackend.model.User;
 import com.viola.backend.voilabackend.model.UserRequest;
 import com.viola.backend.voilabackend.security.CustomUserDetailsService;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -75,6 +75,18 @@ public class AuthRestController {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+
+    @PostMapping("/reset")
+    public ResponseEntity<String> reset(@RequestBody ResetRequest authRequest) throws Exception {
+        String token = authRequest.getToken();
+        String password = authRequest.getPassword();
+        if (userService.isForgotTokenValid(token)) {
+            userService.changePasswordByToken(token, password);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }

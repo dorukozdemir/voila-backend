@@ -6,7 +6,9 @@ CREATE TABLE v_users_t (
   adSoyad varchar(100) DEFAULT NULL,
   kayitTarihi TIMESTAMP NOT NULL,
   password varchar(255) NOT NULL,
-  eposta VARCHAR( 255 ) UNIQUE NOT NULL
+  eposta VARCHAR( 255 ) UNIQUE NOT NULL,
+  reset_password_token varchar(50), 
+  reset_password_token_expiry timestamp without time zone
 );
 
 insert into v_users_t (adSoyad, kayitTarihi, password, eposta) values ('mete', now(), '$2a$10$B3A0YH1z0U56y.lz6ixjOejJLtrh8lHa4q.Kf.VALWCMAww0id88e','mete@voila.com');

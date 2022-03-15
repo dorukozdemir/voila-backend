@@ -30,6 +30,14 @@ public class UserService {
 		return null;
 	}
 
+    public User getByPasswordResetToken(String token) {
+        List<User> users = userRepository.findByResetPasswordToken(token);
+        if (CollectionUtils.isNotEmpty(users)) {
+            return users.get(0);
+        }
+		return null;
+    }
+
     public boolean isUserExist(String username) {
         User user = this.getUserByUsername(username);
         return (user != null);
@@ -42,6 +50,10 @@ public class UserService {
 
     public void deleteUser(User user) {
         userRepository.delete(user);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     public boolean isForgotTokenValid(User user) {
@@ -57,6 +69,14 @@ public class UserService {
         return true;
     }
 
+    public boolean isForgotTokenValid(String token) {
+        if (token == null || token.trim().equals("")) {
+            return false;
+        }
+        User user = getByPasswordResetToken(token);
+        return isForgotTokenValid(user);
+    }
+
     public void createResetPasswordToken(User user) {
         Calendar currentTimeNow = Calendar.getInstance();
         currentTimeNow.add(Calendar.MINUTE, RESETPASSWORDTOKENDURATION);
@@ -64,5 +84,17 @@ public class UserService {
         user.setResetPasswordToken(UUID.randomUUID().toString());
         user.setResetPasswordTokenExpiry(expiry);
         userRepository.save(user);
+    }
+
+    public void changePasswordByToken(String token, String password) {
+        User user = getByPasswordResetToken(token);
+        String encodedPassword = passwordEncoder.encode(password);
+        if (user != null) {
+            System.out.println("Kullanıcı var");
+            user.setPassword(encodedPassword);
+            save(user);
+        } else {
+            System.out.println("Kullanıcı yok.");
+        }
     }
 }

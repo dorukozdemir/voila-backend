@@ -1,6 +1,6 @@
 package com.viola.backend.voilabackend.model;
 
-public class UserRequest {
+public class UserRequest implements Request{
     private String username;
     private String password;
 
