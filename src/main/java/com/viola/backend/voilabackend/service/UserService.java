@@ -97,4 +97,12 @@ public class UserService {
             System.out.println("Kullanıcı yok.");
         }
     }
+
+    public User getByProfileToken(String profileToken) {
+        List<User> users = userRepository.findByProfileToken(profileToken);
+        if (CollectionUtils.isNotEmpty(users)) {
+            return users.get(0);
+        }
+		return null;
+    }
 }

@@ -8,7 +8,8 @@ CREATE TABLE v_users_t (
   password varchar(255) NOT NULL,
   eposta VARCHAR( 255 ) UNIQUE NOT NULL,
   reset_password_token varchar(50), 
-  reset_password_token_expiry timestamp without time zone
+  reset_password_token_expiry timestamp without time zone,
+  profile_token VARCHAR(50) NOT NULL
 );
 
 insert into v_users_t (adSoyad, kayitTarihi, password, eposta) values ('mete', now(), '$2a$10$B3A0YH1z0U56y.lz6ixjOejJLtrh8lHa4q.Kf.VALWCMAww0id88e','mete@voila.com');

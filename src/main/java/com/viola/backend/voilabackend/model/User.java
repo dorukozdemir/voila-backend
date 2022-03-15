@@ -3,6 +3,7 @@ package com.viola.backend.voilabackend.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +28,7 @@ public class User implements UserDetails{
     private Date kayitTarihi = new Date();
     private String resetPasswordToken;
     private Date resetPasswordTokenExpiry = new Date();
+    private String profileToken = UUID.randomUUID().toString();
 
     public User() {
 
@@ -96,6 +98,14 @@ public class User implements UserDetails{
 
     public void setResetPasswordTokenExpiry(Date resetPasswordTokenExpiry) {
         this.resetPasswordTokenExpiry = resetPasswordTokenExpiry;
+    }
+    
+    public String getProfileToken() {
+        return profileToken;
+    }
+
+    public void setProfileToken(String profileToken) {
+        this.profileToken = profileToken;
     }
 
     @Override
