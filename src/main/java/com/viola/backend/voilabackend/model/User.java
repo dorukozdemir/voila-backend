@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -29,6 +32,7 @@ public class User implements UserDetails{
     private String resetPasswordToken;
     private Date resetPasswordTokenExpiry = new Date();
     private String profileToken = UUID.randomUUID().toString();
+    private SocialMediaAccounts socialMediaAccounts;
 
     public User() {
 
@@ -106,6 +110,32 @@ public class User implements UserDetails{
 
     public void setProfileToken(String profileToken) {
         this.profileToken = profileToken;
+    }
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    public SocialMediaAccounts getSocialMediaAccounts() {
+        return socialMediaAccounts;
+    }
+
+    public void setSocialMediaAccounts(SocialMediaAccounts socialMediaAccounts) {
+        this.socialMediaAccounts = socialMediaAccounts;
+    }
+
+    @Transient
+    public void updateSocialMediaAccounts(SocialMediaAccounts updatedSocialMediaAccounts) {
+        this.getSocialMediaAccounts().setFacebook(updatedSocialMediaAccounts.getFacebook());
+        this.getSocialMediaAccounts().setTwitter(updatedSocialMediaAccounts.getTwitter());
+        this.getSocialMediaAccounts().setInstagram(updatedSocialMediaAccounts.getInstagram());
+        this.getSocialMediaAccounts().setTiktok(updatedSocialMediaAccounts.getTiktok());
+        this.getSocialMediaAccounts().setYoutube(updatedSocialMediaAccounts.getYoutube());
+        this.getSocialMediaAccounts().setLinkedin(updatedSocialMediaAccounts.getLinkedin());
+        this.getSocialMediaAccounts().setBehance(updatedSocialMediaAccounts.getBehance());
+        this.getSocialMediaAccounts().setDribble(updatedSocialMediaAccounts.getDribble());
+        this.getSocialMediaAccounts().setPinterest(updatedSocialMediaAccounts.getPinterest());
+        this.getSocialMediaAccounts().setGithub(updatedSocialMediaAccounts.getGithub());
+        this.getSocialMediaAccounts().setTelegram(updatedSocialMediaAccounts.getTelegram());
+        this.getSocialMediaAccounts().setSnap(updatedSocialMediaAccounts.getSnap());
     }
 
     @Override

@@ -12,6 +12,14 @@ import org.springframework.stereotype.Service;
 @Service("jsonDataReader")
 public class JsonDataReader {
 	private final String FOLDERPATH = "src/test/resources/com/viola/backend/voilabackend/data/";
+	
+	public SocialMediaAccounts getSocialMediaAccounts() {
+		return (SocialMediaAccounts) getSingleObjectFromFile("SocialMedia.json", SocialMediaAccounts.class);
+	}
+
+	public SocialMediaAccounts getSocialMediaAccountsUpdated() {
+		return (SocialMediaAccounts) getSingleObjectFromFile("SocialMediaUpdated.json", SocialMediaAccounts.class);
+	}
 
 	public Object getSingleObjectFromFile(String file, Class clazz) {
 		Gson gson = new Gson();

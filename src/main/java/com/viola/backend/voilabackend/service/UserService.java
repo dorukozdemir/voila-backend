@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import com.viola.backend.voilabackend.model.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.User;
 import com.viola.backend.voilabackend.repository.UserRepository;
 
@@ -104,5 +105,18 @@ public class UserService {
             return users.get(0);
         }
 		return null;
+    }
+
+    public void updateSocialMediaAccounts(User user, SocialMediaAccounts socialMediaAccounts) {
+        if (user.getSocialMediaAccounts() == null) {
+            System.out.println("önceden hesap olmadığı için sıfırdan kaydediliyor.");
+            socialMediaAccounts.setUser(user);
+            user.setSocialMediaAccounts(socialMediaAccounts);
+            save(user);
+        } else {
+            System.out.println("hesap olduğu için güncelleniyor");
+            user.updateSocialMediaAccounts(socialMediaAccounts);
+            save(user);
+        }
     }
 }
