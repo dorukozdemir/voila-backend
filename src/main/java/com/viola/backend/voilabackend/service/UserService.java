@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import com.viola.backend.voilabackend.model.BankAccountInfo;
 import com.viola.backend.voilabackend.model.CompanyInfo;
 import com.viola.backend.voilabackend.model.ContactInfo;
 import com.viola.backend.voilabackend.model.Link;
@@ -141,6 +142,12 @@ public class UserService {
     public void addCompanyInfo(User user, CompanyInfo companyInfo) {
         companyInfo.setUser(user);
         user.addCompanyInfo(companyInfo);
+        save(user);
+    }
+
+    public void addBankAccountInfo(User user, BankAccountInfo bankAccountInfo) {
+        bankAccountInfo.setUser(user);
+        user.addBankAccountInfo(bankAccountInfo);
         save(user);
     }
 }

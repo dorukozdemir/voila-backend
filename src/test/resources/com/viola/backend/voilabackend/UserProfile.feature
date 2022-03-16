@@ -28,3 +28,9 @@ Feature: Kullanıcı profili
         When Kullanıcı "Coza Akıllı Çözümler Ltd Şti", "Baki Dede Sok. Balat Mah. No:19 34087 Fatih/İstanbul", "2140664898", "Fatih" şirketini ekliyor
         When Kullanıcı "Keys Danışmanlık", "Ankara", "123456789101", "Başkent" şirketini ekliyor
         Then Kullanıcı 2 adet şirket eklemiş oluyor
+    Scenario: Kullanıcı banka bilgileri ekliyor    
+        Given Kullanıcı "mete@voila.com" epostası ile var
+        When Kullanıcı "Garanti Bankası" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
+        When Kullanıcı "Denizbank" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
+        Then Kullanıcı 2 adet banka bilgisi eklemiş oluyor
+    

@@ -42,6 +42,7 @@ public class User implements UserDetails{
     private Set<ContactInfo> contactInfo;
     private Set<Link> links;
     private Set<CompanyInfo> companies;
+    private Set<BankAccountInfo> bankAccounts;
 
     public User() {
 
@@ -171,6 +172,15 @@ public class User implements UserDetails{
         this.companies = companies;
     }
 
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public Set<BankAccountInfo> getBankAccounts() {
+        return bankAccounts;
+    }
+
+    public void setBankAccounts(Set<BankAccountInfo> bankAccounts) {
+        this.bankAccounts = bankAccounts;
+    }
+
     @Transient
     public void updateSocialMediaAccounts(SocialMediaAccounts updatedSocialMediaAccounts) {
         this.getSocialMediaAccounts().setFacebook(updatedSocialMediaAccounts.getFacebook());
@@ -238,5 +248,12 @@ public class User implements UserDetails{
             this.companies = new LinkedHashSet<CompanyInfo>();
         }
         this.companies.add(companyInfo);
+    }
+
+    public void addBankAccountInfo(BankAccountInfo bankAccountInfo) {
+        if (this.bankAccounts == null) {
+            this.bankAccounts = new LinkedHashSet<BankAccountInfo>();
+        }
+        this.bankAccounts.add(bankAccountInfo);
     }
 }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.viola.backend.voilabackend.helper.JsonDataReader;
+import com.viola.backend.voilabackend.model.BankAccountInfo;
 import com.viola.backend.voilabackend.model.CompanyInfo;
 import com.viola.backend.voilabackend.model.ContactInfo;
 import com.viola.backend.voilabackend.model.ContactType;
@@ -129,6 +130,18 @@ public class UserProfile_Steps {
     public void kullanıcı_adet_şirket_eklemiş_oluyor(Integer count) {
         User updatedUser = userService.getUserByUsername(this.username);
         assertEquals(count, updatedUser.getCompanies().size());
+    }
+
+    @When("Kullanıcı {string} ve {string} banka hesabını ekliyor")
+    public void kullanıcı_ve_banka_hesabını_ekliyor(String name, String iban) {
+        BankAccountInfo bankAccountInfo = new BankAccountInfo(name, iban);
+        User user = userService.getUserByUsername(this.username);
+        userService.addBankAccountInfo(user, bankAccountInfo);
+    }
+    @Then("Kullanıcı {int} adet banka bilgisi eklemiş oluyor")
+    public void kullanıcı_adet_banka_bilgisi_eklemiş_oluyor(Integer count) {
+        User updatedUser = userService.getUserByUsername(this.username);
+        assertEquals(count, updatedUser.getBankAccounts().size());
     }
 
     private boolean testSocialMediaAccounts(SocialMediaAccounts socialMediaAccounts1, SocialMediaAccounts socialMediaAccounts2) {
