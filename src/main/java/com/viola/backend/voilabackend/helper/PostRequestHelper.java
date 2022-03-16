@@ -4,16 +4,19 @@ import java.io.IOException;
 
 import com.google.gson.Gson;
 import com.viola.backend.voilabackend.model.Request;
+import com.viola.backend.voilabackend.model.UserRequest;
 
 import org.apache.http.client.methods.HttpPost;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpEntity;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Service;
-import org.apache.http.HttpResponse;
-import org.apache.http.entity.StringEntity;
 
 @Service("postRequestHelper")
 public class PostRequestHelper {
@@ -25,6 +28,7 @@ public class PostRequestHelper {
     private static final String APPLICATION_JSON = "application/json";
 
     private final String DOMAIN = "http://localhost:";
+    private final String LOGIN_PATH = "/login";
 
     public HttpResponse httpPost(Request requestObject, String url) throws IOException {
         Gson gson = new Gson();
@@ -41,5 +45,14 @@ public class PostRequestHelper {
         int port = webServerAppCtxt.getWebServer().getPort();
         String url = DOMAIN + port + PATH;
         return url;
+    }
+
+    public String getLoginAndJWT(String username, String password) throws IOException{
+        String url = buildUrl(LOGIN_PATH);
+        UserRequest userRequest = new UserRequest(username, password);
+        HttpResponse response = httpPost(userRequest, url);
+        HttpEntity entity = response.getEntity();
+        String responseString = EntityUtils.toString(entity, "UTF-8");
+        return responseString;
     }
 }
