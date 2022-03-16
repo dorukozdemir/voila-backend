@@ -24,11 +24,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "v_users_t")
 public class User implements UserDetails{
 
+    private Long id;
     private String username;
     private String password;
     private String name;
-    private Long id;
-    private Date kayitTarihi = new Date();
+    private String surname;
+    private String bio;
+    private Date created = new Date();
     private String resetPasswordToken;
     private Date resetPasswordTokenExpiry = new Date();
     private String profileToken = UUID.randomUUID().toString();
@@ -70,7 +72,6 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    @Column(name="adsoyad")
     public String getName() {
         return name;
     }
@@ -79,13 +80,28 @@ public class User implements UserDetails{
         this.name = name;
     }
 
-    @Column(name="kayittarihi")
-    public Date getKayitTarihi() {
-        return kayitTarihi;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setKayitTarihi(Date kayitTarihi) {
-        this.kayitTarihi = kayitTarihi;
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }  
 
     public String getResetPasswordToken() {
