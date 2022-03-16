@@ -3,14 +3,19 @@ package com.viola.backend.voilabackend.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -35,6 +40,8 @@ public class User implements UserDetails{
     private Date resetPasswordTokenExpiry = new Date();
     private String profileToken = UUID.randomUUID().toString();
     private SocialMediaAccounts socialMediaAccounts;
+    private Set<ContactInfo> contactInfo;
+    private Set<Link> links;
 
     public User() {
 
@@ -137,6 +144,23 @@ public class User implements UserDetails{
     public void setSocialMediaAccounts(SocialMediaAccounts socialMediaAccounts) {
         this.socialMediaAccounts = socialMediaAccounts;
     }
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public Set<ContactInfo> getContactInfo() {
+        return contactInfo;
+    }
+
+    public void setContactInfo(Set<ContactInfo> contactInfo) {
+        this.contactInfo = contactInfo;
+    }
+
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public Set<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Set<Link> links) {
+        this.links = links;
+    }
 
     @Transient
     public void updateSocialMediaAccounts(SocialMediaAccounts updatedSocialMediaAccounts) {
@@ -184,5 +208,19 @@ public class User implements UserDetails{
     @Transient
     public boolean isEnabled() {
         return true;
+    }
+
+    public void addContactInfo(ContactInfo singleContactInfo) {
+        if (this.contactInfo == null) {
+            this.contactInfo = new LinkedHashSet<ContactInfo>();
+        }
+        this.contactInfo.add(singleContactInfo);
+    }
+
+    public void addLink(Link link) {
+        if (this.links == null) {
+            this.links = new LinkedHashSet<Link>();
+        }
+        this.links.add(link);
     }
 }

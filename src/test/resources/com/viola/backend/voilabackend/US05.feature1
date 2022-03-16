@@ -1,0 +1,6 @@
+Feature: Kullanıcı voila card üzerinden kişi bilgisi okutuyor 
+    Scenario: Kullanıcı voila card üzerinden NFC ile okutunca kullanıcı diğer kullanıcının profil bilgilerine erişiyor
+        Given Uygulamada giriş yapmış kullanıcı var
+        Given Kullanıcı içeri aktarma ekranında
+        When Kullanıcı kartı okutuyor
+        Then Kartta tanımlı kullanıcının profil bilgileri ekrana geliyor

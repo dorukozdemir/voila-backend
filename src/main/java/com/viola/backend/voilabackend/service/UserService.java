@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import com.viola.backend.voilabackend.model.ContactInfo;
+import com.viola.backend.voilabackend.model.Link;
 import com.viola.backend.voilabackend.model.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.User;
 import com.viola.backend.voilabackend.repository.UserRepository;
@@ -118,5 +120,17 @@ public class UserService {
             user.updateSocialMediaAccounts(socialMediaAccounts);
             save(user);
         }
+    }
+
+    public void addContactInfo(User user, ContactInfo contactInfo) {
+        contactInfo.setUser(user);
+        user.addContactInfo(contactInfo);
+        save(user);
+    }
+
+    public void addLink(User user, Link link) {
+        link.setUser(user);
+        user.addLink(link);
+        save(user);
     }
 }
