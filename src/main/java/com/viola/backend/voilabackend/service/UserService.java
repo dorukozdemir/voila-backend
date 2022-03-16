@@ -9,7 +9,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import com.viola.backend.voilabackend.model.CompanyInfo;
 import com.viola.backend.voilabackend.model.ContactInfo;
 import com.viola.backend.voilabackend.model.Link;
 import com.viola.backend.voilabackend.model.SocialMediaAccounts;
@@ -131,6 +134,13 @@ public class UserService {
     public void addLink(User user, Link link) {
         link.setUser(user);
         user.addLink(link);
+        save(user);
+    }
+
+    @Transactional
+    public void addCompanyInfo(User user, CompanyInfo companyInfo) {
+        companyInfo.setUser(user);
+        user.addCompanyInfo(companyInfo);
         save(user);
     }
 }

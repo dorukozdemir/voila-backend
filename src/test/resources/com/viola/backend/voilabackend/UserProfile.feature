@@ -23,3 +23,8 @@ Feature: Kullanıcı profili
         When Kullanıcı "sirketim.com" bağlantısını ekliyor
         When Kullanıcı "sahibinden.com/portal" bağlantısını ekliyor
         Then Kullanıcı 2 adet bağlantı eklemiş oluyor
+    Scenario: Kullanıcı şirket bilgileri ekliyor    
+        Given Kullanıcı "mete@voila.com" epostası ile var
+        When Kullanıcı "Coza Akıllı Çözümler Ltd Şti", "Baki Dede Sok. Balat Mah. No:19 34087 Fatih/İstanbul", "2140664898", "Fatih" şirketini ekliyor
+        When Kullanıcı "Keys Danışmanlık", "Ankara", "123456789101", "Başkent" şirketini ekliyor
+        Then Kullanıcı 2 adet şirket eklemiş oluyor

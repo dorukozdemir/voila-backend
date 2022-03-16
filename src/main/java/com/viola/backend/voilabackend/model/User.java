@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,6 +41,7 @@ public class User implements UserDetails{
     private SocialMediaAccounts socialMediaAccounts;
     private Set<ContactInfo> contactInfo;
     private Set<Link> links;
+    private Set<CompanyInfo> companies;
 
     public User() {
 
@@ -162,6 +162,15 @@ public class User implements UserDetails{
         this.links = links;
     }
 
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public Set<CompanyInfo> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(Set<CompanyInfo> companies) {
+        this.companies = companies;
+    }
+
     @Transient
     public void updateSocialMediaAccounts(SocialMediaAccounts updatedSocialMediaAccounts) {
         this.getSocialMediaAccounts().setFacebook(updatedSocialMediaAccounts.getFacebook());
@@ -222,5 +231,12 @@ public class User implements UserDetails{
             this.links = new LinkedHashSet<Link>();
         }
         this.links.add(link);
+    }
+
+    public void addCompanyInfo(CompanyInfo companyInfo) {
+        if (this.companies == null) {
+            this.companies = new LinkedHashSet<CompanyInfo>();
+        }
+        this.companies.add(companyInfo);
     }
 }
