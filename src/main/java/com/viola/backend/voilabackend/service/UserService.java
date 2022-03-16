@@ -120,7 +120,6 @@ public class UserService {
             user.setSocialMediaAccounts(socialMediaAccounts);
             save(user);
         } else {
-            System.out.println("hesap olduğu için güncelleniyor");
             user.updateSocialMediaAccounts(socialMediaAccounts);
             save(user);
         }

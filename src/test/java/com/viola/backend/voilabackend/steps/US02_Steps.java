@@ -73,10 +73,6 @@ public class US02_Steps {
         assertEquals(200, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
-        System.out.println("Gelen durum şöyle");
-        System.out.println(response);
-        System.out.println("Reponse string");
-        System.out.println(responseString);
         String[] chunks = responseString.split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
         String payload = new String(decoder.decode(chunks[1]));
@@ -108,8 +104,6 @@ public class US02_Steps {
         request.addHeader("content-type", APPLICATION_JSON);
         request.setEntity(entity);
         HttpResponse response = httpClient.execute(request);
-        System.out.println("Dönen cevap:");
-        System.out.println(response.toString());
         assertEquals(403, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");

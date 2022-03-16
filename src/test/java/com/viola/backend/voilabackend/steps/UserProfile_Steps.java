@@ -17,6 +17,7 @@ import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -189,5 +190,12 @@ public class UserProfile_Steps {
             return false;
         } 
         return true; 
+    }
+
+    @After("@UserProfileLast")
+    public void kullaniciKaldir() {
+        User user = userService.getUserByUsername(username);
+        if(user != null)
+            userService.deleteUser(user);
     }
 }
