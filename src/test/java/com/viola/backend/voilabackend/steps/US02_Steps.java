@@ -13,6 +13,7 @@ import java.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.web.UserRequest;
 import com.viola.backend.voilabackend.service.UserService;
@@ -30,10 +31,8 @@ import org.apache.http.HttpEntity;
 
 public class US02_Steps {
 
-    private static final String APPLICATION_JSON = "application/json";
     private final String LOGIN_PATH = "/login";
 
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
     private String USERNAME = "mete@voila.com";
     private String PASSWORD = "mete123";
 
@@ -41,10 +40,10 @@ public class US02_Steps {
     private String password;
 
     @Autowired
-    private ServletWebServerApplicationContext webServerAppCtxt;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private RequestHelper requestHelper;
     
     @Given("Uygulamada kayıtlı kullanıcı var")
     public void uygulamada_kullanıcı_yok() {
@@ -60,16 +59,9 @@ public class US02_Steps {
 
     @Then("Kullanıcı başarılı bir şekilde giriş yapması sağlanır")
     public void kullanıcı_başarılı_bir_şekilde_giriş_yapması_sağlanır() throws IOException {
-        int port = webServerAppCtxt.getWebServer().getPort();
-        String url = "http://localhost:" + port + LOGIN_PATH;
-        HttpPost request = new HttpPost(url);
-        Gson gson = new Gson();
+        String url = requestHelper.buildUrl(LOGIN_PATH);
         UserRequest userRequest = new UserRequest(USERNAME, PASSWORD);
-        String jsonString = gson.toJson(userRequest);
-        StringEntity entity = new StringEntity(jsonString);
-        request.addHeader("content-type", APPLICATION_JSON);
-        request.setEntity(entity);
-        HttpResponse response = httpClient.execute(request);
+        HttpResponse response = requestHelper.httpPost(userRequest, url);
         assertEquals(200, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
@@ -93,21 +85,13 @@ public class US02_Steps {
 
     @Then("Bu eposta ve şifre ile kullanıcı bulunmadığına dair bilgi verilir")
     public void bu_eposta_ve_sifre_ile_kullanici_bulunmadigina_dair_bilgi_verilir() throws IOException {
-        int port = webServerAppCtxt.getWebServer().getPort();
-        String url = "http://localhost:" + port + LOGIN_PATH;
-        System.out.println("bağalanacak adres: " + url);
-        HttpPost request = new HttpPost(url);
-        Gson gson = new Gson();
+        String url = requestHelper.buildUrl(LOGIN_PATH);
         UserRequest userRequest = new UserRequest(username, password);
-        String jsonString = gson.toJson(userRequest);
-        StringEntity entity = new StringEntity(jsonString);
-        request.addHeader("content-type", APPLICATION_JSON);
-        request.setEntity(entity);
-        HttpResponse response = httpClient.execute(request);
+        HttpResponse response = requestHelper.httpPost(userRequest, url);
         assertEquals(403, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
-        System.out.println(responseString);        
+        assertEquals("", responseString);  
     }
 
     @After("@US02Last")

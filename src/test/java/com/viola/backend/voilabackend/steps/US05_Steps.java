@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.viola.backend.voilabackend.helper.JsonDataReader;
-import com.viola.backend.voilabackend.helper.PostRequestHelper;
+import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.service.UserService;
 
@@ -38,7 +38,7 @@ public class US05_Steps {
     private UserService userService;
 
     @Autowired
-    private PostRequestHelper postRequestHelper;
+    private RequestHelper requestHelper;
 
     @Autowired
     private JsonDataReader jsonDataReader;
@@ -51,7 +51,7 @@ public class US05_Steps {
     }
     @Given("Kullanan kullanıcı giriş yapmış durumda")
     public void kullanan_kullanıcı_giriş_yapmış_durumda() throws IOException{
-        String jwt = postRequestHelper.getLoginAndJWT(this.username, this.password);
+        String jwt = requestHelper.getLoginAndJWT(this.username, this.password);
         assertNotNull(jwt);
         this.jwt = jwt;
     }
@@ -72,8 +72,8 @@ public class US05_Steps {
     }
     @Then("Kartta tanımlı kullanıcının profil bilgileri ekrana geliyor")
     public void kartta_tanımlı_kullanıcının_profil_bilgileri_ekrana_geliyor() throws IOException {
-        String url = postRequestHelper.buildUrl(PROFILE_PATH) + "/" + this.profileToken;
-        HttpResponse response = postRequestHelper.httpGet(url, this.jwt);
+        String url = requestHelper.buildUrl(PROFILE_PATH) + "/" + this.profileToken;
+        HttpResponse response = requestHelper.httpGet(url, this.jwt);
         assertEquals(200, response.getStatusLine().getStatusCode());
         HttpEntity entity = response.getEntity();
         String responseString = EntityUtils.toString(entity, "UTF-8");
@@ -91,8 +91,8 @@ public class US05_Steps {
     @Then("Kullanıcının olmadığına dair ekran geliyor")
     public void kullanıcının_olmadığına_dair_ekran_geliyor() throws IOException{
         System.out.println("jwt: " + this.jwt);
-        String url = postRequestHelper.buildUrl(PROFILE_PATH) + "/" + this.profileToken;
-        HttpResponse response = postRequestHelper.httpGet(url, this.jwt);
+        String url = requestHelper.buildUrl(PROFILE_PATH) + "/" + this.profileToken;
+        HttpResponse response = requestHelper.httpGet(url, this.jwt);
         assertEquals(404, response.getStatusLine().getStatusCode());
     }
 }

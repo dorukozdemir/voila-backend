@@ -8,6 +8,7 @@ import com.viola.backend.voilabackend.model.web.UserRequest;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -19,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Service;
 
-@Service("postRequestHelper")
-public class PostRequestHelper {
+@Service("requestHelper")
+public class RequestHelper {
 
     @Autowired
     private ServletWebServerApplicationContext webServerAppCtxt;
@@ -61,6 +62,18 @@ public class PostRequestHelper {
         HttpGet request = new HttpGet(url);
         request.addHeader("content-type", APPLICATION_JSON);
         request.addHeader("Authorization", "Bearer " + jwt);
+        HttpResponse response = httpClient.execute(request);
+        return response;
+    }
+
+    public HttpResponse httpPut(Request requestObject, String url, String jwt) throws IOException{
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(requestObject);
+        HttpPut request = new HttpPut(url);
+        request.addHeader("content-type", APPLICATION_JSON);
+        request.addHeader("Authorization", "Bearer " + jwt);
+        StringEntity entity = new StringEntity(jsonString);
+        request.setEntity(entity);
         HttpResponse response = httpClient.execute(request);
         return response;
     }

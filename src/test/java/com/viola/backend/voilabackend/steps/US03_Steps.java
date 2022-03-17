@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Date;
-import com.viola.backend.voilabackend.helper.PostRequestHelper;
+import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.web.ResetRequest;
 import com.viola.backend.voilabackend.model.web.UserRequest;
@@ -34,7 +34,7 @@ public class US03_Steps {
     private UserService userService;
 
     @Autowired
-    private PostRequestHelper postRequestHelper;
+    private RequestHelper requestHelper;
     
     @Given("Kullanıcı {string} adresi ile işlem yapmak istiyor")
     public void kullanıcı_adresi_ile_işlem_yapmak_istiyor(String username) {
@@ -56,18 +56,18 @@ public class US03_Steps {
     
     @Then("Kullanıcıya e-posta gidiyor")
     public void kullanıcıya_e_posta_gidiyor() throws IOException {
-        String url = postRequestHelper.buildUrl(FORGOT_PATH);
+        String url = requestHelper.buildUrl(FORGOT_PATH);
         UserRequest userRequest = new UserRequest(username);
-        HttpResponse response = postRequestHelper.httpPost(userRequest, url);
+        HttpResponse response = requestHelper.httpPost(userRequest, url);
         assertEquals(200, response.getStatusLine().getStatusCode());
         User user = userService.getUserByUsername(username);
         assertTrue(userService.isForgotTokenValid(user));
     }
     @Then("Kullanıcıya genel bir bu eposta ile bağlantılı kullanıcı varsa şifre sıfırlama epostası gönderilmiştir mesajı")
     public void kullanıcıya_genel_bir_bu_eposta_ile_bağlantılı_kullanıcı_varsa_şifre_sıfırlama_epostası_gönderilmiştir_mesajı() throws IOException {
-        String url = postRequestHelper.buildUrl(FORGOT_PATH);
+        String url = requestHelper.buildUrl(FORGOT_PATH);
         UserRequest userRequest = new UserRequest(username);
-        HttpResponse response = postRequestHelper.httpPost(userRequest, url);
+        HttpResponse response = requestHelper.httpPost(userRequest, url);
         assertEquals(200, response.getStatusLine().getStatusCode());
     }
 
@@ -92,9 +92,9 @@ public class US03_Steps {
     }
     @Then("Şifre değiştirme linkinin süresinin dolduğu bilgisi veriliyor")
     public void şifre_değiştirme_linkinin_süresinin_dolduğu_bilgisi_veriliyor() throws IOException {
-        String url = postRequestHelper.buildUrl(RESET_PATH);
+        String url = requestHelper.buildUrl(RESET_PATH);
         ResetRequest resetRequest = new ResetRequest(this.token, this.password);
-        HttpResponse response = postRequestHelper.httpPost(resetRequest, url);
+        HttpResponse response = requestHelper.httpPost(resetRequest, url);
         assertEquals(403, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
@@ -103,9 +103,9 @@ public class US03_Steps {
 
     @Then("Şifre başarılı bir şekilde güncelleniyor")
     public void şifre_başarılı_bir_şekilde_güncelleniyor() throws IOException {
-        String url = postRequestHelper.buildUrl(RESET_PATH);
+        String url = requestHelper.buildUrl(RESET_PATH);
         ResetRequest resetRequest = new ResetRequest(this.token, this.password);
-        HttpResponse response = postRequestHelper.httpPost(resetRequest, url);
+        HttpResponse response = requestHelper.httpPost(resetRequest, url);
         assertEquals(200, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
