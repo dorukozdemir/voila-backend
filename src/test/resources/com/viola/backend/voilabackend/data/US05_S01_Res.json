@@ -63,5 +63,20 @@
             "holderName":"Mehmet Çelik",
             "iban":"TR38 7654 4343 2132 3213 9932 00"
         }
-    ]
+    ],
+    "socialMediaAccounts":
+    {
+        "facebook":"facebookuser",
+        "twitter":"twitteruser",
+        "instagram":"instagramuser",
+        "tiktok":"tiktokuser",
+        "youtube":"youtubeuser",
+        "linkedin":"linkedinuser",
+        "behance":"behanceuser",
+        "dribble":"dribbleuser",
+        "pinterest":"pinterestuser",
+        "github":"githubuser",
+        "telegram":"telegramuser",
+        "snap":"snapuser"
+    }
 }

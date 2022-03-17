@@ -9,31 +9,34 @@ import org.modelmapper.ModelMapper;
 
 public class ProfileDto {
     private UserDto personal;
-    private CompanyInfoDto[] companyInfo = new CompanyInfoDto[0];
-    private ContactInfoDto[] contactInfo = new ContactInfoDto[0];
-    private LinkDto[] links = new LinkDto[0];
-    private BankAccountInfoDto[] bankAccountInfo = new BankAccountInfoDto[0];
+    private CompanyInfoDto[] companyInfo;
+    private ContactInfoDto[] contactInfo;
+    private LinkDto[] links;
+    private BankAccountInfoDto[] bankAccountInfo;
+    private SocialMediaAccountsDto socialMediaAccounts;
 
     public ProfileDto() {
 
     }
 
-    public ProfileDto(User otherUser) {
+    public ProfileDto(User user) {
         ModelMapper modelMapper = new ModelMapper();
-        UserDto userDto = modelMapper.map(otherUser, UserDto.class);
-        CompanyInfoDto[] companies = modelMapper.map(otherUser.getCompanies(), CompanyInfoDto[].class);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        CompanyInfoDto[] companies = modelMapper.map(user.getCompanies(), CompanyInfoDto[].class);
         Arrays.sort(companies);
-        ContactInfoDto[] contacts = modelMapper.map(otherUser.getContactInfo(), ContactInfoDto[].class);
+        ContactInfoDto[] contacts = modelMapper.map(user.getContactInfo(), ContactInfoDto[].class);
         Arrays.sort(contacts);
-        LinkDto[] links = modelMapper.map(otherUser.getLinks(), LinkDto[].class);
+        LinkDto[] links = modelMapper.map(user.getLinks(), LinkDto[].class);
         Arrays.sort(links);
-        BankAccountInfoDto[] bankAccounts = modelMapper.map(otherUser.getBankAccounts(), BankAccountInfoDto[].class);
+        BankAccountInfoDto[] bankAccounts = modelMapper.map(user.getBankAccounts(), BankAccountInfoDto[].class);
         Arrays.sort(bankAccounts);
+        SocialMediaAccountsDto socialMediaAccounts = modelMapper.map(user.getSocialMediaAccounts(), SocialMediaAccountsDto.class);
         this.setPersonal(userDto);
         this.setCompanyInfo(companies);
         this.setContactInfo(contacts);
         this.setLinks(links);
         this.setBankAccountInfo(bankAccounts);
+        this.setSocialMediaAccounts(socialMediaAccounts);
     }
 
     public UserDto getPersonal() {
@@ -74,6 +77,14 @@ public class ProfileDto {
 
     public void setBankAccountInfo(BankAccountInfoDto[] bankAccountInfo) {
         this.bankAccountInfo = bankAccountInfo;
+    }
+
+    public SocialMediaAccountsDto getSocialMediaAccounts() {
+        return socialMediaAccounts;
+    }
+
+    public void setSocialMediaAccounts(SocialMediaAccountsDto socialMediaAccounts) {
+        this.socialMediaAccounts = socialMediaAccounts;
     }
 
     public String jsonString() {
