@@ -1,6 +1,6 @@
 package com.viola.backend.voilabackend.security;
 
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;

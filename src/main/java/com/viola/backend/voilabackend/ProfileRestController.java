@@ -1,8 +1,8 @@
 package com.viola.backend.voilabackend;
 
-import com.viola.backend.voilabackend.dto.ProfileDto;
 import com.viola.backend.voilabackend.externals.EmailSenderService;
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.ProfileDto;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.security.core.Authentication;

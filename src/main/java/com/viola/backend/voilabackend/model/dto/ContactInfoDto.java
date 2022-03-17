@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.dto;
+package com.viola.backend.voilabackend.model.dto;
 
 public class ContactInfoDto implements Comparable<ContactInfoDto> {
     private String contactType;

@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.util.Date;
 import com.viola.backend.voilabackend.helper.PostRequestHelper;
-import com.viola.backend.voilabackend.model.ResetRequest;
-import com.viola.backend.voilabackend.model.User;
-import com.viola.backend.voilabackend.model.UserRequest;
+import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.web.ResetRequest;
+import com.viola.backend.voilabackend.model.web.UserRequest;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.apache.http.HttpResponse;

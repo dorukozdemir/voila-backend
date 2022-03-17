@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.model;
+package com.viola.backend.voilabackend.model.web;
 
 public class ResetRequest implements Request{
     private String token;

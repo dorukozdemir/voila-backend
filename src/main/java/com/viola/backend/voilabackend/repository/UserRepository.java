@@ -2,7 +2,7 @@ package com.viola.backend.voilabackend.repository;
 
 import java.util.List;
 
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

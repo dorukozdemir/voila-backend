@@ -3,8 +3,8 @@ package com.viola.backend.voilabackend.helper;
 import java.io.IOException;
 
 import com.google.gson.Gson;
-import com.viola.backend.voilabackend.model.Request;
-import com.viola.backend.voilabackend.model.UserRequest;
+import com.viola.backend.voilabackend.model.web.Request;
+import com.viola.backend.voilabackend.model.web.UserRequest;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;

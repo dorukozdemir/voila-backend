@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.model;
+package com.viola.backend.voilabackend.model.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,18 +8,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "v_link_t")
-public class Link {
+@Table(name = "v_contact_info_t")
+public class ContactInfo {
     
     private Long id;
     private User user;
+    private ContactType contactType;
+    private String extension;
     private String value;
 
-    public Link() {
+    public ContactInfo() {
 
     }
 
-    public Link(String value) {
+    public ContactInfo(ContactType contactType, String extension, String value) {
+        this.contactType = contactType;
+        this.extension = extension;
         this.value = value;
     }
     @Id
@@ -38,7 +42,18 @@ public class Link {
     public void setUser(User user) {
         this.user = user;
     }
-    
+    public ContactType getContactType() {
+        return contactType;
+    }
+    public void setContactType(ContactType contactType) {
+        this.contactType = contactType;
+    }
+    public String getExtension() {
+        return extension;
+    }
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
     public String getValue() {
         return value;
     }

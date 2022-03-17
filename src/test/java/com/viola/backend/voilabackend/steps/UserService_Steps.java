@@ -3,7 +3,7 @@ package com.viola.backend.voilabackend.steps;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;

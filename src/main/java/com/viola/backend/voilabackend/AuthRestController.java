@@ -2,9 +2,9 @@ package com.viola.backend.voilabackend;
 
 import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.jwt.JwtUtil;
-import com.viola.backend.voilabackend.model.ResetRequest;
-import com.viola.backend.voilabackend.model.User;
-import com.viola.backend.voilabackend.model.UserRequest;
+import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.web.ResetRequest;
+import com.viola.backend.voilabackend.model.web.UserRequest;
 import com.viola.backend.voilabackend.security.CustomUserDetailsService;
 import com.viola.backend.voilabackend.service.UserService;
 

@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.model;
+package com.viola.backend.voilabackend.model.web;
 
 public class UserRequest implements Request{
     private String username;

@@ -12,12 +12,12 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
-import com.viola.backend.voilabackend.model.BankAccountInfo;
-import com.viola.backend.voilabackend.model.CompanyInfo;
-import com.viola.backend.voilabackend.model.ContactInfo;
-import com.viola.backend.voilabackend.model.Link;
-import com.viola.backend.voilabackend.model.SocialMediaAccounts;
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.BankAccountInfo;
+import com.viola.backend.voilabackend.model.domain.CompanyInfo;
+import com.viola.backend.voilabackend.model.domain.ContactInfo;
+import com.viola.backend.voilabackend.model.domain.Link;
+import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
+import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.repository.UserRepository;
 
 @Service("userService")

@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
-import com.viola.backend.voilabackend.model.SocialMediaAccounts;
+import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
 
 import org.springframework.stereotype.Service;
 

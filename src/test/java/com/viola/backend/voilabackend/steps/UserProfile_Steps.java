@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.viola.backend.voilabackend.helper.JsonDataReader;
-import com.viola.backend.voilabackend.model.BankAccountInfo;
-import com.viola.backend.voilabackend.model.CompanyInfo;
-import com.viola.backend.voilabackend.model.ContactInfo;
-import com.viola.backend.voilabackend.model.ContactType;
-import com.viola.backend.voilabackend.model.Link;
-import com.viola.backend.voilabackend.model.SocialMediaAccounts;
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.BankAccountInfo;
+import com.viola.backend.voilabackend.model.domain.CompanyInfo;
+import com.viola.backend.voilabackend.model.domain.ContactInfo;
+import com.viola.backend.voilabackend.model.domain.ContactType;
+import com.viola.backend.voilabackend.model.domain.Link;
+import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
+import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;

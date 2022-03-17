@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.model;
+package com.viola.backend.voilabackend.model.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.dto;
+package com.viola.backend.voilabackend.model.dto;
 
 
 public class CompanyInfoDto implements Comparable<CompanyInfoDto>{

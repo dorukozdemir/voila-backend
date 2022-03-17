@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.security.CustomUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;

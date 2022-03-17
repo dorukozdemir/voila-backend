@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.model;
+package com.viola.backend.voilabackend.model.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;

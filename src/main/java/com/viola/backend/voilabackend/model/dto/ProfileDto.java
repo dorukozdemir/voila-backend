@@ -1,9 +1,9 @@
-package com.viola.backend.voilabackend.dto;
+package com.viola.backend.voilabackend.model.dto;
 
 import java.util.Arrays;
 
 import com.google.gson.Gson;
-import com.viola.backend.voilabackend.model.User;
+import com.viola.backend.voilabackend.model.domain.User;
 
 import org.modelmapper.ModelMapper;
 

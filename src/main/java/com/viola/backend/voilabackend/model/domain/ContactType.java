@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.model;
+package com.viola.backend.voilabackend.model.domain;
 
 public enum ContactType {
     WHATSAPP("whatsapp"),

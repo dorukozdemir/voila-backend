@@ -14,8 +14,8 @@ import java.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.viola.backend.voilabackend.model.User;
-import com.viola.backend.voilabackend.model.UserRequest;
+import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.web.UserRequest;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.apache.http.HttpResponse;
