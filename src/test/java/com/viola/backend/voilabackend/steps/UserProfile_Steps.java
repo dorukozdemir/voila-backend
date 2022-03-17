@@ -76,10 +76,7 @@ public class UserProfile_Steps {
     }
     @When("Kullanıcı adını {string} soyadını {string} biosunu {string} olarak değiştirdiğinde")
     public void kullanıcı_biosunu_olarak_değiştirdiğinde(String name, String surname, String bio) {
-        this.user.setBio(bio);
-        this.user.setName(name);
-        this.user.setSurname(surname);
-        userService.save(this.user);
+        userService.updatePersonalInformation(this.user, name, surname, bio);
     }
     @Then("Kullanıcının adı {string} soyadı {string} biosu {string} olarak değişmiş olması gerekiyor")
     public void kullanıcının_biosu_olarak_değişmiş_olması_gerekiyor(String name, String surname, String bio) {
@@ -117,9 +114,6 @@ public class UserProfile_Steps {
     public void kullanıcı_bağlantısını_ekliyor(String value) {
         Link link = new Link(value);
         User user = userService.getUserByUsername(this.username);
-        for (Link l: user.getLinks()) {
-            System.out.println(l.getValue());
-        }
         userService.addLink(user, link);
     }
     @Then("Kullanıcı {int} adet bağlantı eklemiş oluyor")
