@@ -1,0 +1,82 @@
+{
+    "personal": {
+        "name": "Atilla",
+        "bio": "stratejist",
+        "surname": "Çağlar"
+    },
+    "companyInfo": 
+    [
+        {
+            "name":"Coza Dijital Akıllı Çözümler Ltd. Şti.",
+            "address":"Baki Dede Sok. Balat Mah. No:19 34087 Fatih/İstanbul",
+            "taxNo":"2140664898",
+            "taxBody":"Fatih"
+        },
+        {
+            "name":"Keys Danışmanlık",
+            "address":"Ankara",
+            "taxNo":"123456789101",
+            "taxBody":"Başkent"
+        }
+    ],
+    "contactInfo":
+    [
+        {
+            "contactType":"whatsapp",
+            "extension":"+90",
+            "value":"2124539256"
+        },
+        {
+            "contactType":"phone",
+            "extension":"+90",
+            "value":"2124539256"
+        },
+        {
+            "contactType":"phone",
+            "extension":"+90",
+            "value":"5313271062"
+        },
+        {
+            "contactType":"email",
+            "extension":"",
+            "value":"mail@sirketim.com"
+        }
+    ],
+    "links":
+    [
+        {
+            "value":"sahibinden.com/portal"
+        },
+        {
+            "value":"sirketim.com"
+        }
+    ],
+    "bankAccountInfo":
+    [
+        {
+            "bankName":"Denizbank",
+            "holderName":"Mehmet Çelik",
+            "iban":"TR38 7654 4343 2132 3213 9932 00"
+        },
+        {
+            "bankName":"Garanti Bankası",
+            "holderName":"Mehmet Çelik",
+            "iban":"TR38 7654 4343 2132 3213 9932 00"
+        }
+    ],
+    "socialMediaAccounts":
+    {
+        "facebook":"facebookuser",
+        "twitter":"twitteruser",
+        "instagram":"instagramuser",
+        "tiktok":"tiktokuser",
+        "youtube":"youtubeuser",
+        "linkedin":"linkedinuser",
+        "behance":"behanceuser",
+        "dribble":"dribbleuser",
+        "pinterest":"pinterestuser",
+        "github":"githubuser",
+        "telegram":"telegramuser",
+        "snap":"snapuser"
+    }
+}

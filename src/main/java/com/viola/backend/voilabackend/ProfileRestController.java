@@ -61,4 +61,17 @@ public class ProfileRestController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<String> myProfile() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        User profileUser = userService.getUserByUsername(user.getUsername());
+        if (profileUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {         
+            ProfileDto profile = new ProfileDto(profileUser);
+            return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
+        }
+    }
 }
