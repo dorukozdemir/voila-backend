@@ -35,7 +35,7 @@ public class RequestHelper {
     public HttpResponse httpPost(Request requestObject, String url) throws IOException {
         Gson gson = new Gson();
         String jsonString = gson.toJson(requestObject);
-        StringEntity entity = new StringEntity(jsonString);
+        StringEntity entity = new StringEntity(jsonString, "UTF-8");
         HttpPost request = new HttpPost(url);
         request.addHeader("content-type", APPLICATION_JSON);
         request.setEntity(entity);
@@ -72,7 +72,7 @@ public class RequestHelper {
         HttpPut request = new HttpPut(url);
         request.addHeader("content-type", APPLICATION_JSON);
         request.addHeader("Authorization", "Bearer " + jwt);
-        StringEntity entity = new StringEntity(jsonString);
+        StringEntity entity = new StringEntity(jsonString, "UTF-8");
         request.setEntity(entity);
         HttpResponse response = httpClient.execute(request);
         return response;
