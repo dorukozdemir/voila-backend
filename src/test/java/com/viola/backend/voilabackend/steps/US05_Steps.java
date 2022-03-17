@@ -1,6 +1,5 @@
 package com.viola.backend.voilabackend.steps;
 
-import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -48,6 +47,7 @@ public class US05_Steps {
         this.username = username;
         this.password = password;
         userService.createUser(this.username, this.password);
+        User createdUser = userService.getUserByUsername(username);
     }
     @Given("Kullanan kullanıcı giriş yapmış durumda")
     public void kullanan_kullanıcı_giriş_yapmış_durumda() throws IOException{
@@ -78,7 +78,6 @@ public class US05_Steps {
         HttpEntity entity = response.getEntity();
         String responseString = EntityUtils.toString(entity, "UTF-8");
         JsonObject jsonObject = JsonParser.parseString(responseString).getAsJsonObject();
-        System.out.println(responseString);
         Assertions.assertTrue(jsonObject.isJsonObject());
         ObjectMapper mapper = new ObjectMapper();
         String testJsonString = jsonDataReader.getJsonStringfromFile("US05_S01_Res.json");
@@ -89,8 +88,7 @@ public class US05_Steps {
         this.profileToken = profileToken;
     }
     @Then("Kullanıcının olmadığına dair ekran geliyor")
-    public void kullanıcının_olmadığına_dair_ekran_geliyor() throws IOException{
-        System.out.println("jwt: " + this.jwt);
+    public void kullanıcının_olmadığına_dair_ekran_geliyor() throws IOException {
         String url = requestHelper.buildUrl(PROFILE_PATH) + "/" + this.profileToken;
         HttpResponse response = requestHelper.httpGet(url, this.jwt);
         assertEquals(404, response.getStatusLine().getStatusCode());

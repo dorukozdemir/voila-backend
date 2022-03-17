@@ -5,8 +5,10 @@ Feature: Kullanıcı voila card üzerinden kişi bilgisi okutuyor
         Given Kullanan kullanıcı giriş yapmış durumda
         Given Kullanıcı "mete1@voila.com" eposta ve "mete123" şifresi ile oluşturulduğunda
         Given Kullanıcı "mete1@voila.com" epostası ile var
+        Given Örnek sosyal medya verisi kaydedildi
+        Given Kullanıcı içeri aktarma ekranında
+        Given Profilini görüntüleyen kullanıcı "mete1@voila.com" tokenını göstermiş
         When Kullanıcı adını "Atilla" soyadını "Çağlar" biosunu "stratejist" olarak değiştirdiğinde
-        Given Örnek profil verisi kaydedildi
         When Kullanıcı "+90" "2124539256" whatsapp numarası giriyor
         When Kullanıcı "+90" "2124539256" telefon numarası giriyor
         When Kullanıcı "+90" "5313271062" telefon numarası giriyor
@@ -17,8 +19,6 @@ Feature: Kullanıcı voila card üzerinden kişi bilgisi okutuyor
         When Kullanıcı "Keys Danışmanlık", "Ankara", "123456789101", "Başkent" şirketini ekliyor
         When Kullanıcı "Garanti Bankası", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
         When Kullanıcı "Denizbank", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
-        Given Kullanıcı içeri aktarma ekranında
-        Given Profilini görüntüleyen kullanıcı "mete1@voila.com" tokenını göstermiş
         When Kullanıcı kartı okutuyor
         Then Kartta tanımlı kullanıcının profil bilgileri ekrana geliyor
     Scenario: Kullanıcı voila card üzerinden NFC ile okutunca kullanıcı diğer kullanıcının profil bilgileri bulunamadığına dair uyarı ekranı çıkıyor   

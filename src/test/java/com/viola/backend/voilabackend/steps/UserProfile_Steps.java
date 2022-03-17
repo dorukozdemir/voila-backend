@@ -35,7 +35,7 @@ public class UserProfile_Steps {
         this.username = username;
 		userService.createUser(username, password);
     }
-    @Given("Örnek profil verisi kaydedildi")
+    @Given("Örnek sosyal medya verisi kaydedildi")
     public void örnek_profil_verisi_kaydedildi() {
         User user = userService.getUserByUsername(this.username);
         this.user = user;
@@ -43,7 +43,7 @@ public class UserProfile_Steps {
         userService.updateSocialMediaAccounts(user, socialMediaAccounts);
         
     }
-    @Then("Kullanıcının profil verisi örnek ile aynı")
+    @Then("Kullanıcının sosyal medya verisi örnek ile aynı")
     public void kullanıcının_profil_verisi_örnek_ile_aynı() {
         SocialMediaAccounts socialMediaAccounts = jsonDataReader.getSocialMediaAccounts();
         if (this.user != null && this.user.getSocialMediaAccounts() != null) {
@@ -57,7 +57,7 @@ public class UserProfile_Steps {
         this.username = username;
         User user = userService.getUserByUsername(username);
         if (user == null) {
-            fail();
+            fail("Kullanıcı bulunamadı: " + username);
         }
         this.user = user;
     }
@@ -76,6 +76,7 @@ public class UserProfile_Steps {
     }
     @When("Kullanıcı adını {string} soyadını {string} biosunu {string} olarak değiştirdiğinde")
     public void kullanıcı_biosunu_olarak_değiştirdiğinde(String name, String surname, String bio) {
+        this.user = userService.getUserByUsername(this.user.getUsername());
         userService.updatePersonalInformation(this.user, name, surname, bio);
     }
     @Then("Kullanıcının adı {string} soyadı {string} biosu {string} olarak değişmiş olması gerekiyor")

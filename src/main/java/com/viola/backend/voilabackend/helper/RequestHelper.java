@@ -26,6 +26,8 @@ public class RequestHelper {
     @Autowired
     private ServletWebServerApplicationContext webServerAppCtxt;
     
+    public static final String PROFILE_PATH = "/profile";
+    
     private final CloseableHttpClient httpClient = HttpClients.createDefault();
     private static final String APPLICATION_JSON = "application/json";
 
