@@ -10,8 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 import java.util.Base64;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.viola.backend.voilabackend.helper.JsonDataReader;
 import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.web.UserRequest;
@@ -38,6 +40,9 @@ public class US02_Steps {
 
     @Autowired
     private RequestHelper requestHelper;
+
+    @Autowired
+    private JsonDataReader jsonDataReader;
     
     @Given("Uygulamada kayıtlı kullanıcı var")
     public void uygulamada_kullanıcı_yok() {
@@ -86,6 +91,32 @@ public class US02_Steps {
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
         assertEquals("", responseString);  
+    }
+
+    @Then("Bu epostaya ait kullanıcı bulunmadığına dair bilgi verilir")
+    public void bu_epostaya_ait_kullanıcı_bulunmadığına_dair_bilgi_verilir() throws IOException {
+        String url = requestHelper.buildUrl(LOGIN_PATH);
+        UserRequest userRequest = new UserRequest(username, password);
+        HttpResponse response = requestHelper.httpPost(userRequest, url);
+        assertEquals(403, response.getStatusLine().getStatusCode());
+        HttpEntity entity2 = response.getEntity();
+        String responseString = EntityUtils.toString(entity2, "UTF-8");
+        ObjectMapper mapper = new ObjectMapper();
+        String testResponseJsonString = jsonDataReader.getJsonStringfromFile("US02_S02_Res.json");
+        assertEquals(mapper.readTree(testResponseJsonString), mapper.readTree(responseString));
+    }
+
+    @Then("Bu kullanıcının şifresinin yanlış olduğuna dair bilgi verilir")
+    public void bu_kullanıcının_şifresinin_yanlış_olduğuna_dair_bilgi_verilir() throws IOException{
+        String url = requestHelper.buildUrl(LOGIN_PATH);
+        UserRequest userRequest = new UserRequest(username, password);
+        HttpResponse response = requestHelper.httpPost(userRequest, url);
+        assertEquals(403, response.getStatusLine().getStatusCode());
+        HttpEntity entity2 = response.getEntity();
+        String responseString = EntityUtils.toString(entity2, "UTF-8");
+        ObjectMapper mapper = new ObjectMapper();
+        String testResponseJsonString = jsonDataReader.getJsonStringfromFile("US02_S03_Res.json");
+        assertEquals(mapper.readTree(testResponseJsonString), mapper.readTree(responseString));
     }
 
     @After("@US02Last")

@@ -6,8 +6,12 @@ Feature: Kullanıcı giriş yapıyor
     When  Kullanıcı adı "mete@voila.com" girildiğinde
     When Şifre "mete123" girildiğinde
     Then  Kullanıcı başarılı bir şekilde giriş yapması sağlanır
-  @US02Last
-  Scenario: Anonim kullanııcının uygulamaya girişi başarısız olması
+  Scenario: Anonim kullanııcının girdiği eposta ile kullanıcı olmaması
     When  Kullanıcı adı olarak "mete1@voila.com" girildiğinde
-    When Şifre olarak "mete123" girildiğinde
-    Then Bu eposta ve şifre ile kullanıcı bulunmadığına dair bilgi verilir
+    When Şifre olarak "mete1234" girildiğinde
+    Then Bu epostaya ait kullanıcı bulunmadığına dair bilgi verilir
+  @US02Last
+  Scenario: Anonim kullanııcının girdiği şifrenin yanlış olması
+    When  Kullanıcı adı olarak "mete@voila.com" girildiğinde
+    When Şifre olarak "mete1234" girildiğinde
+    Then Bu kullanıcının şifresinin yanlış olduğuna dair bilgi verilir

@@ -38,16 +38,21 @@ public class AuthRestController {
     private EmailSenderService emailSenderService;
 
     @PostMapping("/login")
-    public String login(@RequestBody UserRequest authRequest) throws Exception {
+    public ResponseEntity<String> login(@RequestBody UserRequest authRequest) {
+        User user = userService.getUserByUsername(authRequest.getUsername());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"username\": false}");
+        }
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException ex) {
-            throw new Exception("Incorret username or password", ex);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"password\": false}");
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
 
-        return jwt;
+        return ResponseEntity.ok()
+            .body(jwt);
     }
 
     @PostMapping("/register")
