@@ -62,7 +62,7 @@ public class US01_Steps {
         UserRequest userRequest = new UserRequest(username, password);
         String url = requestHelper.buildUrl(REGISTER_PATH);
         HttpResponse response = requestHelper.httpPost(userRequest, url);
-        Assertions.assertEquals(200, response.getStatusLine().getStatusCode());
+        Assertions.assertEquals(201, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
         String[] chunks = responseString.split("\\.");

@@ -1,5 +1,7 @@
 package com.viola.backend.voilabackend;
 
+import java.net.URI;
+
 import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.jwt.JwtUtil;
 import com.viola.backend.voilabackend.model.domain.User;
@@ -65,7 +67,7 @@ public class AuthRestController {
             User user = userService.createUser(username, password);
             final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
-            return ResponseEntity.ok()
+            return ResponseEntity.created(new URI(""))
                 .body(jwt);
         }
     }
