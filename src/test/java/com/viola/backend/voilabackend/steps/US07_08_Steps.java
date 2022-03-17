@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.viola.backend.voilabackend.helper.JsonDataReader;
 import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
 import com.viola.backend.voilabackend.service.UserService;
@@ -26,10 +27,11 @@ import org.junit.jupiter.api.Assertions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class US07_Steps {
+public class US07_08_Steps {
 
     private final String PROFILE_PATH = "/profile";
     private final String PROFILE_FILE = "US07_Req.json";
+    private final String SOCIALMEDIAPROFILE_FILE = "US08_Req.json";
 
     private String jwt;
     private String username;
@@ -100,5 +102,28 @@ public class US07_Steps {
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
         Assertions.assertEquals("", responseString);   
+    }
+
+    @Then("Kullanıcı sosyal medya hesaplarını başarılı bir şekilde güncelleniyor")
+    public void kullanıcı_sosyal_medya_hesaplarını_başarılı_bir_şekilde_güncelleniyor() throws IOException{
+        SocialMediaAccountsDto smaDto = (SocialMediaAccountsDto)jsonDataReader.getSingleObjectFromFile(SOCIALMEDIAPROFILE_FILE, SocialMediaAccountsDto.class);
+        String url = requestHelper.buildUrl(PROFILE_PATH);
+        ProfileRequest profileRequest = new ProfileRequest();
+        profileRequest.setSocialMediaAccounts(smaDto);
+        HttpResponse response = requestHelper.httpPut(profileRequest, url, this.jwt);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+        HttpEntity entity2 = response.getEntity();
+        String responseString = EntityUtils.toString(entity2, "UTF-8");
+        Assertions.assertEquals("", responseString);   
+    }
+    @Then("Kullanıcı güncel sosyal medya hesap bilgilerini görüyor")
+    public void kullanıcı_güncel_sosyal_medya_hesap_bilgilerini_görüyor() throws Exception{
+        User user = userService.getUserByUsername(this.username);
+        SocialMediaAccountsDto exampleProfile = (SocialMediaAccountsDto)jsonDataReader.getSingleObjectFromFile(SOCIALMEDIAPROFILE_FILE, SocialMediaAccountsDto.class);
+        ModelMapper modelMapper = new ModelMapper();
+        ObjectMapper mapper = new ObjectMapper();
+        SocialMediaAccountsDto retrievedUserProfile = modelMapper.map(user.getSocialMediaAccounts(), SocialMediaAccountsDto.class);
+        Gson gson = new Gson();
+        assertEquals(mapper.readTree(gson.toJson(exampleProfile)), mapper.readTree(gson.toJson(retrievedUserProfile)));
     }
 }

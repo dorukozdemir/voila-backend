@@ -18,6 +18,7 @@ import com.viola.backend.voilabackend.model.domain.ContactInfo;
 import com.viola.backend.voilabackend.model.domain.Link;
 import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.repository.UserRepository;
 
@@ -118,6 +119,21 @@ public class UserService {
             user.setSocialMediaAccounts(socialMediaAccounts);
             save(user);
         } else {
+            user.updateSocialMediaAccounts(socialMediaAccounts);
+            save(user);
+        }
+    }
+
+    public void updateSocialMediaAccounts(User user, SocialMediaAccountsDto socialMediaAccountsDto) {
+        if (user.getSocialMediaAccounts() == null) {
+            SocialMediaAccounts socialMediaAccounts = new SocialMediaAccounts();
+            socialMediaAccounts.copyFromDto(socialMediaAccountsDto);
+            socialMediaAccounts.setUser(user);
+            user.setSocialMediaAccounts(socialMediaAccounts);
+            save(user);
+        } else {
+            SocialMediaAccounts socialMediaAccounts = user.getSocialMediaAccounts();
+            socialMediaAccounts.copyFromDto(socialMediaAccountsDto);
             user.updateSocialMediaAccounts(socialMediaAccounts);
             save(user);
         }

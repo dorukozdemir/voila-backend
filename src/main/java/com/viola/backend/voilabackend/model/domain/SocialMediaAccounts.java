@@ -8,6 +8,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
+
 @Entity
 @Table(name = "v_social_media_accounts_t")
 public class SocialMediaAccounts {
@@ -117,4 +119,20 @@ public class SocialMediaAccounts {
     public void setSnap(String snap) {
         this.snap = snap;
     }
+    public void copyFromDto(SocialMediaAccountsDto socialMediaAccountsDto) {
+        this.facebook = socialMediaAccountsDto.getFacebook();
+        this.twitter = socialMediaAccountsDto.getTwitter();
+        this.instagram = socialMediaAccountsDto.getInstagram();
+        this.tiktok = socialMediaAccountsDto.getTiktok();
+        this.youtube = socialMediaAccountsDto.getYoutube();
+        this.linkedin = socialMediaAccountsDto.getLinkedin();
+        this.behance = socialMediaAccountsDto.getBehance();
+        this.dribble = socialMediaAccountsDto.getDribble();
+        this.pinterest = socialMediaAccountsDto.getPinterest();
+        this.github = socialMediaAccountsDto.getGithub();
+        this.telegram = socialMediaAccountsDto.getTelegram();
+        this.snap = socialMediaAccountsDto.getSnap();
+    }
+
+    
 }
