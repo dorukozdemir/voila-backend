@@ -73,15 +73,19 @@ public class UserProfile_Steps {
         assertFalse(testSocialMediaAccounts(updatedUser.getSocialMediaAccounts(), socialMediaAccounts));
         assertTrue(testSocialMediaAccounts(updatedUser.getSocialMediaAccounts(), socialMediaAccountsUpdated));
     }
-    @When("Kullanıcı biosunu {string} olarak değiştirdiğinde")
-    public void kullanıcı_biosunu_olarak_değiştirdiğinde(String bio) {
+    @When("Kullanıcı adını {string} soyadını {string} biosunu {string} olarak değiştirdiğinde")
+    public void kullanıcı_biosunu_olarak_değiştirdiğinde(String name, String surname, String bio) {
         this.user.setBio(bio);
+        this.user.setName(name);
+        this.user.setSurname(surname);
         userService.save(this.user);
     }
-    @Then("Kullanıcının biosu {string} olarak değişmiş olması gerekiyor")
-    public void kullanıcının_biosu_olarak_değişmiş_olması_gerekiyor(String bio) {
+    @Then("Kullanıcının adı {string} soyadı {string} biosu {string} olarak değişmiş olması gerekiyor")
+    public void kullanıcının_biosu_olarak_değişmiş_olması_gerekiyor(String name, String surname, String bio) {
         User updatedUser = userService.getUserByUsername(this.username);
-        assertEquals(updatedUser.getBio(), bio);
+        assertEquals(name, updatedUser.getName());
+        assertEquals(surname, updatedUser.getSurname());
+        assertEquals(bio, updatedUser.getBio());
     }
     @When("Kullanıcı {string} {string} whatsapp numarası giriyor")
     public void kullanıcı_whatsapp_numarası_giriyor(String extension, String value) {

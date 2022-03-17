@@ -7,10 +7,10 @@ Feature: Kullanıcı profili
         Given Kullanıcı "mete@voila.com" epostası ile var
         When Kullanıcının sosyal medya hesapları örnek veri ile güncellendiğinde
         Then Sosyal medya hesapları güncellenmiş olacak
-    Scenario: Kullanıcının bio bilgisi değiştirildi
+    Scenario: Kullanıcının adı, soyadı ve bio bilgisi değiştirildi
         Given Kullanıcı "mete@voila.com" epostası ile var
-        When Kullanıcı biosunu "stratejist" olarak değiştirdiğinde
-        Then Kullanıcının biosu "stratejist" olarak değişmiş olması gerekiyor
+        When Kullanıcı adını "Atilla" soyadını "Çağlar" biosunu "stratejist" olarak değiştirdiğinde
+        Then Kullanıcının adı "Atilla" soyadı "Çağlar" biosu "stratejist" olarak değişmiş olması gerekiyor
     Scenario: Kullanıcı iletişim bilgileri ekledi
         Given Kullanıcı "mete@voila.com" epostası ile var
         When Kullanıcı "+90" "2124539256" whatsapp numarası giriyor
