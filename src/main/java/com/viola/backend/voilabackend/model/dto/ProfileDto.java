@@ -9,10 +9,10 @@ import org.modelmapper.ModelMapper;
 
 public class ProfileDto {
     private UserDto personal;
-    private CompanyInfoDto[] companyInfo;
-    private ContactInfoDto[] contactInfo;
-    private LinkDto[] links;
-    private BankAccountInfoDto[] bankAccountInfo;
+    private CompanyInfoDto[] companyInfo = new CompanyInfoDto[0];
+    private ContactInfoDto[] contactInfo = new ContactInfoDto[0];
+    private LinkDto[] links = new LinkDto[0];
+    private BankAccountInfoDto[] bankAccountInfo = new BankAccountInfoDto[0];
 
     public ProfileDto() {
 

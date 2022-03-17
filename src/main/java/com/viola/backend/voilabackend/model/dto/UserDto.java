@@ -1,20 +1,20 @@
 package com.viola.backend.voilabackend.model.dto;
 
-import java.util.Set;
-
 public class UserDto {
-    private String username;
     private String name;
     private String surname;
     private String bio;
-    public Set<CompanyInfoDto> companyInfo;
+
+    public UserDto() {
+
+    }
+
+    public UserDto(String name, String surname, String bio) {
+        this.name = name;
+        this.surname = surname;
+        this.bio = bio;
+    }
     
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
     public String getName() {
         return name;
     }

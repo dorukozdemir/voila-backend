@@ -18,6 +18,7 @@ import com.viola.backend.voilabackend.model.domain.ContactInfo;
 import com.viola.backend.voilabackend.model.domain.Link;
 import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.repository.UserRepository;
 
 @Service("userService")
@@ -97,11 +98,9 @@ public class UserService {
         User user = getByPasswordResetToken(token);
         String encodedPassword = passwordEncoder.encode(password);
         if (user != null) {
-            System.out.println("Kullanıcı var");
             user.setPassword(encodedPassword);
             save(user);
         } else {
-            System.out.println("Kullanıcı yok.");
         }
     }
 
@@ -115,7 +114,6 @@ public class UserService {
 
     public void updateSocialMediaAccounts(User user, SocialMediaAccounts socialMediaAccounts) {
         if (user.getSocialMediaAccounts() == null) {
-            System.out.println("önceden hesap olmadığı için sıfırdan kaydediliyor.");
             socialMediaAccounts.setUser(user);
             user.setSocialMediaAccounts(socialMediaAccounts);
             save(user);
@@ -147,6 +145,23 @@ public class UserService {
     public void addBankAccountInfo(User user, BankAccountInfo bankAccountInfo) {
         bankAccountInfo.setUser(user);
         user.addBankAccountInfo(bankAccountInfo);
+        save(user);
+    }
+
+    public void updatePersonalInformation(User user, UserDto profile) {
+        updatePersonalInformation(user, profile.getName(), profile.getSurname(), profile.getBio());
+    }
+
+    public void updatePersonalInformation(User user, String name, String surname, String bio ) {
+        if(name != null) {
+            user.setName(name);
+        }
+        if(surname != null) {
+            user.setSurname(surname);
+        }
+        if(bio != null) {
+            user.setBio(bio);
+        }
         save(user);
     }
 }
