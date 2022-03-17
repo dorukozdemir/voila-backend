@@ -30,7 +30,7 @@ Feature: Kullanıcı profili
         Then Kullanıcı 2 adet şirket eklemiş oluyor
     Scenario: Kullanıcı banka bilgileri ekliyor    
         Given Kullanıcı "mete@voila.com" epostası ile var
-        When Kullanıcı "Garanti Bankası" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
-        When Kullanıcı "Denizbank" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
+        When Kullanıcı "Garanti Bankası", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
+        When Kullanıcı "Denizbank", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
         Then Kullanıcı 2 adet banka bilgisi eklemiş oluyor
     

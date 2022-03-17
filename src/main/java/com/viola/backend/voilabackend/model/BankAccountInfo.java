@@ -13,15 +13,17 @@ public class BankAccountInfo {
     
     private Long id;
     private User user;
-    private String name;
+    private String bankName;
+    private String holderName;
     private String iban;
 
     public BankAccountInfo() {
 
     }
 
-    public BankAccountInfo(String name, String iban) {
-        this.name = name;
+    public BankAccountInfo(String bankName, String holderName, String iban) {
+        this.bankName = bankName;
+        this.holderName = holderName;
         this.iban = iban;
     }
     @Id
@@ -41,12 +43,20 @@ public class BankAccountInfo {
         this.user = user;
     }
 
-    public String getName() {
-        return name;
+    public String getBankName() {
+        return bankName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getHolderName() {
+        return holderName;
+    }
+
+    public void setHolderName(String holderName) {
+        this.holderName = holderName;
     }
 
     public String getIban() {

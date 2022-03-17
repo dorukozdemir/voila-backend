@@ -116,6 +116,9 @@ public class UserProfile_Steps {
     public void kullanıcı_bağlantısını_ekliyor(String value) {
         Link link = new Link(value);
         User user = userService.getUserByUsername(this.username);
+        for (Link l: user.getLinks()) {
+            System.out.println(l.getValue());
+        }
         userService.addLink(user, link);
     }
     @Then("Kullanıcı {int} adet bağlantı eklemiş oluyor")
@@ -136,9 +139,9 @@ public class UserProfile_Steps {
         assertEquals(count, updatedUser.getCompanies().size());
     }
 
-    @When("Kullanıcı {string} ve {string} banka hesabını ekliyor")
-    public void kullanıcı_ve_banka_hesabını_ekliyor(String name, String iban) {
-        BankAccountInfo bankAccountInfo = new BankAccountInfo(name, iban);
+    @When("Kullanıcı {string}, {string} ve {string} banka hesabını ekliyor")
+    public void kullanıcı_ve_banka_hesabını_ekliyor(String bankName, String holderName, String iban) {
+        BankAccountInfo bankAccountInfo = new BankAccountInfo(bankName, holderName, iban);
         User user = userService.getUserByUsername(this.username);
         userService.addBankAccountInfo(user, bankAccountInfo);
     }
