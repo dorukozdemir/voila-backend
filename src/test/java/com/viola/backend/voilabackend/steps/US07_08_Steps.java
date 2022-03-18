@@ -1,5 +1,6 @@
 package com.viola.backend.voilabackend.steps;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -125,5 +126,11 @@ public class US07_08_Steps {
         SocialMediaAccountsDto retrievedUserProfile = modelMapper.map(user.getSocialMediaAccounts(), SocialMediaAccountsDto.class);
         Gson gson = new Gson();
         assertEquals(mapper.readTree(gson.toJson(exampleProfile)), mapper.readTree(gson.toJson(retrievedUserProfile)));
+    }
+
+    @After("@US08Last")
+    public void kullanici_sil() {
+        User user = userService.getUserByUsername(this.username);
+        userService.deleteUser(user);
     }
 }

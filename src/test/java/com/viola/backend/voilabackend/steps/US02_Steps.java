@@ -13,6 +13,7 @@ import java.util.Base64;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.helper.JsonDataReader;
 import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
@@ -45,7 +46,7 @@ public class US02_Steps {
     private JsonDataReader jsonDataReader;
     
     @Given("Uygulamada kayıtlı kullanıcı var")
-    public void uygulamada_kullanıcı_yok() {
+    public void uygulamada_kullanıcı_yok() throws UserAlreadyExistException{
         if (!userService.isUserExist(USERNAME)) {
             userService.createUser(USERNAME, PASSWORD);
         }

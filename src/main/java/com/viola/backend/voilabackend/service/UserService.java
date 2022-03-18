@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
+import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.model.domain.BankAccountInfo;
 import com.viola.backend.voilabackend.model.domain.CompanyInfo;
 import com.viola.backend.voilabackend.model.domain.ContactInfo;
@@ -52,9 +53,12 @@ public class UserService {
         return (user != null);
     }
 
-    public User createUser(String username, String password) {
-        User user = new User(username, passwordEncoder.encode(password));
-        return userRepository.save(user);
+    public User createUser(String username, String password) throws UserAlreadyExistException {
+        User user = getUserByUsername(username);
+        if (user != null)
+            throw new UserAlreadyExistException();
+        User newUser = new User(username, passwordEncoder.encode(password));
+        return userRepository.save(newUser);
     }
 
     public void deleteUser(User user) {

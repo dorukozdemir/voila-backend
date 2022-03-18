@@ -1,5 +1,5 @@
-Feature: Kullanıcı voila card üzerinden kişi bilgisi okutuyor 
-    @After("@UserProfileLast")
+Feature: Kullanıcı voila card üzerinden kişi bilgisi okutuyor
+    @US05Last
     Scenario: Kullanıcı voila card üzerinden NFC ile okutunca kullanıcı diğer kullanıcının profil bilgilerine erişiyor
         Given Kullanan kullanıcı "harun@voila.com" "harun123" ile kayıtlı
         Given Kullanan kullanıcı giriş yapmış durumda
@@ -21,6 +21,7 @@ Feature: Kullanıcı voila card üzerinden kişi bilgisi okutuyor
         When Kullanıcı "Denizbank", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
         When Kullanıcı kartı okutuyor
         Then Kartta tanımlı kullanıcının profil bilgileri ekrana geliyor
+    @US05Last
     Scenario: Kullanıcı voila card üzerinden NFC ile okutunca kullanıcı diğer kullanıcının profil bilgileri bulunamadığına dair uyarı ekranı çıkıyor   
         Given Kullanan kullanıcı "harun@voila.com" "harun123" ile kayıtlı
         Given Kullanan kullanıcı giriş yapmış durumda

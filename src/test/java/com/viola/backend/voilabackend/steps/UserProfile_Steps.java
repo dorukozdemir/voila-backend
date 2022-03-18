@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.helper.JsonDataReader;
 import com.viola.backend.voilabackend.model.domain.BankAccountInfo;
 import com.viola.backend.voilabackend.model.domain.CompanyInfo;
@@ -31,7 +32,7 @@ public class UserProfile_Steps {
     private transient JsonDataReader jsonDataReader;
     
     @Given("Kullanıcı {string} eposta ve {string} şifresi ile oluşturulduğunda")
-    public void kullanıcı_eposta_ve_şifresi_ile_oluşturulduğunda(String username, String password) {
+    public void kullanıcı_eposta_ve_şifresi_ile_oluşturulduğunda(String username, String password) throws UserAlreadyExistException {
         this.username = username;
 		userService.createUser(username, password);
     }

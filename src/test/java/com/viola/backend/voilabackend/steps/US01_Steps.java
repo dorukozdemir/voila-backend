@@ -86,6 +86,7 @@ public class US01_Steps {
 
     @After("@US01Last")
     public void kullaniciKaldir() {
+        System.out.println("kullanıcı kaldırılıyor");
         User user = userService.getUserByUsername(username);
         userService.deleteUser(user);
     }

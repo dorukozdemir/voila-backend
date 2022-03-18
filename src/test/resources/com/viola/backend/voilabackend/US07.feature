@@ -7,6 +7,7 @@ Feature: Kullanıcı temel profil bilgilerini güncelliyor
         When kaydet tuşuna bastığında
         Then Kullanıcı temel bilgileri başarılı bir şekilde güncelleniyor
         Then Kullanıcı güncel bilgilerini görüyor
+    @US08Last
     Scenario: Kullanıcı temel bilgilerini değiştirmeden kaydediyor
         Given Uygulamaya "mete2@voila.com" adresi ve "mete123" şifresi ile giriş yapmış kullanıcı var
         Given Kullanıcı kendi profilini görüntülüyor

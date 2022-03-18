@@ -1,5 +1,6 @@
 package com.viola.backend.voilabackend.steps;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -7,12 +8,14 @@ import io.cucumber.java.en.When;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.nullable;
 
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.helper.JsonDataReader;
 import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
@@ -46,8 +49,11 @@ public class US05_Steps {
     public void kullanan_kullanıcı_ile_kayıtlı(String username, String password) {
         this.username = username;
         this.password = password;
-        userService.createUser(this.username, this.password);
-        User createdUser = userService.getUserByUsername(username);
+        try {
+            userService.createUser(this.username, this.password);
+        } catch (UserAlreadyExistException e) {
+            System.out.println("Kullanıcı var, olan ile devam ediliyor.");
+        }
     }
     @Given("Kullanan kullanıcı giriş yapmış durumda")
     public void kullanan_kullanıcı_giriş_yapmış_durumda() throws IOException{
@@ -92,5 +98,17 @@ public class US05_Steps {
         String url = requestHelper.buildUrl(PROFILE_PATH) + "/" + this.profileToken;
         HttpResponse response = requestHelper.httpGet(url, this.jwt);
         assertEquals(404, response.getStatusLine().getStatusCode());
+    }
+
+    @After("@US05Last")
+    public void kullanici_temizle() {
+        User user = userService.getUserByUsername(this.username);
+        userService.deleteUser(user);
+        if(this.profileToken!= null) {
+            User otherUser = userService.getByProfileToken(profileToken);
+            if (otherUser != null) {
+                userService.deleteUser(otherUser);
+            }
+        }
     }
 }

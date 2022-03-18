@@ -63,7 +63,7 @@ public class User implements UserDetails{
         this.id = id;
     }
 
-    @Column(name="eposta")
+    @Column(name="email", unique=true)
     public String getUsername() {
         return username;
     }

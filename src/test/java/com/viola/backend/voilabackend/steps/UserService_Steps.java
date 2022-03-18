@@ -3,6 +3,7 @@ package com.viola.backend.voilabackend.steps;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.service.UserService;
 
@@ -22,7 +23,7 @@ public class UserService_Steps {
 	private String profileToken;
 	
 	@When("Kullanıcı {string} ve {string} ile oluşturulduğunda")
-	public void kullanıcı_ve_ile_oluşturulduğunda(String username, String password) {
+	public void kullanıcı_ve_ile_oluşturulduğunda(String username, String password) throws UserAlreadyExistException{
 		this.username = username;
 		userService.createUser(username, password);
 

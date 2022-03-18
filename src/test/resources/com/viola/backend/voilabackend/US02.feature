@@ -7,7 +7,7 @@ Feature: Kullanıcı giriş yapıyor
     When Şifre "mete123" girildiğinde
     Then  Kullanıcı başarılı bir şekilde giriş yapması sağlanır
   Scenario: Anonim kullanııcının girdiği eposta ile kullanıcı olmaması
-    When  Kullanıcı adı olarak "mete1@voila.com" girildiğinde
+    When  Kullanıcı adı olarak "abc@voila.com" girildiğinde
     When Şifre olarak "mete1234" girildiğinde
     Then Bu epostaya ait kullanıcı bulunmadığına dair bilgi verilir
   @US02Last

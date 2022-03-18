@@ -1,4 +1,5 @@
-Feature: Kullanıcı sosyal medya hesaplarını güncelliyor 
+Feature: Kullanıcı sosyal medya hesaplarını güncelliyor
+    @US08Last
     Scenario: Kullanıcı kendi profiline gidip sosyal medya hesaplarını düzenliyor
         Given Kullanan kullanıcı "mete3@voila.com" "mete123" ile kayıtlı
         Given Uygulamaya "mete3@voila.com" adresi ve "mete123" şifresi ile giriş yapmış kullanıcı var

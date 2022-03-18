@@ -1,5 +1,5 @@
 Feature: Kullanıcı kendi profilini görüntülüyor
-    @After("@UserProfileLast")
+    @UserProfileLast
     Scenario: Kullanıcı kendi profilini görüntülüyor
         Given Kullanan kullanıcı "harun2@voila.com" "harun123" ile kayıtlı
         Given Kullanıcı "harun2@voila.com" epostası ile var
