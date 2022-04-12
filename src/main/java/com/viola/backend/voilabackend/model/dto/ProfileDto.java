@@ -30,7 +30,10 @@ public class ProfileDto {
         Arrays.sort(links);
         BankAccountInfoDto[] bankAccounts = modelMapper.map(user.getBankAccounts(), BankAccountInfoDto[].class);
         Arrays.sort(bankAccounts);
-        SocialMediaAccountsDto socialMediaAccounts = modelMapper.map(user.getSocialMediaAccounts(), SocialMediaAccountsDto.class);
+        SocialMediaAccountsDto socialMediaAccounts = new SocialMediaAccountsDto();
+        if(user.getSocialMediaAccounts() != null) {
+            socialMediaAccounts = modelMapper.map(user.getSocialMediaAccounts(), SocialMediaAccountsDto.class);
+        }
         this.setPersonal(userDto);
         this.setCompanyInfo(companies);
         this.setContactInfo(contacts);

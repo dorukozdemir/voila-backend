@@ -136,7 +136,7 @@ public class User implements UserDetails{
         this.profileToken = profileToken;
     }
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn
     public SocialMediaAccounts getSocialMediaAccounts() {
         return socialMediaAccounts;
