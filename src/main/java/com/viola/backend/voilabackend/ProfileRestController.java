@@ -26,6 +26,17 @@ public class ProfileRestController {
     @Autowired
     private EmailSenderService emailSenderService;
 
+    @GetMapping("/profile/token")
+    public ResponseEntity<String> profileToken() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        if (user == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {         
+            return ResponseEntity.status(HttpStatus.OK).body(user.getProfileToken());
+        }
+    }
+
     @GetMapping("/profile/{profileToken}")
     public ResponseEntity<String> profile(@PathVariable String profileToken) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
