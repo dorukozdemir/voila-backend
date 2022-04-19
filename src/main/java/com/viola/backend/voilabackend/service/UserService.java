@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,9 +17,11 @@ import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.model.domain.BankAccountInfo;
 import com.viola.backend.voilabackend.model.domain.CompanyInfo;
 import com.viola.backend.voilabackend.model.domain.ContactInfo;
+import com.viola.backend.voilabackend.model.domain.ContactType;
 import com.viola.backend.voilabackend.model.domain.Link;
 import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.ContactInfoDto;
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.repository.UserRepository;
@@ -183,5 +186,19 @@ public class UserService {
             user.setBio(bio);
         }
         save(user);
+    }
+
+    public void updateContactInformation(User user, ContactInfoDto[] contactInfo) {
+        user.setContactInfo(new HashSet<ContactInfo>());
+        save(user);
+        for(ContactInfoDto contactInfoDto : contactInfo) {
+            ContactInfo ci = new ContactInfo();
+            ci.setContactType(ContactType.toContactType(contactInfoDto.getContactType()));
+            ci.setExtension(contactInfoDto.getExtension());
+            ci.setValue(contactInfoDto.getValue());
+            ci.setUser(user);
+            this.addContactInfo(user, ci);
+        }
+        
     }
 }

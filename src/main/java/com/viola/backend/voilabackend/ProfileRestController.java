@@ -65,8 +65,10 @@ public class ProfileRestController {
         if (profileUpdateRequest.getSocialMediaAccounts() != null) {
             userService.updateSocialMediaAccounts(user, profileUpdateRequest.getSocialMediaAccounts());
             profileUpdated = true;
+        }if (profileUpdateRequest.getContactInfo() != null && profileUpdateRequest.getContactInfo().length > 0) {
+            userService.updateContactInformation(user, profileUpdateRequest.getContactInfo());
+            profileUpdated = true;
         }
-
         if(profileUpdated) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
