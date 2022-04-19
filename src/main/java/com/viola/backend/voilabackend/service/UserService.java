@@ -21,6 +21,7 @@ import com.viola.backend.voilabackend.model.domain.ContactType;
 import com.viola.backend.voilabackend.model.domain.Link;
 import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.CompanyInfoDto;
 import com.viola.backend.voilabackend.model.dto.ContactInfoDto;
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
@@ -200,5 +201,19 @@ public class UserService {
             this.addContactInfo(user, ci);
         }
         
+    }
+
+    public void updateCompanyInformation(User user, CompanyInfoDto[] companyInfo) {
+        user.setCompanies(new HashSet<CompanyInfo>());
+        save(user);
+        for(CompanyInfoDto cid : companyInfo) {
+            CompanyInfo ci = new CompanyInfo();
+            ci.setName(cid.getName());
+            ci.setAddress(cid.getAddress());
+            ci.setTaxNo(cid.getTaxNo());
+            ci.setTaxBody(cid.getTaxBody());
+            ci.setUser(user);
+            this.addCompanyInfo(user, ci);
+        }
     }
 }

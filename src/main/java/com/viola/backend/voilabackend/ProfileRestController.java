@@ -68,6 +68,9 @@ public class ProfileRestController {
         }if (profileUpdateRequest.getContactInfo() != null && profileUpdateRequest.getContactInfo().length > 0) {
             userService.updateContactInformation(user, profileUpdateRequest.getContactInfo());
             profileUpdated = true;
+        }if (profileUpdateRequest.getCompanyInfo() != null && profileUpdateRequest.getCompanyInfo().length > 0) {
+            userService.updateCompanyInformation(user, profileUpdateRequest.getCompanyInfo());
+            profileUpdated = true;
         }
         if(profileUpdated) {
             return ResponseEntity.status(HttpStatus.OK).build();
