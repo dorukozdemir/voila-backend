@@ -21,6 +21,7 @@ import com.viola.backend.voilabackend.model.domain.ContactType;
 import com.viola.backend.voilabackend.model.domain.Link;
 import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.BankAccountInfoDto;
 import com.viola.backend.voilabackend.model.dto.CompanyInfoDto;
 import com.viola.backend.voilabackend.model.dto.ContactInfoDto;
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
@@ -216,4 +217,17 @@ public class UserService {
             this.addCompanyInfo(user, ci);
         }
     }
+
+	public void updateBankInformation(User user, BankAccountInfoDto[] bankAccountInfo) {
+        user.setBankAccounts(new HashSet<BankAccountInfo>());
+        save(user);
+        for(BankAccountInfoDto bad : bankAccountInfo) {
+            BankAccountInfo bi = new BankAccountInfo();
+            bi.setBankName(bad.getBankName());
+            bi.setHolderName(bad.getHolderName());
+            bi.setIban(bad.getIban());
+            bi.setUser(user);
+            this.addBankAccountInfo(user, bi);
+        }
+	}
 }

@@ -65,11 +65,17 @@ public class ProfileRestController {
         if (profileUpdateRequest.getSocialMediaAccounts() != null) {
             userService.updateSocialMediaAccounts(user, profileUpdateRequest.getSocialMediaAccounts());
             profileUpdated = true;
-        }if (profileUpdateRequest.getContactInfo() != null && profileUpdateRequest.getContactInfo().length > 0) {
+        }
+        if (profileUpdateRequest.getContactInfo() != null && profileUpdateRequest.getContactInfo().length > 0) {
             userService.updateContactInformation(user, profileUpdateRequest.getContactInfo());
             profileUpdated = true;
-        }if (profileUpdateRequest.getCompanyInfo() != null && profileUpdateRequest.getCompanyInfo().length > 0) {
+        }
+        if (profileUpdateRequest.getCompanyInfo() != null && profileUpdateRequest.getCompanyInfo().length > 0) {
             userService.updateCompanyInformation(user, profileUpdateRequest.getCompanyInfo());
+            profileUpdated = true;
+        }
+        if (profileUpdateRequest.getBankAccountInfo() != null && profileUpdateRequest.getBankAccountInfo().length > 0) {
+            userService.updateBankInformation(user, profileUpdateRequest.getBankAccountInfo());
             profileUpdated = true;
         }
         if(profileUpdated) {
