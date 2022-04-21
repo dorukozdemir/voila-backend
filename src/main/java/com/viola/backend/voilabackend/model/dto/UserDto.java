@@ -1,9 +1,12 @@
 package com.viola.backend.voilabackend.model.dto;
 
+import com.viola.backend.voilabackend.model.domain.User;
+
 public class UserDto {
     private String name;
     private String surname;
     private String bio;
+    private String profileToken;
 
     public UserDto() {
 
@@ -15,6 +18,13 @@ public class UserDto {
         this.bio = bio;
     }
     
+    public UserDto(User user) {
+        this.name = user.getName();
+        this.surname = user.getSurname();
+        this.bio = user.getBio();
+        this.profileToken = user.getProfileToken();
+    }
+
     public String getName() {
         return name;
     }
@@ -32,6 +42,14 @@ public class UserDto {
     }
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getProfileToken() {
+        return profileToken;
+    }
+
+    public void setProfileToken(String profileToken) {
+        this.profileToken = profileToken;
     }
 }
 

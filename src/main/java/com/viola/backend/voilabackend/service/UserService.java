@@ -230,4 +230,8 @@ public class UserService {
             this.addBankAccountInfo(user, bi);
         }
 	}
+
+    public List<User> getConnections(User user) {
+        return userRepository.findAll();
+    }
 }

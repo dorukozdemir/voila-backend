@@ -13,12 +13,14 @@ import static org.mockito.ArgumentMatchers.nullable;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.helper.JsonDataReader;
 import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.dto.ProfileDto;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.apache.http.HttpEntity;
@@ -79,6 +81,7 @@ public class US05_Steps {
     @Then("Kartta tanımlı kullanıcının profil bilgileri ekrana geliyor")
     public void kartta_tanımlı_kullanıcının_profil_bilgileri_ekrana_geliyor() throws IOException {
         String url = requestHelper.buildUrl(PROFILE_PATH) + "/" + this.profileToken;
+        User user = userService.getByProfileToken(this.profileToken);
         HttpResponse response = requestHelper.httpGet(url, this.jwt);
         assertEquals(200, response.getStatusLine().getStatusCode());
         HttpEntity entity = response.getEntity();
@@ -86,8 +89,10 @@ public class US05_Steps {
         JsonObject jsonObject = JsonParser.parseString(responseString).getAsJsonObject();
         Assertions.assertTrue(jsonObject.isJsonObject());
         ObjectMapper mapper = new ObjectMapper();
-        String testJsonString = jsonDataReader.getJsonStringfromFile("US05_S01_Res.json");
-        assertEquals(mapper.readTree(testJsonString), mapper.readTree(responseString));
+        ProfileDto exampleProfile = (ProfileDto)jsonDataReader.getSingleObjectFromFile("US11_S01_Res.json", ProfileDto.class);
+        exampleProfile.getPersonal().setProfileToken(user.getProfileToken());
+        Gson gson = new Gson();
+        assertEquals(mapper.readTree(gson.toJson(exampleProfile)), mapper.readTree(responseString));
     }
     @When("Kullanıcı kartı okutuyor ve {string} idli profili görüntülemek istiyor")
     public void kullanıcı_kartı_okutuyor_ve_idli_profili_görüntülemek_istiyor(String profileToken) {

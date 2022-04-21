@@ -1,8 +1,12 @@
 package com.viola.backend.voilabackend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
+import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
 import com.viola.backend.voilabackend.service.UserService;
 
@@ -94,6 +98,22 @@ public class ProfileRestController {
         } else {         
             ProfileDto profile = new ProfileDto(profileUser);
             return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
+        }
+    }
+
+    @GetMapping("/connections")
+    public ResponseEntity<List<UserDto>> myConnections() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        List<User> connections = userService.getConnections(user);
+        if (connections == null || connections.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            List<UserDto> connectionsDto = new ArrayList<UserDto>();      
+            for(User u: connections) {
+                connectionsDto.add(new UserDto(u));
+            }   
+            return ResponseEntity.status(HttpStatus.OK).body(connectionsDto);
         }
     }
 }

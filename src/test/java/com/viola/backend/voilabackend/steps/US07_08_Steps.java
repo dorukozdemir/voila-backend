@@ -83,6 +83,7 @@ public class US07_08_Steps {
     public void kullanıcı_güncel_bilgilerini_görüyor() throws Exception{
         User user = userService.getUserByUsername(this.username);
         UserDto exampleProfile = (UserDto)jsonDataReader.getSingleObjectFromFile(PROFILE_FILE, UserDto.class);
+        exampleProfile.setProfileToken(user.getProfileToken());
         ModelMapper modelMapper = new ModelMapper();
         ObjectMapper mapper = new ObjectMapper();
         UserDto retrievedUserProfile = modelMapper.map(user, UserDto.class);
