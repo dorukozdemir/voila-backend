@@ -16,6 +16,7 @@ import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.model.domain.BankAccountInfo;
 import com.viola.backend.voilabackend.model.domain.CompanyInfo;
+import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.ContactInfo;
 import com.viola.backend.voilabackend.model.domain.ContactType;
 import com.viola.backend.voilabackend.model.domain.Link;
@@ -31,7 +32,10 @@ import com.viola.backend.voilabackend.repository.UserRepository;
 @Service("userService")
 public class UserService {
     @Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
+
+    @Autowired
+    private ConnectionService connectionService;
 
     private final int RESETPASSWORDTOKENDURATION = 15;
 
@@ -67,6 +71,12 @@ public class UserService {
     }
 
     public void deleteUser(User user) {
+        //delete all connections
+        List<Connection> connections = connectionService.getUserConnections(user);
+        for (Connection connection: connections) {
+            connectionService.deleteConnection(connection);
+        }
+        //than delete user
         userRepository.delete(user);
     }
 

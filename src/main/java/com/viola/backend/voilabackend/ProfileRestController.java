@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.viola.backend.voilabackend.externals.EmailSenderService;
+import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
+import com.viola.backend.voilabackend.service.ConnectionService;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,9 @@ public class ProfileRestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ConnectionService connectionService;
 
     @Autowired
     private EmailSenderService emailSenderService;
@@ -48,7 +53,13 @@ public class ProfileRestController {
         User otherUser = userService.getByProfileToken(profileToken);
         if (user == null || otherUser == null ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {         
+        } else {
+            if (!user.equals(otherUser)) {
+                Connection connection = connectionService.getConnection(user, otherUser);
+                if (connection == null) {
+                    connectionService.createConnection(user, otherUser);
+                }
+            }
             ProfileDto profile = new ProfileDto(otherUser);
             return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
         }
@@ -95,7 +106,7 @@ public class ProfileRestController {
         User profileUser = userService.getUserByUsername(user.getUsername());
         if (profileUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {         
+        } else {
             ProfileDto profile = new ProfileDto(profileUser);
             return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
         }
@@ -105,9 +116,9 @@ public class ProfileRestController {
     public ResponseEntity<List<UserDto>> myConnections() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
-        List<User> connections = userService.getConnections(user);
+        List<User> connections = connectionService.getConnections(user);
         if (connections == null || connections.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             List<UserDto> connectionsDto = new ArrayList<UserDto>();      
             for(User u: connections) {

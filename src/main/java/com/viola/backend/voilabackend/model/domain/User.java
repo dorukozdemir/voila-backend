@@ -256,4 +256,21 @@ public class User implements UserDetails{
         }
         this.bankAccounts.add(bankAccountInfo);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof User) {
+            if (((User) obj).getId().equals(getId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
