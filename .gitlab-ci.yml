@@ -22,8 +22,10 @@ test:
   script:
     - cp $application_cicd_mysql_properties src/main/resources/application.properties
     - ./mvnw clean test
+  except:
+    - feature/gitlabci-config
 
-publish:
+publish_stage:
   image: docker:latest
   stage: publish
   services:
@@ -37,7 +39,7 @@ publish:
   only:
     - master
 
-deploy:
+deploy_stage:
   image: alpine:latest
   stage: deploy
   tags:
@@ -54,3 +56,15 @@ deploy:
     url: http://213.232.11.195
   only:
     - master
+
+deploy_k8s:
+  stage: deploy
+  image: matshareyourscript/aws-helm-kubectl
+  before_script:
+    - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    - export AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context arn:aws:eks:eu-west-1:818879812205:cluster/voila-backend
+    - kubectl get pods
