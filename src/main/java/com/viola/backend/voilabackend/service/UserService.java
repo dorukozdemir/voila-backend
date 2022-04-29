@@ -109,7 +109,7 @@ public class UserService {
         Calendar currentTimeNow = Calendar.getInstance();
         currentTimeNow.add(Calendar.MINUTE, RESETPASSWORDTOKENDURATION);
         Date expiry = currentTimeNow.getTime();
-        user.setResetPasswordToken(UUID.randomUUID().toString());
+        user.setResetPasswordToken(UUID.randomUUID().toString().replace("-", "").toLowerCase());
         user.setResetPasswordTokenExpiry(expiry);
         userRepository.save(user);
     }
