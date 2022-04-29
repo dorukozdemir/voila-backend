@@ -37,7 +37,7 @@ public class User implements UserDetails{
     private Date created = new Date();
     private String resetPasswordToken;
     private Date resetPasswordTokenExpiry = new Date();
-    private String profileToken = UUID.randomUUID().toString();
+    private String profileToken = UUID.randomUUID().toString().replace("-", "").toLowerCase().substring(0, 10);
     private SocialMediaAccounts socialMediaAccounts;
     private Set<ContactInfo> contactInfo;
     private Set<Link> links;
