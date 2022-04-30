@@ -29,10 +29,13 @@ test:
   services:
     - mysql:latest
   script:
+<<<<<<< HEAD
     - cp $application_cicd_mysql_properties src/main/resources/application.properties
+=======
+    - cp $application_cicd_properties src/main/resources/application.properties
+>>>>>>> Test için application.properties variable yapıldı
     - ./mvnw clean test
-  except:
-    - feature/gitlabci-config
+
 
 publish_stage:
   image: docker:latest
