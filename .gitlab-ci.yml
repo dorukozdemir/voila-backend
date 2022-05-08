@@ -11,17 +11,14 @@ variables:
   POSTGRES_PASSWORD: password
   PGDATA: "/var/lib/postgresql/data"
   POSTGRES_INITDB_ARGS: "--encoding=UTF8 --data-checksums"
-<<<<<<< HEAD
   MYSQL_DATABASE: voiladb
   MYSQL_ROOT_PASSWORD: password
-=======
   DOCKER_REGISTRY: 818879812205.dkr.ecr.eu-west-1.amazonaws.com
   AWS_DEFAULT_REGION: eu-west-1
   APP_NAME: voila-repo
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
->>>>>>> Testing
 
 test:
   image: openjdk:11-jdk
@@ -29,11 +26,7 @@ test:
   services:
     - mysql:latest
   script:
-<<<<<<< HEAD
     - cp $application_cicd_mysql_properties src/main/resources/application.properties
-=======
-    - cp $application_cicd_properties src/main/resources/application.properties
->>>>>>> Test için application.properties variable yapıldı
     - ./mvnw clean test
 
 
@@ -58,7 +51,7 @@ publish_ecr:
   services:
     - docker:19-dind
   before_script:
-    - echo $application_cicd_properties
+    - echo $application_prod_mysql_properties
     - apk add --no-cache curl jq python3 py3-pip
     - pip install awscli
     - aws ecr get-login-password | docker login --username AWS --password-stdin $DOCKER_REGISTRY
@@ -68,12 +61,12 @@ publish_ecr:
     - echo $CI_REGISTRY_IMAGE
     - echo $CI_COMMIT_REF_NAME
   script:
-    - ls
+    - cp $application_prod_mysql_properties src/main/resources/application.properties
     - docker build -t $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID -t $DOCKER_REGISTRY/$APP_NAME .
     - docker push $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID
     - docker push $DOCKER_REGISTRY/$APP_NAME
   only:
-    - feature/gitlabci-config
+    - main
 
 deploy_stage:
   image: alpine:latest
@@ -86,25 +79,9 @@ deploy_stage:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f voila-backend || true"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d --network=host -p 80:8080 --name voila-backend $TAG_COMMIT"0
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d --network=host -p 80:8080 --name voila-backend $TAG_COMMIT"
   environment:
     name: production
     url: http://213.232.11.195
   only:
     - master
-
-deploy_k8s:
-  stage: deploy
-  image: matshareyourscript/aws-helm-kubectl
-  before_script:
-    - echo "$AWS_ACCESS_KEY_ID" 
-    - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
-    - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
-    - aws configure set region "$AWS_DEFAULT_REGION"
-    - echo "$CI_REGISTRY"
-  script:
-    - kubectl config get-contexts
-    - kubectl config use-context arn:aws:eks:eu-west-1:818879812205:cluster/voila-backend
-    - kubectl get pods
-  only:
-    - main
