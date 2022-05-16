@@ -85,6 +85,10 @@ public class ProfileRestController {
             userService.updateContactInformation(user, profileUpdateRequest.getContactInfo());
             profileUpdated = true;
         }
+        if (profileUpdateRequest.getLinks() != null && profileUpdateRequest.getLinks().length > 0) {
+            userService.updateLinks(user, profileUpdateRequest.getLinks());
+            profileUpdated = true;
+        }
         if (profileUpdateRequest.getCompanyInfo() != null && profileUpdateRequest.getCompanyInfo().length > 0) {
             userService.updateCompanyInformation(user, profileUpdateRequest.getCompanyInfo());
             profileUpdated = true;

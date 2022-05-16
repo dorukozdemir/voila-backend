@@ -244,4 +244,23 @@ public class UserService {
     public List<User> getConnections(User user) {
         return userRepository.findAll();
     }
+    public void updateLinks(User user, LinkDto[] links) {
+        if (links.length == 1) {
+            user.setWebsite1(links[0].getValue());
+        }
+        else if (links.length == 2) {
+            user.setWebsite1(links[0].getValue());
+            user.setWebsite2(links[1].getValue());
+        } else if (links.length == 3)  {
+            user.setWebsite1(links[0].getValue());
+            user.setWebsite2(links[1].getValue());
+            user.setWebsite3(links[2].getValue());
+        } else if (links.length == 4) {
+            user.setWebsite1(links[0].getValue());
+            user.setWebsite2(links[1].getValue());
+            user.setWebsite3(links[2].getValue());
+            user.setWebsite4(links[3].getValue());
+        }
+        this.save(user);
+    }
 }
