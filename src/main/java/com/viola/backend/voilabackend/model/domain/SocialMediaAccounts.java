@@ -1,21 +1,13 @@
 package com.viola.backend.voilabackend.model.domain;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 
-@Entity
-@Table(name = "v_social_media_accounts_t")
+@Embeddable
 public class SocialMediaAccounts {
     
-    private Long id;
-    private User user;
     private String facebook;
     private String twitter;
     private String instagram;
@@ -29,24 +21,7 @@ public class SocialMediaAccounts {
     private String telegram;
     private String snap;
 
-    @Id
-    @Column(name = "user_id")
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-    }
     public String getFacebook() {
         return facebook;
     }
@@ -89,6 +64,7 @@ public class SocialMediaAccounts {
     public void setBehance(String behance) {
         this.behance = behance;
     }
+    @Column(name="dribbble")
     public String getDribble() {
         return dribble;
     }
@@ -113,6 +89,7 @@ public class SocialMediaAccounts {
     public void setTelegram(String telegram) {
         this.telegram = telegram;
     }
+    @Column(name="snapchat")
     public String getSnap() {
         return snap;
     }

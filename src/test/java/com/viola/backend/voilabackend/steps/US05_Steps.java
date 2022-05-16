@@ -89,8 +89,9 @@ public class US05_Steps {
         JsonObject jsonObject = JsonParser.parseString(responseString).getAsJsonObject();
         Assertions.assertTrue(jsonObject.isJsonObject());
         ObjectMapper mapper = new ObjectMapper();
-        ProfileDto exampleProfile = (ProfileDto)jsonDataReader.getSingleObjectFromFile("US11_S01_Res.json", ProfileDto.class);
+        ProfileDto exampleProfile = (ProfileDto)jsonDataReader.getSingleObjectFromFile("US05_S01_Res.json", ProfileDto.class);
         exampleProfile.getPersonal().setProfileToken(user.getProfileToken());
+
         Gson gson = new Gson();
         assertEquals(mapper.readTree(gson.toJson(exampleProfile)), mapper.readTree(responseString));
     }

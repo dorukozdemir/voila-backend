@@ -23,7 +23,7 @@ public class UserService_Steps {
 	private String profileToken;
 	
 	@When("Kullanıcı {string} ve {string} ile oluşturulduğunda")
-	public void kullanıcı_ve_ile_oluşturulduğunda(String username, String password) throws UserAlreadyExistException{
+	public void kullanıcı_ve_ile_oluşturulduğunda(String username, String password) throws UserAlreadyExistException {
 		this.username = username;
 		userService.createUser(username, password);
 

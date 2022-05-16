@@ -8,33 +8,32 @@
     [
         {
             "name":"Coza Dijital Akıllı Çözümler Ltd. Şti.",
-            "address":"Baki Dede Sok. Balat Mah. No:19 34087 Fatih/İstanbul",
-            "taxNo":"2140664898",
-            "taxBody":"Fatih"
-        },
-        {
-            "name":"Keys Danışmanlık",
-            "address":"Ankara",
-            "taxNo":"123456789101",
-            "taxBody":"Başkent"
+            "address": "",
+            "taxNo": "",
+            "taxBody": ""
         }
     ],
     "contactInfo":
     [
         {
             "contactType":"whatsapp",
-            "extension":"+90",
+            "extension":"",
             "value":"2124539256"
         },
         {
             "contactType":"phone",
-            "extension":"+90",
+            "extension":"",
             "value":"2124539256"
         },
         {
             "contactType":"phone",
-            "extension":"+90",
+            "extension":"",
             "value":"5313271062"
+        },
+        {
+            "contactType":"email",
+            "extension":"",
+            "value":"harun2@voila.com"
         },
         {
             "contactType":"email",
@@ -54,13 +53,8 @@
     "bankAccountInfo":
     [
         {
-            "bankName":"Denizbank",
-            "holderName":"Mehmet Çelik",
-            "iban":"TR38 7654 4343 2132 3213 9932 00"
-        },
-        {
             "bankName":"Garanti Bankası",
-            "holderName":"Mehmet Çelik",
+            "holderName":"Atilla Çağlar",
             "iban":"TR38 7654 4343 2132 3213 9932 00"
         }
     ],

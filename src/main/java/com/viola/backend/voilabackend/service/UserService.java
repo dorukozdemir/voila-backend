@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -25,6 +26,7 @@ import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.dto.BankAccountInfoDto;
 import com.viola.backend.voilabackend.model.dto.CompanyInfoDto;
 import com.viola.backend.voilabackend.model.dto.ContactInfoDto;
+import com.viola.backend.voilabackend.model.dto.LinkDto;
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.repository.UserRepository;
@@ -134,7 +136,6 @@ public class UserService {
 
     public void updateSocialMediaAccounts(User user, SocialMediaAccounts socialMediaAccounts) {
         if (user.getSocialMediaAccounts() == null) {
-            socialMediaAccounts.setUser(user);
             user.setSocialMediaAccounts(socialMediaAccounts);
             save(user);
         } else {
@@ -147,7 +148,6 @@ public class UserService {
         if (user.getSocialMediaAccounts() == null) {
             SocialMediaAccounts socialMediaAccounts = new SocialMediaAccounts();
             socialMediaAccounts.copyFromDto(socialMediaAccountsDto);
-            socialMediaAccounts.setUser(user);
             user.setSocialMediaAccounts(socialMediaAccounts);
             save(user);
         } else {
@@ -165,20 +165,20 @@ public class UserService {
     }
 
     public void addLink(User user, Link link) {
-        link.setUser(user);
+        //link.setUser(user);
         user.addLink(link);
         save(user);
     }
 
     @Transactional
     public void addCompanyInfo(User user, CompanyInfo companyInfo) {
-        companyInfo.setUser(user);
+        /*companyInfo.setUser(user);*/
         user.addCompanyInfo(companyInfo);
         save(user);
     }
 
     public void addBankAccountInfo(User user, BankAccountInfo bankAccountInfo) {
-        bankAccountInfo.setUser(user);
+        //bankAccountInfo.setUser(user);
         user.addBankAccountInfo(bankAccountInfo);
         save(user);
     }
@@ -203,14 +203,58 @@ public class UserService {
     public void updateContactInformation(User user, ContactInfoDto[] contactInfo) {
         user.setContactInfo(new HashSet<ContactInfo>());
         save(user);
+        Set<String> emails = new HashSet<String>();
+        Set<String> phones = new HashSet<String>();
         for(ContactInfoDto contactInfoDto : contactInfo) {
-            ContactInfo ci = new ContactInfo();
+            /*ContactInfo ci = new ContactInfo();
             ci.setContactType(ContactType.toContactType(contactInfoDto.getContactType()));
             ci.setExtension(contactInfoDto.getExtension());
             ci.setValue(contactInfoDto.getValue());
             ci.setUser(user);
             this.addContactInfo(user, ci);
+            */
+            if (ContactType.toContactType(contactInfoDto.getContactType()).equals(ContactType.EMAIL)) {
+                if(!contactInfoDto.getValue().equals(user.getUsername())) {
+                    emails.add(contactInfoDto.getValue());
+                }
+            }
+            if (ContactType.toContactType(contactInfoDto.getContactType()).equals(ContactType.PHONE)) {
+                phones.add(contactInfoDto.getValue());
+            }
+            if (ContactType.toContactType(contactInfoDto.getContactType()).equals(ContactType.WHATSAPP)) {
+                user.setWhatsapp(contactInfoDto.getValue());
+            }
         }
+        if(emails.size() == 0) {
+            user.setEmail1("");
+            user.setEmail2("");
+        } else if (emails.size() == 1) {
+            user.setEmail1((String)emails.toArray()[0]);
+            user.setEmail2("");
+        } else if (emails.size() == 2) {
+            user.setEmail1((String)emails.toArray()[0]);
+            user.setEmail2((String)emails.toArray()[1]);
+        }
+
+        if(phones.size() == 0) {
+            user.setPhone("");
+            user.setPhone2("");
+            user.setPhone3("");
+        } else if (phones.size() == 1) {
+            user.setPhone((String)phones.toArray()[0]);
+            user.setPhone2("");
+            user.setPhone3("");
+        } else if (phones.size() == 2) {
+            user.setPhone((String)phones.toArray()[0]);
+            user.setPhone2((String)phones.toArray()[1]);
+            user.setPhone3("");
+        } else if (phones.size() == 3) {
+            user.setPhone((String)phones.toArray()[0]);
+            user.setPhone2((String)phones.toArray()[1]);
+            user.setPhone3((String)phones.toArray()[2]);
+        }
+
+        save(user);
         
     }
 
@@ -226,6 +270,7 @@ public class UserService {
             ci.setUser(user);
             this.addCompanyInfo(user, ci);
         }
+        save(user);
     }
 
 	public void updateBankInformation(User user, BankAccountInfoDto[] bankAccountInfo) {
@@ -239,11 +284,19 @@ public class UserService {
             bi.setUser(user);
             this.addBankAccountInfo(user, bi);
         }
+        
+        /*if (bankAccountInfo.length > 0) {
+            user.setIban(bankAccountInfo[0].getIban());
+            user.setIbanBank(bankAccountInfo[0].getBankName());
+        }
+        */
+        save(user);
 	}
 
     public List<User> getConnections(User user) {
         return userRepository.findAll();
     }
+
     public void updateLinks(User user, LinkDto[] links) {
         if (links.length == 1) {
             user.setWebsite1(links[0].getValue());

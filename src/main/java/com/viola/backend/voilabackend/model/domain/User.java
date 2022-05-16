@@ -1,22 +1,24 @@
 package com.viola.backend.voilabackend.model.domain;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -25,7 +27,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "v_users_t")
+@Table(name = "cardvisits")
 public class User implements UserDetails{
 
     private Long id;
@@ -43,6 +45,19 @@ public class User implements UserDetails{
     private Set<Link> links;
     private Set<CompanyInfo> companies;
     private Set<BankAccountInfo> bankAccounts;
+    private String website1;
+    private String website2;
+    private String website3;
+    private String website4;
+    private String whatsapp;
+    private String email1;
+    private String email2;
+    private String phone;
+    private String phone2;
+    private String phone3;
+    private String companyName;
+    private String iban;
+    private String ibanBank;
 
     public User() {
 
@@ -54,7 +69,10 @@ public class User implements UserDetails{
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="cardvisits_id_seq",
+                   sequenceName="cardvisits_id_seq",
+                   allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cardvisits_id_seq")
     public Long getId() {
         return this.id;
     }
@@ -96,6 +114,7 @@ public class User implements UserDetails{
         this.surname = surname;
     }
 
+    @Column(name="title")
     public String getBio() {
         return bio;
     }
@@ -104,6 +123,7 @@ public class User implements UserDetails{
         this.bio = bio;
     }
 
+    @Column(name="created_at")
     public Date getCreated() {
         return created;
     }
@@ -112,6 +132,7 @@ public class User implements UserDetails{
         this.created = created;
     }  
 
+    @Column(name="password_reset_token")
     public String getResetPasswordToken() {
         return resetPasswordToken;
     }
@@ -120,7 +141,14 @@ public class User implements UserDetails{
         this.resetPasswordToken = resetPasswordToken;
     }
 
+    @Transient
     public Date getResetPasswordTokenExpiry() {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance(); 
+        c.setTime(dt); 
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        this.resetPasswordTokenExpiry = dt;
         return resetPasswordTokenExpiry;
     }
 
@@ -128,6 +156,7 @@ public class User implements UserDetails{
         this.resetPasswordTokenExpiry = resetPasswordTokenExpiry;
     }
     
+    @Column(name="url")
     public String getProfileToken() {
         return profileToken;
     }
@@ -136,8 +165,7 @@ public class User implements UserDetails{
         this.profileToken = profileToken;
     }
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn
+    @Embedded
     public SocialMediaAccounts getSocialMediaAccounts() {
         return socialMediaAccounts;
     }
@@ -145,8 +173,36 @@ public class User implements UserDetails{
     public void setSocialMediaAccounts(SocialMediaAccounts socialMediaAccounts) {
         this.socialMediaAccounts = socialMediaAccounts;
     }
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Transient
     public Set<ContactInfo> getContactInfo() {
+        this.contactInfo = new HashSet<ContactInfo>();
+        ContactInfo ciEmail = new ContactInfo(ContactType.EMAIL, "" ,this.username);
+        this.contactInfo.add(ciEmail);
+        if (this.whatsapp!=null && !this.whatsapp.trim().equals("")) {
+            ContactInfo ci = new ContactInfo(ContactType.WHATSAPP, "", this.whatsapp);
+            this.contactInfo.add(ci);
+        }
+        if (this.email1 != null && !this.email1.trim().equals("")) {
+            ContactInfo ci = new ContactInfo(ContactType.EMAIL, "", this.email1);
+            this.contactInfo.add(ci);
+        }
+        if (this.email2 != null && !this.email2.trim().equals("")) {
+            ContactInfo ci = new ContactInfo(ContactType.EMAIL, "", this.email2);
+            this.contactInfo.add(ci);
+        }
+        if (this.phone != null && !this.phone.trim().equals("")) {
+            ContactInfo ci = new ContactInfo(ContactType.PHONE, "", this.phone);
+            this.contactInfo.add(ci);
+        }
+        if (this.phone2 != null && !this.phone2.trim().equals("")) {
+            ContactInfo ci = new ContactInfo(ContactType.PHONE, "", this.phone2);
+            this.contactInfo.add(ci);
+        }
+        if (this.phone3 != null && !this.phone3.trim().equals("")) {
+            ContactInfo ci = new ContactInfo(ContactType.PHONE, "", this.phone3);
+            this.contactInfo.add(ci);
+        }
         return contactInfo;
     }
 
@@ -154,8 +210,26 @@ public class User implements UserDetails{
         this.contactInfo = contactInfo;
     }
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    // @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Transient
     public Set<Link> getLinks() {
+        this.links = new HashSet<Link>();
+        if (this.website1 != null && !this.website1.trim().equals("anObject")) {
+            Link link = new Link(this.website1);
+            this.links.add(link);
+        }
+        if (this.website2 != null && !this.website2.trim().equals("anObject")) {
+            Link link = new Link(this.website2);
+            this.links.add(link);
+        }
+        if (this.website3 != null && !this.website3.trim().equals("anObject")) {
+            Link link = new Link(this.website3);
+            this.links.add(link);
+        }
+        if (this.website4 != null && !this.website4.trim().equals("anObject")) {
+            Link link = new Link(this.website4);
+            this.links.add(link);
+        }
         return links;
     }
 
@@ -163,8 +237,12 @@ public class User implements UserDetails{
         this.links = links;
     }
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    // @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Transient
     public Set<CompanyInfo> getCompanies() {
+        this.companies = new HashSet<CompanyInfo>();
+        CompanyInfo ci = new CompanyInfo(this.companyName, "", "", "");
+        this.companies.add(ci);
         return companies;
     }
 
@@ -172,8 +250,20 @@ public class User implements UserDetails{
         this.companies = companies;
     }
 
-    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    //@OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Transient
     public Set<BankAccountInfo> getBankAccounts() {
+        this.bankAccounts = new HashSet<BankAccountInfo>();
+        String holderName = "";
+        if (this.name != null && !this.name.trim().equals("")) {
+            holderName = this.name;
+        }
+        if (this.surname != null && !this.surname.trim().equals("")) {
+            holderName = holderName + " " + this.surname;
+        }
+        holderName = holderName.trim();
+        BankAccountInfo bai = new BankAccountInfo(this.ibanBank, holderName, this.iban);
+        this.bankAccounts.add(bai);
         return bankAccounts;
     }
 
@@ -233,28 +323,166 @@ public class User implements UserDetails{
         if (this.contactInfo == null) {
             this.contactInfo = new LinkedHashSet<ContactInfo>();
         }
-        this.contactInfo.add(singleContactInfo);
+        //this.contactInfo.add(singleContactInfo);
+        if(singleContactInfo.getContactType().equals(ContactType.WHATSAPP)) {
+            this.whatsapp = singleContactInfo.getValue();
+        } else if (singleContactInfo.getContactType().equals(ContactType.EMAIL)) {
+            if(this.email1 == null || this.email1.trim().equals("")) {
+                this.email1 = singleContactInfo.getValue();
+            } else if(this.email2 == null || this.email2.trim().equals("")) {
+                this.email2 = singleContactInfo.getValue();
+            }
+        } else if(singleContactInfo.getContactType().equals(ContactType.PHONE)) {
+            if(this.phone == null || this.phone.trim().equals("")) {
+                this.phone = singleContactInfo.getValue();
+            } else if(this.phone2 == null || this.phone2.trim().equals("")) {
+                this.phone2 = singleContactInfo.getValue();
+            } else if(this.phone3 == null || this.phone3.trim().equals("")) {
+                this.phone3 = singleContactInfo.getValue();
+            }
+        }
     }
 
     public void addLink(Link link) {
         if (this.links == null) {
             this.links = new LinkedHashSet<Link>();
         }
-        this.links.add(link);
+        if(this.website1 == null || this.website1.trim().equals("")) {
+            this.setWebsite1(link.getValue());
+        }
+        else if(this.website2 == null || this.website2.trim().equals("")) {
+            this.setWebsite2(link.getValue());
+        }
+        else if(this.website3 == null || this.website3.trim().equals("")) {
+            this.setWebsite3(link.getValue());
+        } else if(this.website4 == null || this.website4.trim().equals("")) {
+            this.setWebsite4(link.getValue());
+        }
+        //this.links.add(link);
     }
 
     public void addCompanyInfo(CompanyInfo companyInfo) {
         if (this.companies == null) {
             this.companies = new LinkedHashSet<CompanyInfo>();
         }
-        this.companies.add(companyInfo);
+        this.companyName = companyInfo.getName();
+        //this.companies.add(companyInfo);
     }
 
     public void addBankAccountInfo(BankAccountInfo bankAccountInfo) {
         if (this.bankAccounts == null) {
             this.bankAccounts = new LinkedHashSet<BankAccountInfo>();
         }
-        this.bankAccounts.add(bankAccountInfo);
+        this.iban = bankAccountInfo.getIban();
+        this.ibanBank = bankAccountInfo.getBankName();
+    }
+
+    @Column(name = "web_site_1")
+    public String getWebsite1() {
+        return website1;
+    }
+
+    public void setWebsite1(String website1) {
+        this.website1 = website1;
+    }
+
+    @Column(name = "web_site_2")
+    public String getWebsite2() {
+        return website2;
+    }
+
+    public void setWebsite2(String website2) {
+        this.website2 = website2;
+    }
+
+    @Column(name = "web_site_3")
+    public String getWebsite3() {
+        return website3;
+    }
+
+    public void setWebsite3(String website3) {
+        this.website3 = website3;
+    }
+
+    @Column(name = "web_site_4")
+    public String getWebsite4() {
+        return website4;
+    }
+
+    public void setWebsite4(String website4) {
+        this.website4 = website4;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
+    }
+
+    public String getEmail1() {
+        return email1;
+    }
+
+    public void setEmail1(String email1) {
+        this.email1 = email1;
+    }
+
+    public String getEmail2() {
+        return email2;
+    }
+
+    public void setEmail2(String email2) {
+        this.email2 = email2;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPhone2() {
+        return phone2;
+    }
+
+    public void setPhone2(String phone2) {
+        this.phone2 = phone2;
+    }
+
+    public String getPhone3() {
+        return phone3;
+    }
+
+    public void setPhone3(String phone3) {
+        this.phone3 = phone3;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public String getIbanBank() {
+        return ibanBank;
+    }
+
+    public void setIbanBank(String ibanBank) {
+        this.ibanBank = ibanBank;
     }
 
     @Override

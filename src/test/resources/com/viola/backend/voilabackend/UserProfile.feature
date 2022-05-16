@@ -17,7 +17,7 @@ Feature: Kullanıcı profili
         When Kullanıcı "+90" "2124539256" telefon numarası giriyor
         When Kullanıcı "+90" "5313271062" telefon numarası giriyor
         When Kullanıcı "mail@sirketim.com" email adresi giriyor
-        Then Kullanıcı 4 adet iletişim bilgisi girmiş oluyor
+        Then Kullanıcı 5 adet iletişim bilgisi girmiş oluyor
     Scenario: Kullanıcı link bilgileri ekliyor    
         Given Kullanıcı "mete@voila.com" epostası ile var
         When Kullanıcı "sirketim.com" bağlantısını ekliyor
@@ -26,12 +26,12 @@ Feature: Kullanıcı profili
     Scenario: Kullanıcı şirket bilgileri ekliyor    
         Given Kullanıcı "mete@voila.com" epostası ile var
         When Kullanıcı "Coza Akıllı Çözümler Ltd Şti", "Baki Dede Sok. Balat Mah. No:19 34087 Fatih/İstanbul", "2140664898", "Fatih" şirketini ekliyor
-        When Kullanıcı "Keys Danışmanlık", "Ankara", "123456789101", "Başkent" şirketini ekliyor
-        Then Kullanıcı 2 adet şirket eklemiş oluyor
+        # When Kullanıcı "Keys Danışmanlık", "Ankara", "123456789101", "Başkent" şirketini ekliyor
+        Then Kullanıcı 1 adet şirket eklemiş oluyor
     @UserProfileLast
     Scenario: Kullanıcı banka bilgileri ekliyor    
         Given Kullanıcı "mete@voila.com" epostası ile var
         When Kullanıcı "Garanti Bankası", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
-        When Kullanıcı "Denizbank", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
-        Then Kullanıcı 2 adet banka bilgisi eklemiş oluyor
+        # When Kullanıcı "Denizbank", "Mehmet Çelik" ve "TR38 7654 4343 2132 3213 9932 00" banka hesabını ekliyor
+        Then Kullanıcı 1 adet banka bilgisi eklemiş oluyor
     
