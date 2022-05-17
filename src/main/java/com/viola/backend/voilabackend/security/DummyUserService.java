@@ -2,7 +2,6 @@ package com.viola.backend.voilabackend.security;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +35,12 @@ public class DummyUserService {
         encodedPassword = passwordEncoder.encode(password);
         System.out.println("Password is         : " + password);
         System.out.println("Encoded Password is : " + encodedPassword);
+
+        password = "123456";
+        VoilaPasswordEncoder voilaPasswordEncoder = new VoilaPasswordEncoder();
+        encodedPassword = voilaPasswordEncoder.encode(password);
+        System.out.println("Password is                           : " + password);
+        System.out.println("Encoded Password with new algorithm is: " + encodedPassword);
     }
 
     public User getUserByUsername(String username) {

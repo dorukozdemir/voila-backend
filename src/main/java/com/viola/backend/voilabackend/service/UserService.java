@@ -1,7 +1,6 @@
 package com.viola.backend.voilabackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -30,6 +29,7 @@ import com.viola.backend.voilabackend.model.dto.LinkDto;
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.repository.UserRepository;
+import com.viola.backend.voilabackend.security.VoilaPasswordEncoder;
 
 @Service("userService")
 public class UserService {
@@ -41,7 +41,7 @@ public class UserService {
 
     private final int RESETPASSWORDTOKENDURATION = 15;
 
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final VoilaPasswordEncoder passwordEncoder = new VoilaPasswordEncoder();
     
     public User getUserByUsername(String username) {
         List<User> users = userRepository.findByUsername(username);
