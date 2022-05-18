@@ -69,10 +69,10 @@ public class User implements UserDetails{
     }
 
     @Id
-    @SequenceGenerator(name="cardvisits_id_seq",
+    /*@SequenceGenerator(name="cardvisits_id_seq",
                    sequenceName="cardvisits_id_seq",
-                   allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cardvisits_id_seq")
+                   allocationSize=1) */
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return this.id;
     }
