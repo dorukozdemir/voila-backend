@@ -20,7 +20,6 @@ test:
   services:
     - mysql:latest
   script:
-    - echo $application_cicd_mysql_properties 
     - cp $application_cicd_mysql_properties src/main/resources/application.properties
     - ./mvnw clean test
 
@@ -30,7 +29,7 @@ publish:
   services:
     - docker:dind
   script:
-    - mv src/main/resources/application-local.properties src/main/resources/application.properties
+    - cp $application_staging_mysql_properties src/main/resources/application.properties
     - docker build . -t $TAG_COMMIT -t $TAG_LATEST
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker push $TAG_COMMIT
