@@ -1,13 +1,13 @@
 Feature: Kullanıcı voila card üzerinden kişi bilgisi okutuyor
     @US05Last
     Scenario: Kullanıcı voila card üzerinden NFC ile okutunca kullanıcı diğer kullanıcının profil bilgilerine erişiyor
-        Given Kullanan kullanıcı "harun@voila.com" "harun123" ile kayıtlı
+        Given Kullanan kullanıcı "harun3@voila.com" "harun123" ile kayıtlı
         Given Kullanan kullanıcı giriş yapmış durumda
-        Given Kullanıcı "mete1@voila.com" eposta ve "mete123" şifresi ile oluşturulduğunda
-        Given Kullanıcı "mete1@voila.com" epostası ile var
+        Given Kullanıcı "mete2@voila.com" eposta ve "mete123" şifresi ile oluşturulduğunda
+        Given Kullanıcı "mete2@voila.com" epostası ile var
         Given Örnek sosyal medya verisi kaydedildi
         Given Kullanıcı içeri aktarma ekranında
-        Given Profilini görüntüleyen kullanıcı "mete1@voila.com" tokenını göstermiş
+        Given Profilini görüntüleyen kullanıcı "mete2@voila.com" tokenını göstermiş
         When Kullanıcı adını "Atilla" soyadını "Çağlar" biosunu "stratejist" olarak değiştirdiğinde
         When Kullanıcı "+90" "2124539256" whatsapp numarası giriyor
         When Kullanıcı "+90" "2124539256" telefon numarası giriyor
