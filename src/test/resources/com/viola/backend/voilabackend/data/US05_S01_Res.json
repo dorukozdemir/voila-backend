@@ -2,7 +2,8 @@
     "personal": {
         "name": "Atilla",
         "bio": "stratejist",
-        "surname": "Çağlar"
+        "surname": "Çağlar",
+        "profileVisits": 0
     },
     "companyInfo": 
     [
@@ -38,7 +39,7 @@
         {
             "contactType":"email",
             "extension":"",
-            "value":"mete1@voila.com"
+            "value":"mete2@voila.com"
         }
     ],
     "links":
