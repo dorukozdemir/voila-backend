@@ -132,4 +132,18 @@ public class ProfileRestController {
             return ResponseEntity.status(HttpStatus.OK).body(connectionsDto);
         }
     }
+
+    @GetMapping("/insights")
+    public ResponseEntity<List<UserDto>> insights() {
+        List<User> users = userService.getInsights();
+        if (users == null || users.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            List<UserDto> usersDto = new ArrayList<UserDto>();      
+            for(User u: users) {
+                usersDto.add(new UserDto(u));
+            }   
+            return ResponseEntity.status(HttpStatus.OK).body(usersDto);
+        }
+    }
 }

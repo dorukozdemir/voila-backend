@@ -321,4 +321,8 @@ public class UserService {
         user.setProfileVisits(user.getProfileVisits() + 1);
         this.save(user);
     }
+
+    public List<User> getInsights() {
+        return userRepository.findFirst10ByOrderByProfileVisitsDesc();
+    }
 }

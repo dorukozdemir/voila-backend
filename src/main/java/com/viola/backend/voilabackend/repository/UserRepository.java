@@ -11,4 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
     List<User> findByResetPasswordToken(String resetToken);
     List<User> findByProfileToken(String profileToken);
     List<User> findAll();
+    List<User> findFirst10ByOrderByProfileVisitsDesc();
 }
