@@ -59,6 +59,7 @@ public class ProfileRestController {
                 if (connection == null) {
                     connectionService.createConnection(user, otherUser);
                 }
+                userService.increaseProfileVisitCount(otherUser);
             }
             ProfileDto profile = new ProfileDto(otherUser);
             return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());

@@ -316,4 +316,9 @@ public class UserService {
         }
         this.save(user);
     }
+
+    public void increaseProfileVisitCount(User user) {
+        user.setProfileVisits(user.getProfileVisits() + 1);
+        this.save(user);
+    }
 }
