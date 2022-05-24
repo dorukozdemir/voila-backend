@@ -1,5 +1,7 @@
 {
     "name": "Atilla",
     "surname": "Çağlar",
-    "bio": "Stratejist"
+    "bio": "Stratejist",
+    "profileVisits": 0,
+    "profilePhoto":"/CardvisitUI/Dash/media/avatars/blank.png"
   }

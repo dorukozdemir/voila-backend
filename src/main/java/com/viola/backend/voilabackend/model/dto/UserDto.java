@@ -8,6 +8,7 @@ public class UserDto {
     private String bio;
     private String profileToken;
     private int profileVisits;
+    private String profilePhoto;
 
     public UserDto() {
 
@@ -25,6 +26,7 @@ public class UserDto {
         this.bio = user.getBio();
         this.profileToken = user.getProfileToken();
         this.profileVisits = user.getProfileVisits();
+        this.profilePhoto = user.getProfilePhoto();
     }
 
     public String getName() {
@@ -61,5 +63,15 @@ public class UserDto {
     public void setProfileVisits(int profileVisits) {
         this.profileVisits = profileVisits;
     }
+
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    
 }
 

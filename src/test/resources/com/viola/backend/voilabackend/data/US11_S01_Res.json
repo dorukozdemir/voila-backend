@@ -2,7 +2,9 @@
     "personal": {
         "name": "Atilla",
         "bio": "stratejist",
-        "surname": "Çağlar"
+        "surname": "Çağlar",
+        "profileVisits": 0,
+        "profilePhoto":"/CardvisitUI/Dash/media/avatars/blank.png"
     },
     "companyInfo": 
     [

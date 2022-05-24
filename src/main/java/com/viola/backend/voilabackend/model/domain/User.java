@@ -55,6 +55,7 @@ public class User implements UserDetails{
     private String iban;
     private String ibanBank;
     private int profileVisits = 0;
+    private String profilePhoto = "/CardvisitUI/Dash/media/avatars/blank.png";
 
     public User() {
 
@@ -489,6 +490,14 @@ public class User implements UserDetails{
 
     public void setProfileVisits(int profileVisits) {
         this.profileVisits = profileVisits;
+    }
+
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
     }
 
     @Override
