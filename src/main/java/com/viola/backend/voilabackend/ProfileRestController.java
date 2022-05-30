@@ -1,5 +1,10 @@
 package com.viola.backend.voilabackend;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +12,7 @@ import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
+import com.viola.backend.voilabackend.model.dto.UploadImageResponse;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
 import com.viola.backend.voilabackend.service.ConnectionService;
@@ -21,7 +27,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
 
 @RestController
 public class ProfileRestController {
@@ -32,8 +41,7 @@ public class ProfileRestController {
     @Autowired
     private ConnectionService connectionService;
 
-    @Autowired
-    private EmailSenderService emailSenderService;
+    private static HttpURLConnection con;
 
     @GetMapping("/profile/token")
     public ResponseEntity<String> profileToken() {
@@ -145,5 +153,55 @@ public class ProfileRestController {
             }   
             return ResponseEntity.status(HttpStatus.OK).body(usersDto);
         }
+    }
+
+    @PostMapping("/uploadPhoto")
+    public ResponseEntity<String> uploadPhoto(@RequestBody String imageValue) {
+        Gson gson = new Gson();
+        var url = "https://voilacard.com/api/cardvisit/upload-image ";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        try {
+
+            var myurl = new URL(url);
+            con = (HttpURLConnection) myurl.openConnection();
+
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("x-api-key", "633e382f0f4e0ef3c9a8c9e98d5534078c94386f81343ab48c25dab9becc220f");
+            con.setRequestProperty("Content-Type", "application/json");
+
+            String jsonInputString = "{\"user\": \"" + user.getProfileToken()+ "\", \"image\": \"" + imageValue + "\"}";
+
+            try(OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);			
+            }
+
+            try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                String responseString = response.toString();
+                
+                System.out.println(response.toString());
+                UploadImageResponse responseObject = gson.fromJson(responseString, UploadImageResponse.class);
+                if(responseObject.isStatus()) {
+                    userService.updatePhoto(user, responseObject.getPath());
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } finally {
+            con.disconnect();
+        }
+        return ResponseEntity.ok().build();
     }
 }

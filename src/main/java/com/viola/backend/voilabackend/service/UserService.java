@@ -325,4 +325,9 @@ public class UserService {
     public List<User> getInsights() {
         return userRepository.findFirst10ByOrderByProfileVisitsDesc();
     }
+
+    public void updatePhoto(User user, String imagePath) {
+        user.setProfilePhoto(imagePath);
+        this.save(user);
+    }
 }
