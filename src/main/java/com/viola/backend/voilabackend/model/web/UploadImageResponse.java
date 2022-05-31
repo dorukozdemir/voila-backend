@@ -1,4 +1,4 @@
-package com.viola.backend.voilabackend.model.dto;
+package com.viola.backend.voilabackend.model.web;
 
 public class UploadImageResponse {
     private boolean status;

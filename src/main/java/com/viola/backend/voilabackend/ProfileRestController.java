@@ -12,9 +12,10 @@ import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
-import com.viola.backend.voilabackend.model.dto.UploadImageResponse;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
+import com.viola.backend.voilabackend.model.web.UploadImageRequest;
+import com.viola.backend.voilabackend.model.web.UploadImageResponse;
 import com.viola.backend.voilabackend.service.ConnectionService;
 import com.viola.backend.voilabackend.service.UserService;
 
@@ -156,7 +157,7 @@ public class ProfileRestController {
     }
 
     @PostMapping("/uploadPhoto")
-    public ResponseEntity<String> uploadPhoto(@RequestBody String imageValue) {
+    public ResponseEntity<String> uploadPhoto(@RequestBody UploadImageRequest uploadImageRequest) {
         Gson gson = new Gson();
         var url = "https://voilacard.com/api/cardvisit/upload-image ";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -171,7 +172,7 @@ public class ProfileRestController {
             con.setRequestProperty("x-api-key", "633e382f0f4e0ef3c9a8c9e98d5534078c94386f81343ab48c25dab9becc220f");
             con.setRequestProperty("Content-Type", "application/json");
 
-            String jsonInputString = "{\"user\": \"" + user.getProfileToken()+ "\", \"image\": \"" + imageValue + "\"}";
+            String jsonInputString = "{\"user\": \"" + user.getProfileToken()+ "\", \"image\": \"" + uploadImageRequest.getImageValue() + "\"}";
 
             try(OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");
@@ -204,6 +205,7 @@ public class ProfileRestController {
         }
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/removePhoto")
     public ResponseEntity<String> removePhoto() {        
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
