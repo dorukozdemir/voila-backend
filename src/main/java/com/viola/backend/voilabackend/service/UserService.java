@@ -42,6 +42,8 @@ public class UserService {
     private final int RESETPASSWORDTOKENDURATION = 15;
 
     private final VoilaPasswordEncoder passwordEncoder = new VoilaPasswordEncoder();
+
+    private final String thumbnail = "/CardvisitUI/Dash/media/avatars/blank.png";
     
     public User getUserByUsername(String username) {
         List<User> users = userRepository.findByUsername(username);
@@ -328,6 +330,11 @@ public class UserService {
 
     public void updatePhoto(User user, String imagePath) {
         user.setProfilePhoto(imagePath);
+        this.save(user);
+    }
+
+    public void removePhoto(User user) {
+        user.setProfilePhoto(thumbnail);
         this.save(user);
     }
 }

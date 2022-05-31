@@ -204,4 +204,11 @@ public class ProfileRestController {
         }
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/removePhoto")
+    public ResponseEntity<String> removePhoto() {        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        userService.removePhoto(user);          
+        return ResponseEntity.ok().build();
+    }
 }
