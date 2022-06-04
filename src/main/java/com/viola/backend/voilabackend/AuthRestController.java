@@ -78,7 +78,7 @@ public class AuthRestController {
         if (userService.isUserExist(username)) {
             User user = userService.getUserByUsername(username);
             userService.createResetPasswordToken(user);
-            emailSenderService.sendForgotPasswordEmail(user.getUsername(), user.getResetPasswordToken());
+            emailSenderService.sendForgotPasswordEmail(user.getName() == null ? "" : user.getName(), user.getUsername(), user.getResetPasswordToken());
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).build();
