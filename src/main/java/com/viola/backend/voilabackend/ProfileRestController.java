@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -113,6 +114,7 @@ public class ProfileRestController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/profile")
     public ResponseEntity<String> myProfile() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -126,6 +128,7 @@ public class ProfileRestController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/connections")
     public ResponseEntity<List<UserDto>> myConnections() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

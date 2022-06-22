@@ -35,7 +35,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     "/v3/api-docs", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/doc/**", "/doc.html").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // ***
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().cors();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
