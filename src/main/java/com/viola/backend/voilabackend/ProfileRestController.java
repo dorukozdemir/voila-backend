@@ -76,6 +76,7 @@ public class ProfileRestController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @PutMapping("/profile")
     public ResponseEntity<String> updateProfile(@RequestBody ProfileRequest profileUpdateRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

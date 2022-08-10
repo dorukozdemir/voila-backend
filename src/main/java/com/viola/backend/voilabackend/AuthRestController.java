@@ -38,6 +38,9 @@ public class AuthRestController {
     private UserService userService;
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     private EmailSenderService emailSenderService;
 
     @CrossOrigin(origins = "*")
@@ -59,12 +62,13 @@ public class AuthRestController {
             .body(jwt);
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserRequest authRequest) throws Exception {
         String username = authRequest.getUsername();
         String password = authRequest.getPassword();
         if (userService.isUserExist(username)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
         } else {
             User user = userService.createUser(username, password);
             final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
@@ -74,6 +78,7 @@ public class AuthRestController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/forgot")
     public ResponseEntity<String> forgot(@RequestBody UserRequest authRequest) throws Exception {
         String username = authRequest.getUsername();
