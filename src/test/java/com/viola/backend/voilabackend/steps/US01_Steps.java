@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.Base64;
 
 import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonParser;
+import com.viola.backend.voilabackend.helper.JsonDataReader;
 import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.web.UserRequest;
@@ -33,6 +35,9 @@ public class US01_Steps {
 
     @Autowired
     private RequestHelper requestHelper;
+
+    @Autowired
+    private JsonDataReader jsonDataReader;
 
     @Before
     public void sunucu_ayarlamalari() {
@@ -81,7 +86,9 @@ public class US01_Steps {
         Assertions.assertEquals(409, response.getStatusLine().getStatusCode());
         HttpEntity entity2 = response.getEntity();
         String responseString = EntityUtils.toString(entity2, "UTF-8");
-        Assertions.assertEquals("", responseString);       
+        ObjectMapper mapper = new ObjectMapper();
+        String testResponseJsonString = jsonDataReader.getJsonStringfromFile("US01_S02_Res.json");
+        Assertions.assertEquals(mapper.readTree(testResponseJsonString), mapper.readTree(responseString));     
     }
 
     @After("@US01Last")
