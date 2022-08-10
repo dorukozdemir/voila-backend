@@ -4,12 +4,16 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -26,6 +30,12 @@ public class JwtUtil {
     // verilen token a ait token bitiş süresini verir.
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    // verilen token a ait Role veriyor
+    public String extractRole(String token) {
+        final Claims claims = extractAllClaims(token);
+        return claims.get("ROLE").toString();
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -49,12 +59,19 @@ public class JwtUtil {
 
     // userDetails objesini alır. createToken metoduna gönderir.
     public String generateToken(UserDetails userDetails) {
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        Object[] grantAuthoritiesList = authorities.toArray();
+        String role = ((GrantedAuthority)grantAuthoritiesList[0]).getAuthority();
+        System.out.println(role);
+         
         Map<String, Object> claims = new HashMap<>();
+        claims.put("ROLE", role);
         return createToken(claims, userDetails.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims)
+        return Jwts.builder()
+        .setClaims(claims)
                 .setSubject(subject) // ilgili kullanıcı
                 .setIssuedAt(new Date(System.currentTimeMillis())) // başlangıç
                 .setExpiration(new Date(System.currentTimeMillis() + 5 * 60 * 60 * 1000)) // bitiş
@@ -64,6 +81,9 @@ public class JwtUtil {
 
     // token hala geçerli mi? kullanıcı adı doğru ise ve token ın geçerlilik süresi devam ediyorsa true döner.
     public Boolean validateToken(String token, UserDetails userDetails) {
+        if (userDetails == null) {
+            return false;
+        }
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

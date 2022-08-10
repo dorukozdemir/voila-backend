@@ -289,7 +289,7 @@ public class User implements UserDetails{
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("Kullanıcı"));
+		authorities.add(new SimpleGrantedAuthority("USER"));
 		return authorities;
     }
 

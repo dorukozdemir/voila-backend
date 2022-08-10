@@ -4,10 +4,12 @@ import java.net.URI;
 
 import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.jwt.JwtUtil;
+import com.viola.backend.voilabackend.model.domain.Admin;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.web.ResetRequest;
 import com.viola.backend.voilabackend.model.web.UserRequest;
 import com.viola.backend.voilabackend.security.CustomUserDetailsService;
+import com.viola.backend.voilabackend.service.AdminService;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +104,25 @@ public class AuthRestController {
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+    }
+
+    // Admin Auth Endpoints
+    @CrossOrigin(origins = "*")
+    @PostMapping("/admin/login")
+    public ResponseEntity<String> adminLogin(@RequestBody UserRequest authRequest) {
+        Admin admin = adminService.getUserByUsername(authRequest.getUsername());
+        if (admin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"username\": false}");
+        }
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"password\": false}");
+        }
+        final UserDetails userDetails = userDetailsService.loadAdminByUsername(authRequest.getUsername());
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok()
+            .body(jwt);
     }
 }
