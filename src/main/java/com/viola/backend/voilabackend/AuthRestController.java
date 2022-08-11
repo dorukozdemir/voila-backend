@@ -125,4 +125,18 @@ public class AuthRestController {
         return ResponseEntity.ok()
             .body(jwt);
     }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/admin/forgot")
+    public ResponseEntity<String> adminForgot(@RequestBody UserRequest authRequest) throws Exception {
+        String username = authRequest.getUsername();
+        if (adminService.isUserExist(username)) {
+            Admin admin = adminService.getUserByUsername(username);
+            adminService.createResetPasswordToken(admin);
+            emailSenderService.sendAdminForgotPasswordEmail(admin.getName() == null ? "" : admin.getName(), admin.getUsername(), admin.getResetPasswordToken());
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
 }

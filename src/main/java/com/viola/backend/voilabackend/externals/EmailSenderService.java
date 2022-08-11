@@ -16,6 +16,7 @@ public class EmailSenderService {
     private JavaMailSender javaMailSender;
 
     private final String DOMAINURL = "https://voilacard.com/";
+    private final String ADMINURL = "https://voilacard.com/admin/";
     private final String RESET_PATH = "cardvisit-dashboard/reset-my-password/";
     public boolean sendForgotPasswordEmail(String name, String emailAddress, String token) {
         String resetLink = DOMAINURL + RESET_PATH + token;
@@ -908,6 +909,13 @@ public class EmailSenderService {
             e.printStackTrace();
         } 
         return mimeMessage;
+    }
+
+    public boolean sendAdminForgotPasswordEmail(String name, String emailAddress, String token) {
+        String resetLink = ADMINURL + RESET_PATH + token;
+        MimeMessage email = resetPasswordEmail(name, emailAddress, resetLink);
+        javaMailSender.send(email);
+        return true;
     }
 
 }

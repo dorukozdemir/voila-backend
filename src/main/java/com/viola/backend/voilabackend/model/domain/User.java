@@ -516,4 +516,15 @@ public class User implements UserDetails{
 
         return false;
     }
+
+    @Transient
+    public String getFullName() {
+        String fullName = "";
+        if(this.name != null && !this.name.trim().equals("")) {
+            fullName = this.name;
+        } if(this.surname != null && !this.surname.trim().equals("")) {
+            fullName = fullName + " " + this.surname;
+        }
+        return fullName;
+    }
 }

@@ -141,6 +141,7 @@ public class Admin implements UserDetails {
         this.surname = surname;
     }
 
+    @Column(name="created_at")
     public Date getCreated() {
         return created;
     }
@@ -164,5 +165,16 @@ public class Admin implements UserDetails {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    @Transient
+    public String getFullName() {
+        String fullName = "";
+        if(this.name != null && !this.name.trim().equals("")) {
+            fullName = this.name;
+        } if(this.surname != null && !this.surname.trim().equals("")) {
+            fullName = fullName + " " + this.surname;
+        }
+        return fullName;
     }
 }

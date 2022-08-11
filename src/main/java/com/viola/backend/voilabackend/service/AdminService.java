@@ -96,4 +96,8 @@ public class AdminService {
         } else {
         }
     }
+
+    public List<Admin> getAllUsers() {
+        return adminRepository.findAll();
+    }
 }

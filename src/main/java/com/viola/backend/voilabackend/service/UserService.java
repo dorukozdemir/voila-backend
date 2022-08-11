@@ -337,4 +337,8 @@ public class UserService {
         user.setProfilePhoto(thumbnail);
         this.save(user);
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }
