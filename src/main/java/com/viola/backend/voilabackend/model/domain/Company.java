@@ -12,6 +12,7 @@ import javax.persistence.Table;
 public class Company {
     
     private Long id;
+    private String name;
     private String phone;
     private String companyEmail;
     private String authorityEmail;
@@ -19,6 +20,10 @@ public class Company {
 
     public Company() {
 
+    }
+
+    public Company(String name) {
+        this.name = name;
     }
 
     public Company(String phone, String companyEmail, String authorityEmail, String authorityName) {
@@ -34,6 +39,14 @@ public class Company {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone() {
