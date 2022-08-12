@@ -29,7 +29,7 @@ public class Admin implements UserDetails {
     private Date created = new Date();
     private String resetPasswordToken;
     private Date resetPasswordTokenExpiry = new Date();
-    private AdminRole role;
+    private AdminRole role = AdminRole.SUPER_ADMIN;
     private Company company;
     public Admin() {
 
@@ -40,6 +40,12 @@ public class Admin implements UserDetails {
         this.password = password;
     }
 
+    public Admin(String username, String password, String name, String surname) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+    }
     @Id
     /*@SequenceGenerator(name="cardvisits_id_seq",
                    sequenceName="cardvisits_id_seq",

@@ -45,12 +45,12 @@ public class AdminService {
         return (admin != null);
     }
 
-    public Admin createAdmin(String username, String password) throws AdminAlreadyExistException {
+    public Admin createAdmin(String username, String password, String name, String surname) throws AdminAlreadyExistException {
         Admin admin = getUserByUsername(username);
         if (admin != null)
             throw new AdminAlreadyExistException();
-        User newUser = new User(username, passwordEncoder.encode(password));
-        return adminRepository.save(admin);
+        Admin newAdmin = new Admin(username, passwordEncoder.encode(password), name, surname);
+        return adminRepository.save(newAdmin);
     }
 
     public void save(Admin admin) {
