@@ -17,6 +17,7 @@ public class Company {
     private String companyEmail;
     private String authorityEmail;
     private String authorityName;
+    private Admin admin;
 
     public Company() {
 
@@ -26,11 +27,13 @@ public class Company {
         this.name = name;
     }
 
-    public Company(String phone, String companyEmail, String authorityEmail, String authorityName) {
+    public Company(String name, String phone, String companyEmail, String authorityEmail, String authorityName, Admin admin) {
+        this.name = name;
         this.phone = phone;
         this.companyEmail = companyEmail;
         this.authorityEmail = authorityEmail;
         this.authorityName = authorityName;
+        this.admin = admin;
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,4 +83,15 @@ public class Company {
     public void setAuthorityName(String authorityName) {
         this.authorityName = authorityName;
     }
+
+    @ManyToOne
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
+    
 }

@@ -1,7 +1,5 @@
 package com.viola.backend.voilabackend.model.web;
 
-import com.viola.backend.voilabackend.model.domain.AdminRole;
-
 public class AdminRequest {
     private String username;
     private String password;

@@ -5,15 +5,21 @@ import java.util.List;
 
 import com.viola.backend.voilabackend.model.domain.Admin;
 import com.viola.backend.voilabackend.model.domain.Company;
+import com.viola.backend.voilabackend.model.domain.Url;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.dto.AdminListItem;
 import com.viola.backend.voilabackend.model.dto.CardvisitListItem;
 import com.viola.backend.voilabackend.model.dto.CompanyListItem;
 import com.viola.backend.voilabackend.model.dto.StatisticsDto;
+import com.viola.backend.voilabackend.model.dto.UrlListItem;
 import com.viola.backend.voilabackend.model.web.AdminRequest;
+import com.viola.backend.voilabackend.model.web.CompanyRequest;
+import com.viola.backend.voilabackend.model.web.UrlCreateRequest;
+import com.viola.backend.voilabackend.model.web.UrlRequest;
 import com.viola.backend.voilabackend.service.UserService;
 import com.viola.backend.voilabackend.service.AdminService;
 import com.viola.backend.voilabackend.service.CompanyService;
+import com.viola.backend.voilabackend.service.UrlService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +44,8 @@ public class AdminRestController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private UrlService urlService;
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/dashboard")
@@ -88,7 +96,7 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/admin/admin")
-    public ResponseEntity<String> register(@RequestBody AdminRequest authRequest) throws Exception {
+    public ResponseEntity<String> createAdmin(@RequestBody AdminRequest authRequest) throws Exception {
         String username = authRequest.getUsername();
         String password = authRequest.getPassword();
         String name = authRequest.getName();
@@ -119,6 +127,69 @@ public class AdminRestController {
                 list.add(new CompanyListItem(c));
             }   
             return ResponseEntity.status(HttpStatus.OK).body(list);
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/admin/urls")
+    public ResponseEntity<List<UrlListItem>> urls() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Admin admin = (Admin) auth.getPrincipal();
+        List<Url> urls = urlService.getAllUrls();
+        if (admin == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {     
+            List<UrlListItem> list = new ArrayList<UrlListItem>();      
+            for(Url u: urls) {
+                list.add(new UrlListItem(u));
+            }   
+            return ResponseEntity.status(HttpStatus.OK).body(list);
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/admin/company")
+    public ResponseEntity<String> createCompany(@RequestBody CompanyRequest companyRequest) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Admin admin = (Admin) auth.getPrincipal();
+        String companyEmail = companyRequest.getCompanyEmail();
+        String name = companyRequest.getName();
+        String phone = companyRequest.getPhone();
+        String authorityEmail = companyRequest.getAuthorityEmail();
+        String authorityName = companyRequest.getAuthorityName();
+        if (companyService.isCompanyExist(name)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"name\": false}");
+        } else {
+            Company company = companyService.createCompany(name, companyEmail, phone, authorityEmail, authorityName, admin);
+            if(company != null) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/admin/url")
+    public ResponseEntity<String> createUrl(@RequestBody UrlCreateRequest urlCreateRequest) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Admin admin = (Admin) auth.getPrincipal();
+        if (urlCreateRequest.getUrls()== null || urlCreateRequest.getUrls().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).build();
+        } else {
+            for(UrlRequest ur : urlCreateRequest.getUrls()) {
+                int count = Integer.parseInt(ur.getCount());
+                Company company = companyService.getCompanyById(ur.getCompanyId());
+                if(count > 0) {
+                    for (int i = 0; i < count; i++) {
+                        Url url = new Url();
+                        url.setAdmin(admin);
+                        url.setCompany(company);
+                        urlService.save(url);
+                    }
+                }
+            }
+            return ResponseEntity.ok().build();
         }
     }
 }

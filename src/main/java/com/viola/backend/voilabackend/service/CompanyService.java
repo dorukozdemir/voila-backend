@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import com.viola.backend.voilabackend.exceptions.CompanyAlreadyExistException;
+import com.viola.backend.voilabackend.model.domain.Admin;
 import com.viola.backend.voilabackend.model.domain.Company;
 import com.viola.backend.voilabackend.repository.CompanyRepository;
 
@@ -21,11 +22,11 @@ public class CompanyService {
 
  
 
-    public Company createCompany(String name) throws CompanyAlreadyExistException {
+    public Company createCompany(String name, String email, String phone, String authorityEmail, String authorityName, Admin admin) throws CompanyAlreadyExistException {
         List<Company> companies = companyRepository.findByName(name);
         if (companies != null && !companies.isEmpty())
             throw new CompanyAlreadyExistException();
-        Company company = new Company(name);
+        Company company = new Company(name,  email,  phone,  authorityEmail,  authorityName, admin);
         return companyRepository.save(company);
     }
 
@@ -35,5 +36,14 @@ public class CompanyService {
   
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
+    }
+
+    public boolean isCompanyExist(String name) {
+        List<Company> companies = companyRepository.findByName(name);
+        if (companies != null && !companies.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
