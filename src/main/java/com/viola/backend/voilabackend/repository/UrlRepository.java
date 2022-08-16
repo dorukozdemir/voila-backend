@@ -11,4 +11,5 @@ public interface UrlRepository extends JpaRepository<Url, Long>{
     List<Company> findByName(String name);
     */
     List<Url> findAll();
+    List<Url> findByToken(String token);
 }

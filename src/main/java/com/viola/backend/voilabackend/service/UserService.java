@@ -341,4 +341,22 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public User createUser(String username, String password, String name, String surname, String token) throws UserAlreadyExistException{
+        User user = getUserByUsername(username);
+        if (user != null)
+            throw new UserAlreadyExistException();
+        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token);
+        return userRepository.save(newUser);
+    }
+
+    public void updateProfileToken(User user, String token) {
+        user.setProfileToken(token);
+        save(user);
+    }
+
+    public boolean isUserWithProfileTokenExist(String token) {
+        User user = getByProfileToken(token);
+        return user != null;
+    }
 }

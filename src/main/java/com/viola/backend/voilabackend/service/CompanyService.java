@@ -15,12 +15,11 @@ public class CompanyService {
     @Autowired
 	private CompanyRepository companyRepository;
 
-    public Company getCompanyById(String id) {
-        Company company = companyRepository.findById(id);
+    public Company getCompanyById(String idString) {
+        Long id = Long.parseLong(idString);
+        Company company = companyRepository.findById(id).orElse(null);
 		return company;
 	}
-
- 
 
     public Company createCompany(String name, String email, String phone, String authorityEmail, String authorityName, Admin admin) throws CompanyAlreadyExistException {
         List<Company> companies = companyRepository.findByName(name);

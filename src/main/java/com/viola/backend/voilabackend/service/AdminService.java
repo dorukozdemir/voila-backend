@@ -11,6 +11,7 @@ import java.util.UUID;
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import com.viola.backend.voilabackend.exceptions.AdminAlreadyExistException;
 import com.viola.backend.voilabackend.model.domain.Admin;
+import com.viola.backend.voilabackend.model.domain.Company;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.repository.AdminRepository;
 import com.viola.backend.voilabackend.security.VoilaPasswordEncoder;
@@ -45,11 +46,11 @@ public class AdminService {
         return (admin != null);
     }
 
-    public Admin createAdmin(String username, String password, String name, String surname) throws AdminAlreadyExistException {
+    public Admin createAdmin(String username, String password, String name, String surname, Company company) throws AdminAlreadyExistException {
         Admin admin = getUserByUsername(username);
         if (admin != null)
             throw new AdminAlreadyExistException();
-        Admin newAdmin = new Admin(username, passwordEncoder.encode(password), name, surname);
+        Admin newAdmin = new Admin(username, passwordEncoder.encode(password), name, surname, company);
         return adminRepository.save(newAdmin);
     }
 

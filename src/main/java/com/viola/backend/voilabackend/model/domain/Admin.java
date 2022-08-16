@@ -40,11 +40,12 @@ public class Admin implements UserDetails {
         this.password = password;
     }
 
-    public Admin(String username, String password, String name, String surname) {
+    public Admin(String username, String password, String name, String surname, Company company) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.company = company;
     }
     @Id
     /*@SequenceGenerator(name="cardvisits_id_seq",

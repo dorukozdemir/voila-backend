@@ -96,15 +96,17 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/admin/admin")
-    public ResponseEntity<String> createAdmin(@RequestBody AdminRequest authRequest) throws Exception {
-        String username = authRequest.getUsername();
-        String password = authRequest.getPassword();
-        String name = authRequest.getName();
-        String surname = authRequest.getSurname();
+    public ResponseEntity<String> createAdmin(@RequestBody AdminRequest adminRequest) throws Exception {
+        String username = adminRequest.getUsername();
+        String password = adminRequest.getPassword();
+        String name = adminRequest.getName();
+        String surname = adminRequest.getSurname();
+        String companyId = adminRequest.getCompany();
+        Company company = companyService.getCompanyById(companyId);
         if (adminService.isUserExist(username)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
         } else {
-            Admin admin = adminService.createAdmin(username, password, name, surname);
+            Admin admin = adminService.createAdmin(username, password, name, surname, company);
             if(admin != null) {
                 return ResponseEntity.ok().build();
             } else {

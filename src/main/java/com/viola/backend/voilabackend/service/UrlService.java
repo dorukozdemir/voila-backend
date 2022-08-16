@@ -29,4 +29,12 @@ public class UrlService {
     public List<Url> getAllUrls() {
         return urlRepository.findAll();
     }
+
+    public boolean isUrlExist(String token) {
+        List<Url> urls = urlRepository.findByToken(token);
+        if(urls != null && !urls.isEmpty()) {
+            return true;
+        } 
+        return false;
+    }
 }

@@ -10,6 +10,7 @@ import com.viola.backend.voilabackend.model.web.ResetRequest;
 import com.viola.backend.voilabackend.model.web.UserRequest;
 import com.viola.backend.voilabackend.security.CustomUserDetailsService;
 import com.viola.backend.voilabackend.service.AdminService;
+import com.viola.backend.voilabackend.service.UrlService;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +44,16 @@ public class AuthRestController {
     private AdminService adminService;
 
     @Autowired
+    private UrlService urlService;
+
+    @Autowired
     private EmailSenderService emailSenderService;
 
     @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserRequest authRequest) {
         User user = userService.getUserByUsername(authRequest.getUsername());
+        String token = authRequest.getToken();
         if (user == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"username\": false}");
         }
@@ -56,6 +61,11 @@ public class AuthRestController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"password\": false}");
+        }
+        if(token!= null && !token.trim().equals("")) {
+            if(!userService.isUserWithProfileTokenExist(token) && urlService.isUrlExist(token)){
+                userService.updateProfileToken(user, token);
+            }
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
@@ -137,6 +147,28 @@ public class AuthRestController {
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
             return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/register/token")
+    public ResponseEntity<String> registerWithToken(@RequestBody UserRequest authRequest) throws Exception {
+        String username = authRequest.getUsername();
+        String password = authRequest.getPassword();
+        String name = authRequest.getName();
+        String surname = authRequest.getSurname();
+        String token = authRequest.getToken();
+        if (token == null || token.trim().equals("")) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        }
+        if (userService.isUserExist(username)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
+        } else {
+            User user = userService.createUser(username, password, name, surname, token);
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            final String jwt = jwtUtil.generateToken(userDetails);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                .body(jwt);
         }
     }
 }

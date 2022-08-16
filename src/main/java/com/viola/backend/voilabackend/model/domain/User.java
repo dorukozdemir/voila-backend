@@ -66,6 +66,14 @@ public class User implements UserDetails{
         this.password = password;
     }
 
+    public User(String username, String password, String name, String surname, String token) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.profileToken = token;
+    }
+
     @Id
     /*@SequenceGenerator(name="cardvisits_id_seq",
                    sequenceName="cardvisits_id_seq",
@@ -526,5 +534,10 @@ public class User implements UserDetails{
             fullName = fullName + " " + this.surname;
         }
         return fullName;
+    }
+
+    @Override
+    public String toString() {
+        return this.getFullName();
     }
 }

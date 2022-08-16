@@ -5,16 +5,18 @@ public class AdminRequest {
     private String password;
     private String name;
     private String surname;
+    private String company;
 
     public AdminRequest() {
 
     }
 
-    public AdminRequest(String username, String password, String name, String surname) {
+    public AdminRequest(String username, String password, String name, String surname, String company) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.company = company;
     }
 
     public AdminRequest(String username) {
@@ -48,6 +50,9 @@ public class AdminRequest {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getCompany() {
+        return company;
     }   
-    
 }

@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
@@ -17,6 +16,7 @@ import com.viola.backend.voilabackend.model.web.ProfileRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageResponse;
 import com.viola.backend.voilabackend.service.ConnectionService;
+import com.viola.backend.voilabackend.service.UrlService;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.springframework.security.core.Authentication;
@@ -43,6 +43,9 @@ public class ProfileRestController {
     @Autowired
     private ConnectionService connectionService;
 
+    @Autowired
+    private UrlService urlService;
+
     private static HttpURLConnection con;
 
     @GetMapping("/profile/token")
@@ -56,6 +59,7 @@ public class ProfileRestController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/profile/{profileToken}")
     public ResponseEntity<String> profile(@PathVariable String profileToken) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -216,5 +220,40 @@ public class ProfileRestController {
 		User user = (User) auth.getPrincipal();
         userService.removePhoto(user);          
         return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/token/{profileToken}")
+    public ResponseEntity<String> externalProfile(@PathVariable String profileToken) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if(auth.toString().equals("anonymousUser")) {
+            user = (User) auth.getPrincipal();
+        }
+        User otherUser = userService.getByProfileToken(profileToken);
+        if (user != null && otherUser == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else if (user != null && otherUser != null) {
+            if (!user.equals(otherUser)) {
+                Connection connection = connectionService.getConnection(user, otherUser);
+                if (connection == null) {
+                    connectionService.createConnection(user, otherUser);
+                }
+                userService.increaseProfileVisitCount(otherUser);
+            }
+            ProfileDto profile = new ProfileDto(otherUser);
+            return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
+        } 
+        else if(otherUser != null){
+            ProfileDto profile = new ProfileDto(otherUser);
+            return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
+        } else {
+            if (urlService.isUrlExist(profileToken)) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            
+        }
     }
 }
