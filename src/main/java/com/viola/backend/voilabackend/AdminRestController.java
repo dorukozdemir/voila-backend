@@ -205,6 +205,26 @@ public class AdminRestController {
     }
 
     @CrossOrigin(origins = "*")
+    @PutMapping("/admin/company")
+    public ResponseEntity<String> updateCompany(@RequestBody CompanyRequest companyRequest) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = (Admin) auth.getPrincipal();
+        String companyEmail = companyRequest.getCompanyEmail();
+        String name = companyRequest.getName();
+        String phone = companyRequest.getPhone();
+        String authorityEmail = companyRequest.getAuthorityEmail();
+        String authorityName = companyRequest.getAuthorityName();
+        String idString = companyRequest.getId();
+        Company company = companyService.getCompanyById(idString);
+        if (company == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            companyService.updateCompany(company, name, companyEmail, phone, authorityEmail, authorityName);
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/admin/url")
     public ResponseEntity<String> createUrl(@RequestBody UrlCreateRequest urlCreateRequest) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

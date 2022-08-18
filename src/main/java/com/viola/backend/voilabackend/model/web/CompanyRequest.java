@@ -6,16 +6,9 @@ public class CompanyRequest {
     private String phone;
     private String authorityEmail;
     private String authorityName;
+    private String id;
     public CompanyRequest() {
 
-    }
-
-    public CompanyRequest(String name, String companyEmail, String phone, String authorityEmail, String authorityName) {
-        this.companyEmail = companyEmail;
-        this.name = name;
-        this.phone = phone;
-        this.authorityEmail = authorityEmail;
-        this.authorityName = authorityName;
     }
 
     public String getCompanyEmail() {
@@ -56,5 +49,13 @@ public class CompanyRequest {
 
     public void setAuthorityName(String authorityName) {
         this.authorityName = authorityName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

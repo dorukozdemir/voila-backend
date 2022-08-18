@@ -54,4 +54,14 @@ public class CompanyService {
             return false;
         }
     }
+
+    public void updateCompany(Company company, String name, String companyEmail, String phone, String authorityEmail,
+            String authorityName) {
+        company.setName(name);
+        company.setCompanyEmail(companyEmail);
+        company.setPhone(phone);
+        company.setAuthorityEmail(authorityEmail);
+        company.setAuthorityName(authorityName);
+        save(company);
+    }
 }
