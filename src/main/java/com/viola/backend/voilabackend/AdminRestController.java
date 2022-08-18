@@ -16,6 +16,7 @@ import com.viola.backend.voilabackend.model.dto.admin.EditProfileDto;
 import com.viola.backend.voilabackend.model.web.AdminRequest;
 import com.viola.backend.voilabackend.model.web.CompanyRequest;
 import com.viola.backend.voilabackend.model.web.EditProfileRequest;
+import com.viola.backend.voilabackend.model.web.PaginatedData;
 import com.viola.backend.voilabackend.model.web.UrlCreateRequest;
 import com.viola.backend.voilabackend.model.web.UrlRequest;
 import com.viola.backend.voilabackend.service.UserService;
@@ -25,6 +26,7 @@ import com.viola.backend.voilabackend.service.UrlService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class AdminRestController {
@@ -66,18 +69,21 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/cardvisits")
-    public ResponseEntity<List<CardvisitListItem>> cardvisits() {
+    public ResponseEntity<PaginatedData> cardvisits(@RequestParam int start, @RequestParam int size ) {
+        System.out.println("start: " + start + " size: " + size);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
-        List<User> users = userService.getAllUsers();
+        Page<User> users = userService.getAllUsers(start-1, size);
+        System.out.println(users.getTotalElements());
         if (admin == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             List<CardvisitListItem> list = new ArrayList<CardvisitListItem>();
-            for (User u : users) {
+            for (User u : users.toList()) {
                 list.add(new CardvisitListItem(u));
             }
-            return ResponseEntity.status(HttpStatus.OK).body(list);
+            PaginatedData pd = new PaginatedData(list, users.getTotalElements());
+            return ResponseEntity.status(HttpStatus.OK).body(pd);
         }
     }
 
@@ -162,18 +168,18 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/urls")
-    public ResponseEntity<List<UrlListItem>> urls() {
+    public ResponseEntity<PaginatedData> urls(@RequestParam int start, @RequestParam int size) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
-        List<Url> urls = urlService.getAllUrls();
         if (admin == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
+            Page<Url> urls = urlService.getAllUrls(start-1, size);
             List<UrlListItem> list = new ArrayList<UrlListItem>();
-            for (Url u : urls) {
+            for (Url u : urls.toList()) {
                 list.add(new UrlListItem(u));
             }
-            return ResponseEntity.status(HttpStatus.OK).body(list);
+            return ResponseEntity.status(HttpStatus.OK).body(new PaginatedData(list, urls.getTotalElements()));
         }
     }
 

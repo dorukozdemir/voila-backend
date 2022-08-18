@@ -1,6 +1,9 @@
 package com.viola.backend.voilabackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,5 +39,10 @@ public class UrlService {
             return true;
         } 
         return false;
+    }
+
+    public Page<Url> getAllUrls(int start, int size) {
+        Pageable pagination = PageRequest.of(start, size);
+        return urlRepository.findAll(pagination);
     }
 }

@@ -44,10 +44,10 @@ public class ConnectionService {
         if (connections != null && connections.size()>0) {
             for (Connection connection : connections) {
                 if (!connection.getUser1().getId().equals( user.getId())) {
-                    User u = userRepository.getById(connection.getUser1().getId());
+                    User u = userRepository.findById(connection.getUser1().getId()).orElse(null);
                     users.add(u);
                 } else {
-                    User u = userRepository.getById(connection.getUser2().getId());
+                    User u = userRepository.findById(connection.getUser2().getId()).orElse(null);
                     users.add(u);
                 }
             }
@@ -56,8 +56,8 @@ public class ConnectionService {
     }
 
     public void createConnection(User user1, User user2) {
-        user1 = userRepository.getById(user1.getId());
-        user2 = userRepository.getById(user2.getId());
+        user1 = userRepository.findById(user1.getId()).orElse(null);
+        user2 = userRepository.findById(user2.getId()).orElse(null);
         Connection connection = new Connection(user1, user2);
         save(connection);
     }

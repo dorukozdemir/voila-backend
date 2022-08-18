@@ -1,6 +1,9 @@
 package com.viola.backend.voilabackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -340,6 +343,11 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public Page<User> getAllUsers(int start, int size) {
+        Pageable pagination = PageRequest.of(start, size);
+        return userRepository.findAll(pagination);
     }
 
     public User createUser(String username, String password, String name, String surname, String token, String note) throws UserAlreadyExistException{
