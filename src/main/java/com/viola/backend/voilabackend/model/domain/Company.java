@@ -27,7 +27,7 @@ public class Company {
         this.name = name;
     }
 
-    public Company(String name, String phone, String companyEmail, String authorityEmail, String authorityName, Admin admin) {
+    public Company(String name, String companyEmail, String phone, String authorityEmail, String authorityName, Admin admin) {
         this.name = name;
         this.phone = phone;
         this.companyEmail = companyEmail;
