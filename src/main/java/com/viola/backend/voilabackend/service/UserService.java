@@ -342,11 +342,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User createUser(String username, String password, String name, String surname, String token) throws UserAlreadyExistException{
+    public User createUser(String username, String password, String name, String surname, String token, String note) throws UserAlreadyExistException{
         User user = getUserByUsername(username);
         if (user != null)
             throw new UserAlreadyExistException();
-        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token);
+        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token, note);
         return userRepository.save(newUser);
     }
 

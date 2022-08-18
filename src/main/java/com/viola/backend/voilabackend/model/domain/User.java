@@ -56,6 +56,7 @@ public class User implements UserDetails{
     private String ibanBank;
     private int profileVisits = 0;
     private String profilePhoto = "/CardvisitUI/Dash/media/avatars/blank.png";
+    private String note;
 
     public User() {
 
@@ -66,12 +67,13 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    public User(String username, String password, String name, String surname, String token) {
+    public User(String username, String password, String name, String surname, String token, String note) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.profileToken = token;
+        this.note = note;
     }
 
     @Id
@@ -508,6 +510,14 @@ public class User implements UserDetails{
         this.profilePhoto = profilePhoto;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -540,4 +550,6 @@ public class User implements UserDetails{
     public String toString() {
         return this.getFullName();
     }
+
+
 }

@@ -164,7 +164,7 @@ public class AuthRestController {
         if (userService.isUserExist(username)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
         } else {
-            User user = userService.createUser(username, password, name, surname, token);
+            User user = userService.createUser(username, password, name, surname, token, "");
             final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.status(HttpStatus.CREATED)
