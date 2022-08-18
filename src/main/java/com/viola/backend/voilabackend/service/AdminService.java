@@ -101,4 +101,14 @@ public class AdminService {
     public List<Admin> getAllUsers() {
         return adminRepository.findAll();
     }
+
+    public void updateAdmin(Admin admin, String password, String name, String surname, Company company) {
+        admin.setName(name);
+        admin.setSurname(surname);
+        admin.setCompany(company);
+        if(password != null && !password.trim().equals("")) {
+            admin.setPassword(password);
+        }
+        save(admin);
+    }
 }

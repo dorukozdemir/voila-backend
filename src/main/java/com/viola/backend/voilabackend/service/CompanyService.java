@@ -45,4 +45,13 @@ public class CompanyService {
             return false;
         }
     }
+
+    public boolean isCompanyExistByEmail(String companyEmail) {
+        List<Company> companies = companyRepository.findByCompanyEmail(companyEmail);
+        if (companies != null && !companies.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
