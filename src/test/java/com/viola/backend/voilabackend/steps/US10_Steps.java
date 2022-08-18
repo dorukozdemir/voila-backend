@@ -9,8 +9,8 @@ import java.io.IOException;
 import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.helper.RequestHelper;
 import com.viola.backend.voilabackend.model.domain.User;
-import com.viola.backend.voilabackend.model.dto.ProfileDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
+import com.viola.backend.voilabackend.model.dto.ProfileDto;
 import com.viola.backend.voilabackend.service.UserService;
 
 import org.junit.jupiter.api.Assertions;
