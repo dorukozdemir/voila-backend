@@ -4,13 +4,15 @@ import com.viola.backend.voilabackend.model.domain.User;
 
 public class CardvisitListItem {
     private String name;
+    private String surname;
     private String company;
     private String email;
     private int profileVisits;
     private String profileToken;
 
     public CardvisitListItem (User user) {
-        this.name = user.getFullName();
+        this.name = user.getName();
+        this.surname = user.getSurname();
         this.company = "Voila";
         this.email = user.getUsername();
         this.profileVisits = user.getProfileVisits();
@@ -47,5 +49,13 @@ public class CardvisitListItem {
     }
     public void setProfileToken(String profileToken) {
         this.profileToken = profileToken;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }

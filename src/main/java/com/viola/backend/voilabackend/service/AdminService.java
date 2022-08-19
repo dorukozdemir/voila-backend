@@ -111,4 +111,8 @@ public class AdminService {
         }
         save(admin);
     }
+
+    public List<Admin> getAllUsers(String search) {
+        return adminRepository.findAByNameContainsOrSurnameContainsOrUsernameContains(search, search, search);
+    }
 }

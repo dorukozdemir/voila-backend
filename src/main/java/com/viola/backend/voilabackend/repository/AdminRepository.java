@@ -10,4 +10,5 @@ public interface AdminRepository extends JpaRepository<Admin, Long>{
     List<Admin> findByUsername(String username);
     List<Admin> findByResetPasswordToken(String resetToken);
     List<Admin> findAll();
+    List<Admin> findAByNameContainsOrSurnameContainsOrUsernameContains(String search, String search2, String search3);
 }

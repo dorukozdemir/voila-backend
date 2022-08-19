@@ -1,5 +1,9 @@
 package com.viola.backend.voilabackend.model.dto;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.viola.backend.voilabackend.helper.DateStringHelper;
 import com.viola.backend.voilabackend.model.domain.Company;
 import com.viola.backend.voilabackend.model.domain.Url;
 
@@ -11,11 +15,16 @@ public class UrlListItem {
     private String createdAt;
 
     public UrlListItem(Url url) {
+        DateStringHelper dsh = new DateStringHelper();
+        String inWords = dsh.dateDifferenceInWords(url.getCreated(), new Date());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyy-MM-dd HH:mm");  
+        String createdAtString = formatter.format(url.getCreated()); 
+
         this.token = url.getToken();
         this.company = url.getCompany();
         this.admin = url.getAdmin().getFullName();
         this.note = url.getNote();
-        this.createdAt = url.getCreated().toString();
+        this.createdAt = createdAtString + " " + inWords;
     }
     public String getToken() {
         return token;

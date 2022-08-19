@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -57,6 +58,7 @@ public class User implements UserDetails{
     private int profileVisits = 0;
     private String profilePhoto = "/CardvisitUI/Dash/media/avatars/blank.png";
     private String note;
+    private Company company;
 
     public User() {
 
@@ -516,6 +518,15 @@ public class User implements UserDetails{
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @ManyToOne
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     @Override

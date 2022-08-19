@@ -10,4 +10,5 @@ public interface CompanyRepository extends JpaRepository<Company, Long>{
     List<Company> findByName(String name);
     List<Company> findAll();
     List<Company> findByCompanyEmail(String email);
+    List<Company> findByNameContaining(String name);
 }

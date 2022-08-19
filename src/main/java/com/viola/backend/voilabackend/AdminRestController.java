@@ -19,6 +19,7 @@ import com.viola.backend.voilabackend.model.web.EditProfileRequest;
 import com.viola.backend.voilabackend.model.web.PaginatedData;
 import com.viola.backend.voilabackend.model.web.UrlCreateRequest;
 import com.viola.backend.voilabackend.model.web.UrlRequest;
+import com.viola.backend.voilabackend.model.web.UserSearch;
 import com.viola.backend.voilabackend.service.UserService;
 import com.viola.backend.voilabackend.service.AdminService;
 import com.viola.backend.voilabackend.service.CompanyService;
@@ -69,13 +70,38 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/cardvisits")
-    public ResponseEntity<PaginatedData> cardvisits(@RequestParam int start, @RequestParam int size ) {
+    public ResponseEntity<PaginatedData> cardvisits(@RequestParam int start, 
+        @RequestParam int size, @RequestParam String name, 
+        @RequestParam String surname, @RequestParam String email, 
+        @RequestParam String url, @RequestParam String company, @RequestParam String all) {
         System.out.println("start: " + start + " size: " + size);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
-        Page<User> users = userService.getAllUsers(start-1, size);
-        System.out.println(users.getTotalElements());
-        if (admin == null) {
+        UserSearch userSearch = new UserSearch();
+        Page<User> users = null;
+        if(all != null && !all.trim().equals("")) {
+            users = userService.getAllUsers(start-1, size, all);
+        } else {
+            if(name != null && !name.trim().equals("")) {
+                userSearch.setName(name);
+            }
+            if(surname != null && !surname.trim().equals("")) {
+                userSearch.setSurname(surname);
+            }
+            if(url != null && !url.trim().equals("")) {
+                userSearch.setUrl(url);
+            }
+            if(email != null && !email.trim().equals("")) {
+                userSearch.setEmail(email);
+            }
+            if(company != null && !company.trim().equals("")) {
+                List<Company> companies = companyService.findCompaniesByName(company);
+                userSearch.setCompanies(companies);
+            }
+            users = userService.getAllUsers(start-1, size, userSearch);
+        }
+        
+        if (admin == null || users == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
             List<CardvisitListItem> list = new ArrayList<CardvisitListItem>();
@@ -89,10 +115,10 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/admins")
-    public ResponseEntity<List<AdminListItem>> admins() {
+    public ResponseEntity<List<AdminListItem>> admins(@RequestParam String search) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
-        List<Admin> admins = adminService.getAllUsers();
+        List<Admin> admins = adminService.getAllUsers(search);
         if (admin == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {

@@ -64,4 +64,8 @@ public class CompanyService {
         company.setAuthorityName(authorityName);
         save(company);
     }
+
+    public List<Company> findCompaniesByName(String name) {
+        return companyRepository.findByNameContaining(name);
+    }
 }

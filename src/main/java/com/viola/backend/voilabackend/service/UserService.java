@@ -31,6 +31,7 @@ import com.viola.backend.voilabackend.model.dto.ContactInfoDto;
 import com.viola.backend.voilabackend.model.dto.LinkDto;
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
+import com.viola.backend.voilabackend.model.web.UserSearch;
 import com.viola.backend.voilabackend.repository.UserRepository;
 import com.viola.backend.voilabackend.security.VoilaPasswordEncoder;
 
@@ -350,6 +351,11 @@ public class UserService {
         return userRepository.findAll(pagination);
     }
 
+    public Page<User> getAllUsers(int start, int size, UserSearch search) {
+        Pageable pagination = PageRequest.of(start, size);
+        return userRepository.findByUsernameContainingAndProfileTokenContainingAndNameContainingAndSurnameContaining(search.getEmail(), search.getUrl(), search.getName(), search.getSurname(), pagination);
+    }
+
     public User createUser(String username, String password, String name, String surname, String token, String note) throws UserAlreadyExistException{
         User user = getUserByUsername(username);
         if (user != null)
@@ -366,5 +372,11 @@ public class UserService {
     public boolean isUserWithProfileTokenExist(String token) {
         User user = getByProfileToken(token);
         return user != null;
+    }
+
+    public Page<User> getAllUsers(int start, int size, String all) {
+        Pageable pagination = PageRequest.of(start, size);
+        return userRepository.findByUsernameContainingOrProfileTokenContainingOrNameContainingOrSurnameContaining(all, all, all, all, pagination);
+    
     }
 }
