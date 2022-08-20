@@ -41,11 +41,18 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = null;
+            /* 
             if(role.equals("USER")) {
                 userDetails = userDetailsService.loadUserByUsername(username);
             } else if(role.equals("ADMIN")) {
                 userDetails = userDetailsService.loadAdminByUsername(username);
             }
+            */
+            String checkUserName = username;
+            if(role.equals("ADMIN")) {
+                checkUserName = username + ":ADMIN";
+            }
+            userDetails = userDetailsService.loadUserByUsername(checkUserName);
             
             if (jwtUtil.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =

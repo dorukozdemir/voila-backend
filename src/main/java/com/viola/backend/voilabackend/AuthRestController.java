@@ -121,15 +121,16 @@ public class AuthRestController {
     @PostMapping("/admin/login")
     public ResponseEntity<String> adminLogin(@RequestBody UserRequest authRequest) {
         Admin admin = adminService.getUserByUsername(authRequest.getUsername());
+        String username = authRequest.getUsername() + ":ADMIN";
         if (admin == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"username\": false}");
         }
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, authRequest.getPassword()));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"password\": false}");
         }
-        final UserDetails userDetails = userDetailsService.loadAdminByUsername(authRequest.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok()

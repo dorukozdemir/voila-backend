@@ -6,17 +6,21 @@ public class AdminListItem {
     private String fullname;
     private String name;
     private String surname;
-    private String company;
+    private String company = "Voila";
     private String email;
-    private String type;
+    private String type = "Süper";
+    private String role;
 
     public AdminListItem (Admin admin) {
         this.fullname = admin.getFullName();
         this.name = admin.getName();
         this.surname = admin.getSurname();
-        this.company = "Voila";
         this.email = admin.getUsername();
-        this.type = admin.getRole().toString();
+        this.role = admin.getRole().toString();
+        if(admin.getCompany() != null) {
+            this.company = admin.getCompany().getName();
+            this.type = "Müşteri";
+        }
     }
 
     public String getFullname() {
@@ -62,5 +66,12 @@ public class AdminListItem {
     public void setType(String type) {
         this.type = type;
     }
-    
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

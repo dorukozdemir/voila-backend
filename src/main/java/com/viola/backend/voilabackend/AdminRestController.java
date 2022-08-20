@@ -115,7 +115,7 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/admins")
-    public ResponseEntity<List<AdminListItem>> admins(@RequestParam String search) {
+    public ResponseEntity<List<AdminListItem>> admins(@RequestParam String search, @RequestParam String companyId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
         List<Admin> admins = adminService.getAllUsers(search);
@@ -266,7 +266,10 @@ public class AdminRestController {
         } else {
             for (UrlRequest ur : urlCreateRequest.getUrls()) {
                 int count = Integer.parseInt(ur.getCount());
-                Company company = companyService.getCompanyById(ur.getCompanyId());
+                Company company = null;
+                if(ur.getCompanyId() != null) {
+                    company = companyService.getCompanyById(ur.getCompanyId());
+                }
                 if (count > 0) {
                     for (int i = 0; i < count; i++) {
                         Url url = new Url();

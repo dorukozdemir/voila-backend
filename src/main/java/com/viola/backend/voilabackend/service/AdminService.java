@@ -21,6 +21,9 @@ public class AdminService {
     @Autowired
 	private AdminRepository adminRepository;
 
+    @Autowired
+    private CompanyService companyService;
+
     private final int RESETPASSWORDTOKENDURATION = 15;
 
     private final VoilaPasswordEncoder passwordEncoder = new VoilaPasswordEncoder();
@@ -113,6 +116,7 @@ public class AdminService {
     }
 
     public List<Admin> getAllUsers(String search) {
-        return adminRepository.findAByNameContainsOrSurnameContainsOrUsernameContains(search, search, search);
+        List<Company> companies = companyService.findCompaniesByName(search);
+        return adminRepository.findAByNameContainsOrSurnameContainsOrUsernameContainsOrCompanyIn(search, search, search, companies);
     }
 }
