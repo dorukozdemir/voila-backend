@@ -59,6 +59,15 @@ public class User implements UserDetails{
     private String profilePhoto = "/CardvisitUI/Dash/media/avatars/blank.png";
     private String note;
     private Company company;
+    private String ownerCompany;
+
+    public String getOwnerCompany() {
+        return ownerCompany;
+    }
+
+    public void setOwnerCompany(String ownerCompany) {
+        this.ownerCompany = ownerCompany;
+    }
 
     public User() {
 

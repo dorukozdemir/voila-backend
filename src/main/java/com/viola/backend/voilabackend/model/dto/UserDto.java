@@ -9,6 +9,11 @@ public class UserDto {
     private String profileToken;
     private int profileVisits;
     private String profilePhoto;
+    private boolean hasCompanyPhoto = false;
+    private String companyPhotoUrl;
+    private boolean hasCTA = false;
+    private String ctaLink;
+    private String ctaSentence;
 
     public UserDto() {
 
@@ -70,6 +75,46 @@ public class UserDto {
 
     public void setProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;
+    }
+
+    public boolean isHasCompanyPhoto() {
+        return hasCompanyPhoto;
+    }
+
+    public void setHasCompanyPhoto(boolean hasCompanyPhoto) {
+        this.hasCompanyPhoto = hasCompanyPhoto;
+    }
+
+    public String getCompanyPhotoUrl() {
+        return companyPhotoUrl;
+    }
+
+    public void setCompanyPhotoUrl(String companyPhotoUrl) {
+        this.companyPhotoUrl = companyPhotoUrl;
+    }
+
+    public boolean isHasCTA() {
+        return hasCTA;
+    }
+
+    public void setHasCTA(boolean hasCTA) {
+        this.hasCTA = hasCTA;
+    }
+
+    public String getCtaLink() {
+        return ctaLink;
+    }
+
+    public void setCtaLink(String ctaLink) {
+        this.ctaLink = ctaLink;
+    }
+
+    public String getCtaSentence() {
+        return ctaSentence;
+    }
+
+    public void setCtaSentence(String ctaSentence) {
+        this.ctaSentence = ctaSentence;
     }
 
     

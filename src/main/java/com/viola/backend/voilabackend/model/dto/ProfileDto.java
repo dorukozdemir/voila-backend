@@ -22,6 +22,16 @@ public class ProfileDto {
     public ProfileDto(User user) {
         ModelMapper modelMapper = new ModelMapper();
         UserDto userDto = modelMapper.map(user, UserDto.class);
+        if(user.getOwnerCompany() != null && !user.getOwnerCompany().trim().equals("")) {
+            if(user.getOwnerCompany().equals("cimtas")) {
+                userDto.setHasCompanyPhoto(true);
+                userDto.setCompanyPhotoUrl("https://voilacard.com/logos/cimtas-logo.png");
+            } else if(user.getOwnerCompany().equals("ticimax")) {
+                userDto.setHasCTA(true);
+                userDto.setCtaLink("https://www.ticimax.com/");
+                userDto.setCtaSentence("Ticimax ile tanışın");
+            }
+        }
         CompanyInfoDto[] companies = modelMapper.map(user.getCompanies(), CompanyInfoDto[].class);
         Arrays.sort(companies);
         ContactInfoDto[] contacts = modelMapper.map(user.getContactInfo(), ContactInfoDto[].class);
