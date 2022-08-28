@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
 import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 import com.viola.backend.voilabackend.exceptions.UserAlreadyExistException;
 import com.viola.backend.voilabackend.model.domain.BankAccountInfo;
+import com.viola.backend.voilabackend.model.domain.Company;
 import com.viola.backend.voilabackend.model.domain.CompanyInfo;
 import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.ContactInfo;
@@ -42,6 +44,9 @@ public class UserService {
 
     @Autowired
     private ConnectionService connectionService;
+
+    @Autowired
+    private CompanyService companyService;
 
     private final int RESETPASSWORDTOKENDURATION = 15;
 
@@ -351,9 +356,32 @@ public class UserService {
         return userRepository.findAll(pagination);
     }
 
-    public Page<User> getAllUsers(int start, int size, UserSearch search) {
+    public Page<User> getAllUsers(int start, int size, UserSearch search, String companyId) {
         Pageable pagination = PageRequest.of(start, size);
-        return userRepository.findByUsernameContainingAndProfileTokenContainingAndNameContainingAndSurnameContaining(search.getEmail(), search.getUrl(), search.getName(), search.getSurname(), pagination);
+        Company company = null;
+        if(companyId != null && !companyId.trim().equals("")) {
+            company = companyService.getCompanyById(companyId);
+        }
+        Specification<User> searchSpecification = searchLike("name", search.getName())
+            .and(searchLike("surname", search.getSurname()))
+            .and(searchLike("profileToken", search.getUrl())
+            .and(searchLike("username", search.getEmail())));
+        Specification<User> specification = null;
+        if (companyId != null && !companyId.trim().equals("") && !companyId.equals("0")) {
+            specification = findByCompany(company).and(searchSpecification);
+        } else if (companyId != null && companyId.equals("0")) {
+            specification = findVoilaCompanies().and(searchSpecification);
+        } else {
+            specification = searchSpecification;
+        }
+
+        if(search.getCompanies()!= null && !search.getCompanies().isEmpty()){
+            specification.and(searchByCompanies(search.getCompanies()));
+        }
+
+        Page<User> users = userRepository.findAll(specification, pagination);
+        return users;
+        //return userRepository.findByUsernameContainingAndProfileTokenContainingAndNameContainingAndSurnameContaining(search.getEmail(), search.getUrl(), search.getName(), search.getSurname(), pagination);
     }
 
     public User createUser(String username, String password, String name, String surname, String token, String note) throws UserAlreadyExistException{
@@ -377,6 +405,29 @@ public class UserService {
     public Page<User> getAllUsers(int start, int size, String all) {
         Pageable pagination = PageRequest.of(start, size);
         return userRepository.findByUsernameContainingOrProfileTokenContainingOrNameContainingOrSurnameContaining(all, all, all, all, pagination);
-    
+    }
+
+    private Specification<User> findByCompany(Company company) {
+        return(root, query, builder) -> {
+            return builder.equal(root.get("company"), company);
+        };
+    }
+
+    private Specification<User> findVoilaCompanies() {
+        return(root, query, builder) -> {
+            return builder.isNull(root.get("company"));
+        };
+    }
+
+    private Specification<User> searchLike(String property, String needle) {
+        return(root, query, builder) -> {
+            return builder.like(root.get(property), "%" + needle + "%");
+        };
+    }
+
+    private Specification<User> searchByCompanies(List<Company> companies) {
+        return(root, query, builder) -> {
+            return builder.in(root.get("company")).value(companies);
+        };
     }
 }

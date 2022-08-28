@@ -73,10 +73,18 @@ public class AdminRestController {
     public ResponseEntity<PaginatedData> cardvisits(@RequestParam int start, 
         @RequestParam int size, @RequestParam String name, 
         @RequestParam String surname, @RequestParam String email, 
-        @RequestParam String url, @RequestParam String company, @RequestParam String all) {
-        System.out.println("start: " + start + " size: " + size);
+        @RequestParam String url, @RequestParam String company, @RequestParam String all, @RequestParam String companyId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
+        if (admin == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        String searchCompanyId = "";
+        if (admin.getCompany() != null) {
+            searchCompanyId = admin.getCompany().getId().toString();
+        } else {
+            searchCompanyId = companyId;
+        }
         UserSearch userSearch = new UserSearch();
         Page<User> users = null;
         if(all != null && !all.trim().equals("")) {
@@ -98,7 +106,7 @@ public class AdminRestController {
                 List<Company> companies = companyService.findCompaniesByName(company);
                 userSearch.setCompanies(companies);
             }
-            users = userService.getAllUsers(start-1, size, userSearch);
+            users = userService.getAllUsers(start-1, size, userSearch, searchCompanyId);
         }
         
         if (admin == null || users == null) {
@@ -118,16 +126,21 @@ public class AdminRestController {
     public ResponseEntity<List<AdminListItem>> admins(@RequestParam String search, @RequestParam String companyId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
-        List<Admin> admins = adminService.getAllUsers(search);
         if (admin == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {
-            List<AdminListItem> list = new ArrayList<AdminListItem>();
-            for (Admin a : admins) {
-                list.add(new AdminListItem(a));
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(list);
         }
+        String searchCompanyId = "";
+        if (admin.getCompany() != null) {
+            searchCompanyId = admin.getCompany().getId().toString();
+        } else {
+            searchCompanyId = companyId;
+        }
+        List<Admin> admins = adminService.getAllUsers(search, searchCompanyId);
+        List<AdminListItem> list = new ArrayList<AdminListItem>();
+        for (Admin a : admins) {
+            list.add(new AdminListItem(a));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
     @CrossOrigin(origins = "*")
