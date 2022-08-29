@@ -227,7 +227,7 @@ public class ProfileRestController {
     public ResponseEntity<String> externalProfile(@PathVariable String profileToken) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = null;
-        if(auth.toString().equals("anonymousUser")) {
+        if(!auth.toString().equals("anonymousUser")) {
             user = (User) auth.getPrincipal();
         }
         User otherUser = userService.getByProfileToken(profileToken);
