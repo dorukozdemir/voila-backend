@@ -131,8 +131,8 @@ public class AuthRestController {
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"password\": false}");
         }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        final String jwt = jwtUtil.generateToken(userDetails);
+        // final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        final String jwt = jwtUtil.generateAdminToken(admin);
 
         return ResponseEntity.ok()
             .body(jwt);
@@ -177,6 +177,13 @@ public class AuthRestController {
     @CrossOrigin(origins = "*")
     @GetMapping("/authenticated")
     public ResponseEntity<String> authenticated() throws Exception {
+        return ResponseEntity.status(HttpStatus.OK)
+            .build();
+    }
+    
+    @CrossOrigin(origins = "*")
+    @GetMapping("/admin/authenticated")
+    public ResponseEntity<String> adminAuthenticated() throws Exception {
         return ResponseEntity.status(HttpStatus.OK)
             .build();
     }

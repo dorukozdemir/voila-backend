@@ -9,11 +9,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.viola.backend.voilabackend.model.domain.Admin;
+
 import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -67,6 +68,20 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("ROLE", role);
         return createToken(claims, userDetails.getUsername());
+    }
+
+    public String generateAdminToken(Admin admin) {
+        Collection<? extends GrantedAuthority> authorities = admin.getAuthorities();
+        Object[] grantAuthoritiesList = authorities.toArray();
+        String role = ((GrantedAuthority)grantAuthoritiesList[0]).getAuthority();
+        System.out.println(role);
+         
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("ROLE", role);
+        claims.put("NAME", admin.getFullName());
+        String company = admin.getCompany() == null ? "0" : admin.getCompany().getId().toString();
+        claims.put("COMPANY", company);
+        return createToken(claims, admin.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
