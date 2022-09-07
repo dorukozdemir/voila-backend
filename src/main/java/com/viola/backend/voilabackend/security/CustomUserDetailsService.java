@@ -1,7 +1,5 @@
 package com.viola.backend.voilabackend.security;
 
-import com.viola.backend.voilabackend.model.domain.Admin;
-import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.service.AdminService;
 import com.viola.backend.voilabackend.service.UserService;
 
@@ -35,6 +33,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         } else {
             return adminService.getUserByUsername(usernamePart);
         }
-        
     }
 }

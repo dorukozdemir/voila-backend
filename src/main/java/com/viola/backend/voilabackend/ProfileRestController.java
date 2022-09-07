@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.domain.UserStatus;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
@@ -227,7 +228,7 @@ public class ProfileRestController {
     public ResponseEntity<String> externalProfile(@PathVariable String profileToken) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = null;
-        if(!auth.toString().equals("anonymousUser")) {
+        if(!auth.getPrincipal().toString().equals("anonymousUser")) {
             user = (User) auth.getPrincipal();
         }
         User otherUser = userService.getByProfileToken(profileToken);
@@ -244,16 +245,17 @@ public class ProfileRestController {
             ProfileDto profile = new ProfileDto(otherUser);
             return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
         } 
-        else if(otherUser != null){
+        else if(otherUser != null && otherUser.getStatus().equals(UserStatus.ACTIVE)){
             ProfileDto profile = new ProfileDto(otherUser);
             return ResponseEntity.status(HttpStatus.OK).body(profile.jsonString());
+        } else if (otherUser != null && otherUser.getStatus().equals(UserStatus.SETUP)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             if (urlService.isUrlExist(profileToken)) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-            
         }
     }
 }
