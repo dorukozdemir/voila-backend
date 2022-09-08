@@ -9,6 +9,7 @@ public class CardvisitListItem {
     private String email;
     private int profileVisits;
     private String profileToken;
+    private String status;
 
     public CardvisitListItem (User user) {
         this.name = user.getName();
@@ -17,6 +18,7 @@ public class CardvisitListItem {
         this.email = user.getUsername();
         this.profileVisits = user.getProfileVisits();
         this.profileToken = user.getProfileToken();
+        this.status = user.getStatus().toString();
     }
 
     public String getName() {
@@ -58,4 +60,14 @@ public class CardvisitListItem {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    
 }

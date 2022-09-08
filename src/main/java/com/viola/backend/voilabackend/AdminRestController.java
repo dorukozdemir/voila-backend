@@ -7,6 +7,7 @@ import com.viola.backend.voilabackend.model.domain.Admin;
 import com.viola.backend.voilabackend.model.domain.Company;
 import com.viola.backend.voilabackend.model.domain.Url;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.domain.UserStatus;
 import com.viola.backend.voilabackend.model.dto.AdminListItem;
 import com.viola.backend.voilabackend.model.dto.CardvisitListItem;
 import com.viola.backend.voilabackend.model.dto.CompanyListItem;
@@ -359,5 +360,80 @@ public class AdminRestController {
 
         userService.createUser(email, password, name, surname, token, note);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/admin/profile/reset/{profileToken}")
+    public ResponseEntity<String> resetProfile(@PathVariable String profileToken) throws Exception{
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = (Admin) auth.getPrincipal();
+        if(admin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        User user = userService.getByProfileToken(profileToken);
+        
+        if (user == null || user.getStatus().equals(UserStatus.SETUP)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else if(admin.getCompany() != null) {
+            if(user.getCompany().equals(admin.getCompany())) {
+                userService.resetUser(user);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            userService.resetUser(user);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/admin/profile/active/{profileToken}")
+    public ResponseEntity<String> enableProfile(@PathVariable String profileToken) throws Exception{
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = (Admin) auth.getPrincipal();
+        if(admin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        User user = userService.getByProfileToken(profileToken);
+        
+        if (user == null || user.getStatus().equals(UserStatus.ACTIVE)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else if(admin.getCompany() != null) {
+            if(user.getCompany().equals(admin.getCompany())) {
+                userService.enableUser(user);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            userService.enableUser(user);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/admin/profile/passive/{profileToken}")
+    public ResponseEntity<String> disableProfile(@PathVariable String profileToken) throws Exception{
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = (Admin) auth.getPrincipal();
+        if(admin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        User user = userService.getByProfileToken(profileToken);
+        
+        if (user == null || user.getStatus().equals(UserStatus.PASSIVE)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else if(admin.getCompany() != null) {
+            if(user.getCompany().equals(admin.getCompany())) {
+                userService.disableUser(user);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            userService.disableUser(user);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
     }
 }

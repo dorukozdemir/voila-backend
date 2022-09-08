@@ -60,6 +60,7 @@ public class User implements UserDetails{
     private String note;
     private Company company;
     private String ownerCompany;
+    private UserStatus status = UserStatus.ACTIVE;
 
     public String getOwnerCompany() {
         return ownerCompany;
@@ -536,6 +537,14 @@ public class User implements UserDetails{
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 
     @Override

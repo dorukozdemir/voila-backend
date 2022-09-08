@@ -27,6 +27,7 @@ import com.viola.backend.voilabackend.model.domain.ContactType;
 import com.viola.backend.voilabackend.model.domain.Link;
 import com.viola.backend.voilabackend.model.domain.SocialMediaAccounts;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.domain.UserStatus;
 import com.viola.backend.voilabackend.model.dto.BankAccountInfoDto;
 import com.viola.backend.voilabackend.model.dto.CompanyInfoDto;
 import com.viola.backend.voilabackend.model.dto.ContactInfoDto;
@@ -392,6 +393,14 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    public User updateUser(User user, String username, String password, String name, String surname, String token) {
+        user.setUsername(username);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(user);
+    }
+
     public void updateProfileToken(User user, String token) {
         user.setProfileToken(token);
         save(user);
@@ -429,5 +438,22 @@ public class UserService {
         return(root, query, builder) -> {
             return builder.in(root.get("company")).value(companies);
         };
+    }
+
+    public void resetUser(User user) {
+        updateUserStatus(user, UserStatus.SETUP);
+    }
+
+    private void updateUserStatus(User user, UserStatus status) {
+        user.setStatus(status);
+        save(user);
+    }
+
+    public void disableUser(User user) {
+        updateUserStatus(user, UserStatus.PASSIVE);
+    }
+
+    public void enableUser(User user) {
+        updateUserStatus(user, UserStatus.ACTIVE);
     }
 }

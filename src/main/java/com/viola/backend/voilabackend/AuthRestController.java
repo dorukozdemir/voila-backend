@@ -6,6 +6,7 @@ import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.jwt.JwtUtil;
 import com.viola.backend.voilabackend.model.domain.Admin;
 import com.viola.backend.voilabackend.model.domain.User;
+import com.viola.backend.voilabackend.model.domain.UserStatus;
 import com.viola.backend.voilabackend.model.web.ResetRequest;
 import com.viola.backend.voilabackend.model.web.UserRequest;
 import com.viola.backend.voilabackend.security.CustomUserDetailsService;
@@ -160,14 +161,25 @@ public class AuthRestController {
         String name = authRequest.getName();
         String surname = authRequest.getSurname();
         String token = authRequest.getToken();
+        User user = userService.getUserByUsername(username);
         if (token == null || token.trim().equals("")) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
-        if (userService.isUserExist(username)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
+        if (user != null) {
+            if(user.getStatus().equals(UserStatus.ACTIVE)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
+            } else if(user.getStatus().equals(UserStatus.SETUP)) {
+                user = userService.updateUser(user, username, password, name, surname, token);
+                final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            final String jwt = jwtUtil.generateToken(userDetails);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                .body(jwt);
+            } else {
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+            }
         } else {
-            User user = userService.createUser(username, password, name, surname, token, "");
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+            User newUser = userService.createUser(username, password, name, surname, token, "");
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(newUser.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.status(HttpStatus.CREATED)
                 .body(jwt);
