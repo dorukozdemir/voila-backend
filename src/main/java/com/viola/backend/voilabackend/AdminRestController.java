@@ -322,6 +322,7 @@ public class AdminRestController {
         String name = profileUpdateRequest.getName();
         String note = profileUpdateRequest.getNote();
         String surname = profileUpdateRequest.getSurname();
+        boolean isLocked = profileUpdateRequest.isLocked();
         User user = userService.getByProfileToken(token);
         boolean profileUpdated = true;
         if (user == null) {
@@ -331,6 +332,7 @@ public class AdminRestController {
         user.setName(name);
         user.setSurname(surname);
         user.setNote(note);
+        user.setLocked(isLocked);
         userService.save(user);
 
         if (profileUpdated) {
@@ -350,6 +352,7 @@ public class AdminRestController {
         String surname = profileUpdateRequest.getSurname();
         String email = profileUpdateRequest.getEmail();
         String password = profileUpdateRequest.getPassword();
+        boolean locked = profileUpdateRequest.isLocked();
         User user = userService.getByProfileToken(email);
         if (user != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -358,7 +361,7 @@ public class AdminRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        userService.createUser(email, password, name, surname, token, note);
+        userService.createUser(email, password, name, surname, token, note, locked);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

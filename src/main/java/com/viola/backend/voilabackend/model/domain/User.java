@@ -61,6 +61,7 @@ public class User implements UserDetails{
     private Company company;
     private String ownerCompany;
     private UserStatus status = UserStatus.ACTIVE;
+    private boolean locked = false;
 
     public String getOwnerCompany() {
         return ownerCompany;
@@ -79,13 +80,14 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    public User(String username, String password, String name, String surname, String token, String note) {
+    public User(String username, String password, String name, String surname, String token, String note, boolean locked) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.profileToken = token;
         this.note = note;
+        this.locked = locked;
     }
 
     @Id
@@ -547,6 +549,15 @@ public class User implements UserDetails{
         this.status = status;
     }
 
+    @Column(name = "is_cardvisit_url_lock")
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -579,6 +590,8 @@ public class User implements UserDetails{
     public String toString() {
         return this.getFullName();
     }
+
+ 
 
 
 }

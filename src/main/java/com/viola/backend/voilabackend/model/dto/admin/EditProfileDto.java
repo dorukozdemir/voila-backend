@@ -12,6 +12,7 @@ public class EditProfileDto {
     private String profilePhoto;
     private String note;
     private String email;
+    private boolean locked;
 
     public EditProfileDto() {
 
@@ -23,6 +24,7 @@ public class EditProfileDto {
         this.profileToken = user.getProfileToken();
         this.profilePhoto = user.getProfilePhoto();
         this.note = user.getNote();
+        this.locked = user.isLocked();
     }
 
     public String jsonString() {
@@ -78,4 +80,13 @@ public class EditProfileDto {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+    
 }

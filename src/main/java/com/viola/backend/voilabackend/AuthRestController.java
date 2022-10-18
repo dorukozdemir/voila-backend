@@ -178,7 +178,7 @@ public class AuthRestController {
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
             }
         } else {
-            User newUser = userService.createUser(username, password, name, surname, token, "");
+            User newUser = userService.createUser(username, password, name, surname, token, "", true);
             final UserDetails userDetails = userDetailsService.loadUserByUsername(newUser.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.status(HttpStatus.CREATED)

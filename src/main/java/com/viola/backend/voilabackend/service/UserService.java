@@ -386,11 +386,11 @@ public class UserService {
         //return userRepository.findByUsernameContainingAndProfileTokenContainingAndNameContainingAndSurnameContaining(search.getEmail(), search.getUrl(), search.getName(), search.getSurname(), pagination);
     }
 
-    public User createUser(String username, String password, String name, String surname, String token, String note) throws UserAlreadyExistException{
+    public User createUser(String username, String password, String name, String surname, String token, String note, boolean locked) throws UserAlreadyExistException{
         User user = getUserByUsername(username);
         if (user != null)
             throw new UserAlreadyExistException();
-        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token, note);
+        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token, note, locked);
         return userRepository.save(newUser);
     }
 
