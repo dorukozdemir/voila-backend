@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -358,7 +359,7 @@ public class UserService {
     }
 
     public Page<User> getAllUsers(int start, int size, UserSearch search, String companyId) {
-        Pageable pagination = PageRequest.of(start, size);
+        Pageable pagination = PageRequest.of(start, size, Sort.by("id").descending());
         Company company = null;
         if(companyId != null && !companyId.trim().equals("")) {
             company = companyService.getCompanyById(companyId);
@@ -412,7 +413,7 @@ public class UserService {
     }
 
     public Page<User> getAllUsers(int start, int size, String all) {
-        Pageable pagination = PageRequest.of(start, size);
+        Pageable pagination = PageRequest.of(start, size, Sort.by("id").descending());
         return userRepository.findByUsernameContainingOrProfileTokenContainingOrNameContainingOrSurnameContaining(all, all, all, all, pagination);
     }
 
