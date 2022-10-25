@@ -217,7 +217,8 @@ public class AdminRestController {
             Page<Url> urls = urlService.getAllUrls(start-1, size);
             List<UrlListItem> list = new ArrayList<UrlListItem>();
             for (Url u : urls.toList()) {
-                list.add(new UrlListItem(u));
+                User testUser = userService.getByProfileToken(u.getToken());
+                list.add(new UrlListItem(u, testUser != null));
             }
             return ResponseEntity.status(HttpStatus.OK).body(new PaginatedData(list, urls.getTotalElements()));
         }
