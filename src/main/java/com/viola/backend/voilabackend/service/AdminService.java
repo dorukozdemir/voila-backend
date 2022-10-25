@@ -1,6 +1,8 @@
 package com.viola.backend.voilabackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -130,7 +132,7 @@ public class AdminService {
             specification = searchSpecification;
         }
             //.and(adminRepository.findByNameContainsOrSurnameContainsOrUsernameContainsOrCompanyIn(search, search, search, companies));
-        List<Admin> admins = adminRepository.findAll(specification);
+        List<Admin> admins = adminRepository.findAll(specification,  Sort.by(Direction.DESC, "id" ));
         
         //List<Admin> admins = adminRepository.findByCompanyAndNameContainsOrSurnameContainsOrUsernameContainsOrCompanyIn(company, search, search, search, companies);
         return admins;

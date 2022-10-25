@@ -34,7 +34,7 @@ public class CompanyService {
     }
   
     public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+        return companyRepository.findAllByOrderByIdDesc();
     }
 
     public boolean isCompanyExist(String name) {
