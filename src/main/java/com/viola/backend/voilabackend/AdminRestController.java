@@ -3,6 +3,7 @@ package com.viola.backend.voilabackend;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.model.domain.Admin;
 import com.viola.backend.voilabackend.model.domain.AdminRole;
 import com.viola.backend.voilabackend.model.domain.Company;
@@ -61,6 +62,9 @@ public class AdminRestController {
 
     @Autowired
     private AmazonClient amazonClient;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/dashboard")
@@ -509,5 +513,18 @@ public class AdminRestController {
         String fileName =  this.amazonClient.uploadFile(file, idString);
         companyService.updateLogo(company, fileName);
         return ResponseEntity.ok().body(fileName);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("admin/cardvisit/forgot/{profileToken}")
+    public ResponseEntity<String> forgot(@PathVariable String profileToken) throws Exception {
+            User user = userService.getByProfileToken(profileToken);
+            if(user != null) {
+            userService.createResetPasswordToken(user);
+            emailSenderService.sendForgotPasswordEmail(user.getName() == null ? "" : user.getName(), user.getUsername(), user.getResetPasswordToken());
+            return ResponseEntity.status(HttpStatus.OK).build();
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
     }
 }
