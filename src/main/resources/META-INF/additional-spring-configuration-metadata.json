@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "app.url",
+    "type": "java.lang.String",
+    "description": "Uygulamanın çalıştığı ana alan adı"
+  },
+  {
+    "name": "app.adminUrl",
+    "type": "java.lang.String",
+    "description": "Admin uygulamasının çalıştığı ana alan adı"
+  },
+  {
+    "name": "amazonProperties.accessKey",
+    "type": "java.lang.String",
+    "description": "Amazon accessKey"
+  },
+  {
+    "name": "amazonProperties.secretKey",
+    "type": "java.lang.String",
+    "description": "Amazon kullanıcısının secretkey"
+  },
+  {
+    "name": "amazonProperties.endpointUrl",
+    "type": "java.lang.String",
+    "description": "Kullanılan s3 bucketın public urli"
+  },
+  {
+    "name": "amazonProperties.bucketName",
+    "type": "java.lang.String",
+    "description": "Kullanılan bucketın adı"
+  }
+]}
