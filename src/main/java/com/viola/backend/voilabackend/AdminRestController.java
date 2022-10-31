@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.viola.backend.voilabackend.model.domain.Admin;
+import com.viola.backend.voilabackend.model.domain.AdminRole;
 import com.viola.backend.voilabackend.model.domain.Company;
 import com.viola.backend.voilabackend.model.domain.Url;
 import com.viola.backend.voilabackend.model.domain.User;
@@ -23,6 +24,7 @@ import com.viola.backend.voilabackend.model.web.UrlRequest;
 import com.viola.backend.voilabackend.model.web.UserSearch;
 import com.viola.backend.voilabackend.service.UserService;
 import com.viola.backend.voilabackend.service.AdminService;
+import com.viola.backend.voilabackend.service.AmazonClient;
 import com.viola.backend.voilabackend.service.CompanyService;
 import com.viola.backend.voilabackend.service.UrlService;
 
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -55,6 +58,9 @@ public class AdminRestController {
 
     @Autowired
     private UrlService urlService;
+
+    @Autowired
+    private AmazonClient amazonClient;
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/dashboard")
@@ -439,5 +445,30 @@ public class AdminRestController {
             userService.disableUser(user);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PutMapping("/admin/company/logo")
+    public ResponseEntity<String> updateLogo(@RequestParam(value = "file") MultipartFile file, @RequestParam(value="id") String idString) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Admin admin = (Admin) auth.getPrincipal();
+        Long id = null;
+        if(idString == null || idString.trim().equals("")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            id = Long.parseLong(idString);
+        }
+        Company company = companyService.getCompanyById(idString);
+        if(company == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        if (admin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else if (!admin.getRole().equals(AdminRole.SUPER_ADMIN) && !admin.getCompany().getId().equals(id)) {
+            ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        String fileName =  this.amazonClient.uploadFile(file, idString);
+        companyService.updateLogo(company, fileName);
+        return ResponseEntity.ok().body(fileName);
     }
 }
