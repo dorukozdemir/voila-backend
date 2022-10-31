@@ -527,4 +527,17 @@ public class AdminRestController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
     }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/admin/company")
+    public ResponseEntity<CompanyListItem> company() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = (Admin) auth.getPrincipal();
+        if (admin == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            CompanyListItem cli = new CompanyListItem(admin.getCompany());
+            return ResponseEntity.status(HttpStatus.OK).body(cli);
+        }
+    }
 }
