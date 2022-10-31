@@ -232,14 +232,19 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/admin/company")
-    public ResponseEntity<String> createCompany(@RequestBody CompanyRequest companyRequest) throws Exception {
+    public ResponseEntity<String> createCompany(@RequestParam(value="companyEmail") String companyEmail,
+        @RequestParam(value="name") String name, @RequestParam(value="phone") String phone, @RequestParam(value="companyEmail") String authorityEmail, 
+        @RequestParam(value="companyEmail") String authorityName
+    ) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
+        /*
         String companyEmail = companyRequest.getCompanyEmail();
         String name = companyRequest.getName();
         String phone = companyRequest.getPhone();
         String authorityEmail = companyRequest.getAuthorityEmail();
         String authorityName = companyRequest.getAuthorityName();
+        */
         if (companyService.isCompanyExist(name)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"name\": false}");
         } else if(companyService.isCompanyExistByEmail(companyEmail)) {
@@ -250,6 +255,40 @@ public class AdminRestController {
             Company company = companyService.createCompany(name, companyEmail, phone, authorityEmail, authorityName,
                     admin);
             if (company != null) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/admin/companyWithLogo")
+    public ResponseEntity<String> createCompanyWithLogo(@RequestParam(value = "file") MultipartFile file, @RequestParam(value="companyEmail") String companyEmail,
+        @RequestParam(value="name") String name, @RequestParam(value="phone") String phone, @RequestParam(value="companyEmail") String authorityEmail, 
+        @RequestParam(value="companyEmail") String authorityName
+    ) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = (Admin) auth.getPrincipal();
+        /*
+        String companyEmail = companyRequest.getCompanyEmail();
+        String name = companyRequest.getName();
+        String phone = companyRequest.getPhone();
+        String authorityEmail = companyRequest.getAuthorityEmail();
+        String authorityName = companyRequest.getAuthorityName();
+        */
+        if (companyService.isCompanyExist(name)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"name\": false}");
+        } else if(companyService.isCompanyExistByEmail(companyEmail)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"email\": false}");
+        } 
+        
+        else {
+            Company company = companyService.createCompany(name, companyEmail, phone, authorityEmail, authorityName,
+                    admin);
+            if (company != null) {
+                String fileName =  this.amazonClient.uploadFile(file, company.getId().toString());
+                companyService.updateLogo(company, fileName);
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
