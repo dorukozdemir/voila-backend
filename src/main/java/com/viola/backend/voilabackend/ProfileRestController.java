@@ -16,6 +16,7 @@ import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageResponse;
+import com.viola.backend.voilabackend.service.AmazonClient;
 import com.viola.backend.voilabackend.service.ConnectionService;
 import com.viola.backend.voilabackend.service.UrlService;
 import com.viola.backend.voilabackend.service.UserService;
@@ -29,9 +30,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 
@@ -46,6 +49,9 @@ public class ProfileRestController {
 
     @Autowired
     private UrlService urlService;
+
+    @Autowired
+    private AmazonClient amazonClient;
 
     private static HttpURLConnection con;
 
@@ -259,5 +265,15 @@ public class ProfileRestController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/uploadPhotoS3")
+    public ResponseEntity<String> uploadPhotoS3(@RequestParam(value = "file") MultipartFile file) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        String fileName =  this.amazonClient.uploadFile(file, user.getProfileToken());
+        userService.updatePhoto(user, fileName);
+        return ResponseEntity.ok().build();
     }
 }
