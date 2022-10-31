@@ -18,6 +18,7 @@ public class Company {
     private String authorityEmail;
     private String authorityName;
     private Admin admin;
+    private String logo = "/CardvisitUI/Dash/media/avatars/blank.png";
 
     public Company() {
 
@@ -93,5 +94,11 @@ public class Company {
         this.admin = admin;
     }
 
-    
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 }

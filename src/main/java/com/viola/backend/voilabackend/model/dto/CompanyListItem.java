@@ -10,6 +10,7 @@ public class CompanyListItem {
     private String authorityEmail;
     private String authorityName;
     private String adminName;
+    private String logo;
     
     public CompanyListItem(Company company) {
         this.id = company.getId();
@@ -19,6 +20,7 @@ public class CompanyListItem {
         this.authorityEmail = company.getAuthorityEmail();
         this.authorityName = company.getAuthorityName();
         this.adminName = company.getAdmin().getFullName();
+        this.logo = company.getLogo();
     }
     public Long getId() {
         return id;
@@ -62,5 +64,10 @@ public class CompanyListItem {
     public void setAdminName(String adminName) {
         this.adminName = adminName;
     }
-    
+    public String getLogo() {
+        return logo;
+    }
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }    
 }

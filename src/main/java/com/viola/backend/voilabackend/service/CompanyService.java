@@ -68,4 +68,9 @@ public class CompanyService {
     public List<Company> findCompaniesByName(String name) {
         return companyRepository.findByNameContaining(name);
     }
+
+    public void updateLogo(Company company, String fileName) {
+        company.setLogo(fileName);
+        save(company);
+    }
 }
