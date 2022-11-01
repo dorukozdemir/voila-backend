@@ -416,6 +416,29 @@ public class AdminRestController {
     }
 
     @CrossOrigin(origins = "*")
+    @PostMapping("/admin/profileWithAvatar")
+    public ResponseEntity<String> createProfileWithAvatar(
+    @RequestParam(value = "file") MultipartFile file, @RequestParam(value="name") String name,
+        @RequestParam(value="surname") String surname, @RequestParam(value="note") String note, @RequestParam(value="email") String email, 
+        @RequestParam(value="password") String password, @RequestParam(value="locked") boolean locked, @RequestParam(value="token") String token
+    ) throws Exception{
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Admin admin = (Admin) auth.getPrincipal();
+        User user = userService.getByProfileToken(token);
+        if (user != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        if(!urlService.isUrlExist(token)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User createdUser = userService.createUser(email, password, name, surname, token, note, locked);
+        String filename = amazonClient.uploadFile(file, token);
+        userService.updatePhoto(createdUser, filename);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping("/admin/profile/reset/{profileToken}")
     public ResponseEntity<String> resetProfile(@PathVariable String profileToken) throws Exception{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -539,5 +562,28 @@ public class AdminRestController {
             CompanyListItem cli = new CompanyListItem(admin.getCompany());
             return ResponseEntity.status(HttpStatus.OK).body(cli);
         }
+    }
+
+    @CrossOrigin(origins = "*")
+    @PutMapping("/admin/cardvisit/avatar")
+    public ResponseEntity<String> updateCardvisitAvatar(@RequestParam(value = "file") MultipartFile file, @RequestParam(value="token") String token) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Admin admin = (Admin) auth.getPrincipal();
+        Long id = null;
+        if(token == null || token.trim().equals("")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } 
+        User user = userService.getByProfileToken(token);
+        if(user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        if (admin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else if (!admin.getRole().equals(AdminRole.SUPER_ADMIN) && !user.getCompany().getId().equals(id)) {
+            ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        String fileName =  this.amazonClient.uploadFile(file, token);
+        userService.updatePhoto(user, fileName);
+        return ResponseEntity.ok().body(fileName);
     }
 }
