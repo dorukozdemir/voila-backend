@@ -24,9 +24,9 @@ test:
   image: openjdk:11-jdk
   stage: test
   services:
-    - mysql:latest
+    - postgres:12.2-alpine
   script:
-    - cp $application_cicd_mysql_properties src/main/resources/application.properties
+    - cp $application_cicd_posgres_properties src/main/resources/application.properties
     - ./mvnw clean test
 
 
