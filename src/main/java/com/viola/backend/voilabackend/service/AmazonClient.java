@@ -3,11 +3,13 @@ package com.viola.backend.voilabackend.service;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +32,8 @@ public class AmazonClient {
     private String accessKey;
     @Value("${amazonProperties.secretKey}")
     private String secretKey;
+    @Value("${amazonProperties.region}")
+    private String region;
 
     @PostConstruct
     private void initializeAmazon() {
@@ -37,6 +41,7 @@ public class AmazonClient {
        this.s3client = AmazonS3ClientBuilder
         .standard()
         .withCredentials(new AWSStaticCredentialsProvider(credentials))
+        .withRegion(region)
         .build();
     }
     
