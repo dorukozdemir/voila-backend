@@ -262,12 +262,8 @@ public class User implements UserDetails{
         this.links = links;
     }
 
-    // @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @Transient
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public Set<CompanyInfo> getCompanies() {
-        this.companies = new HashSet<CompanyInfo>();
-        CompanyInfo ci = new CompanyInfo(this.companyName, "", "", "");
-        this.companies.add(ci);
         return companies;
     }
 
@@ -379,8 +375,7 @@ public class User implements UserDetails{
         if (this.companies == null) {
             this.companies = new LinkedHashSet<CompanyInfo>();
         }
-        this.companyName = companyInfo.getName();
-        //this.companies.add(companyInfo);
+        this.companies.add(companyInfo);
     }
 
     public void addBankAccountInfo(BankAccountInfo bankAccountInfo) {

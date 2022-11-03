@@ -185,7 +185,7 @@ public class UserService {
 
     @Transactional
     public void addCompanyInfo(User user, CompanyInfo companyInfo) {
-        /*companyInfo.setUser(user);*/
+        companyInfo.setUser(user);
         user.addCompanyInfo(companyInfo);
         save(user);
     }
