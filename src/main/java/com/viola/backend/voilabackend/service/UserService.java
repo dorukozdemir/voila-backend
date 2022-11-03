@@ -191,7 +191,7 @@ public class UserService {
     }
 
     public void addBankAccountInfo(User user, BankAccountInfo bankAccountInfo) {
-        //bankAccountInfo.setUser(user);
+        bankAccountInfo.setUser(user);
         user.addBankAccountInfo(bankAccountInfo);
         save(user);
     }

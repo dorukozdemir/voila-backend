@@ -9,13 +9,16 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -272,20 +275,9 @@ public class User implements UserDetails{
         this.companies = companies;
     }
 
-    //@OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @Transient
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    //@Transient
     public Set<BankAccountInfo> getBankAccounts() {
-        this.bankAccounts = new HashSet<BankAccountInfo>();
-        String holderName = "";
-        if (this.name != null && !this.name.trim().equals("")) {
-            holderName = this.name;
-        }
-        if (this.surname != null && !this.surname.trim().equals("")) {
-            holderName = holderName + " " + this.surname;
-        }
-        holderName = holderName.trim();
-        BankAccountInfo bai = new BankAccountInfo(this.ibanBank, holderName, this.iban);
-        this.bankAccounts.add(bai);
         return bankAccounts;
     }
 
@@ -395,8 +387,7 @@ public class User implements UserDetails{
         if (this.bankAccounts == null) {
             this.bankAccounts = new LinkedHashSet<BankAccountInfo>();
         }
-        this.iban = bankAccountInfo.getIban();
-        this.ibanBank = bankAccountInfo.getBankName();
+        this.bankAccounts.add(bankAccountInfo);
     }
 
     @Column(name = "web_site_1")
