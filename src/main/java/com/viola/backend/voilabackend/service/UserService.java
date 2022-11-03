@@ -99,6 +99,8 @@ public class UserService {
         userRepository.save(user);
     }
 
+    
+
     public boolean isForgotTokenValid(User user) {
         if (user == null) {
             return false;
@@ -149,9 +151,11 @@ public class UserService {
 
     public void updateSocialMediaAccounts(User user, SocialMediaAccounts socialMediaAccounts) {
         if (user.getSocialMediaAccounts() == null) {
+            socialMediaAccounts.setUser(user);
             user.setSocialMediaAccounts(socialMediaAccounts);
             save(user);
         } else {
+            socialMediaAccounts.setUser(user);
             user.updateSocialMediaAccounts(socialMediaAccounts);
             save(user);
         }
@@ -160,6 +164,7 @@ public class UserService {
     public void updateSocialMediaAccounts(User user, SocialMediaAccountsDto socialMediaAccountsDto) {
         if (user.getSocialMediaAccounts() == null) {
             SocialMediaAccounts socialMediaAccounts = new SocialMediaAccounts();
+            socialMediaAccounts.setUser(user);
             socialMediaAccounts.copyFromDto(socialMediaAccountsDto);
             user.setSocialMediaAccounts(socialMediaAccounts);
             save(user);
