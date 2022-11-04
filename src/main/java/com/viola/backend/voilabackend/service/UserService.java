@@ -221,58 +221,15 @@ public class UserService {
     public void updateContactInformation(User user, ContactInfoDto[] contactInfo) {
         user.setContactInfo(new HashSet<ContactInfo>());
         save(user);
-        Set<String> emails = new HashSet<String>();
-        Set<String> phones = new HashSet<String>();
         for(ContactInfoDto contactInfoDto : contactInfo) {
-            /*ContactInfo ci = new ContactInfo();
+            ContactInfo ci = new ContactInfo();
             ci.setContactType(ContactType.toContactType(contactInfoDto.getContactType()));
             ci.setExtension(contactInfoDto.getExtension());
             ci.setValue(contactInfoDto.getValue());
             ci.setUser(user);
             this.addContactInfo(user, ci);
-            */
-            if (ContactType.toContactType(contactInfoDto.getContactType()).equals(ContactType.EMAIL)) {
-                if(!contactInfoDto.getValue().equals(user.getUsername())) {
-                    emails.add(contactInfoDto.getValue());
-                }
-            }
-            if (ContactType.toContactType(contactInfoDto.getContactType()).equals(ContactType.PHONE)) {
-                phones.add(contactInfoDto.getValue());
-            }
-            if (ContactType.toContactType(contactInfoDto.getContactType()).equals(ContactType.WHATSAPP)) {
-                user.setWhatsapp(contactInfoDto.getValue());
-            }
-        }
-        if(emails.size() == 0) {
-            user.setEmail1("");
-            user.setEmail2("");
-        } else if (emails.size() == 1) {
-            user.setEmail1((String)emails.toArray()[0]);
-            user.setEmail2("");
-        } else if (emails.size() == 2) {
-            user.setEmail1((String)emails.toArray()[0]);
-            user.setEmail2((String)emails.toArray()[1]);
         }
 
-        if(phones.size() == 0) {
-            user.setPhone("");
-            user.setPhone2("");
-            user.setPhone3("");
-        } else if (phones.size() == 1) {
-            user.setPhone((String)phones.toArray()[0]);
-            user.setPhone2("");
-            user.setPhone3("");
-        } else if (phones.size() == 2) {
-            user.setPhone((String)phones.toArray()[0]);
-            user.setPhone2((String)phones.toArray()[1]);
-            user.setPhone3("");
-        } else if (phones.size() == 3) {
-            user.setPhone((String)phones.toArray()[0]);
-            user.setPhone2((String)phones.toArray()[1]);
-            user.setPhone3((String)phones.toArray()[2]);
-        }
-
-        save(user);
         
     }
 

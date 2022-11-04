@@ -200,36 +200,8 @@ public class User implements UserDetails{
     public void setSocialMediaAccounts(SocialMediaAccounts socialMediaAccounts) {
         this.socialMediaAccounts = socialMediaAccounts;
     }
-    //@OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @Transient
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public Set<ContactInfo> getContactInfo() {
-        this.contactInfo = new HashSet<ContactInfo>();
-        ContactInfo ciEmail = new ContactInfo(ContactType.EMAIL, "" ,this.username);
-        this.contactInfo.add(ciEmail);
-        if (this.whatsapp!=null && !this.whatsapp.trim().equals("")) {
-            ContactInfo ci = new ContactInfo(ContactType.WHATSAPP, "", this.whatsapp);
-            this.contactInfo.add(ci);
-        }
-        if (this.email1 != null && !this.email1.trim().equals("")) {
-            ContactInfo ci = new ContactInfo(ContactType.EMAIL, "", this.email1);
-            this.contactInfo.add(ci);
-        }
-        if (this.email2 != null && !this.email2.trim().equals("")) {
-            ContactInfo ci = new ContactInfo(ContactType.EMAIL, "", this.email2);
-            this.contactInfo.add(ci);
-        }
-        if (this.phone != null && !this.phone.trim().equals("")) {
-            ContactInfo ci = new ContactInfo(ContactType.PHONE, "", this.phone);
-            this.contactInfo.add(ci);
-        }
-        if (this.phone2 != null && !this.phone2.trim().equals("")) {
-            ContactInfo ci = new ContactInfo(ContactType.PHONE, "", this.phone2);
-            this.contactInfo.add(ci);
-        }
-        if (this.phone3 != null && !this.phone3.trim().equals("")) {
-            ContactInfo ci = new ContactInfo(ContactType.PHONE, "", this.phone3);
-            this.contactInfo.add(ci);
-        }
         return contactInfo;
     }
 
@@ -317,24 +289,7 @@ public class User implements UserDetails{
         if (this.contactInfo == null) {
             this.contactInfo = new LinkedHashSet<ContactInfo>();
         }
-        //this.contactInfo.add(singleContactInfo);
-        if(singleContactInfo.getContactType().equals(ContactType.WHATSAPP)) {
-            this.whatsapp = singleContactInfo.getValue();
-        } else if (singleContactInfo.getContactType().equals(ContactType.EMAIL)) {
-            if(this.email1 == null || this.email1.trim().equals("")) {
-                this.email1 = singleContactInfo.getValue();
-            } else if(this.email2 == null || this.email2.trim().equals("")) {
-                this.email2 = singleContactInfo.getValue();
-            }
-        } else if(singleContactInfo.getContactType().equals(ContactType.PHONE)) {
-            if(this.phone == null || this.phone.trim().equals("")) {
-                this.phone = singleContactInfo.getValue();
-            } else if(this.phone2 == null || this.phone2.trim().equals("")) {
-                this.phone2 = singleContactInfo.getValue();
-            } else if(this.phone3 == null || this.phone3.trim().equals("")) {
-                this.phone3 = singleContactInfo.getValue();
-            }
-        }
+        this.contactInfo.add(singleContactInfo);
     }
 
     public void addLink(Link link) {
