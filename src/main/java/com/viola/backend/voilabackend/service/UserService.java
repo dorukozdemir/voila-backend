@@ -183,7 +183,7 @@ public class UserService {
     }
 
     public void addLink(User user, Link link) {
-        //link.setUser(user);
+        link.setUser(user);
         user.addLink(link);
         save(user);
     }
@@ -316,23 +316,15 @@ public class UserService {
     }
 
     public void updateLinks(User user, LinkDto[] links) {
-        if (links.length == 1) {
-            user.setWebsite1(links[0].getValue());
+        user.setLinks(new HashSet<Link>());
+        save(user);
+        for(LinkDto linkDto : links) {
+            Link l = new Link();
+            l.setValue(linkDto.getValue());
+            l.setUser(user);
+            this.addLink(user, l);
         }
-        else if (links.length == 2) {
-            user.setWebsite1(links[0].getValue());
-            user.setWebsite2(links[1].getValue());
-        } else if (links.length == 3)  {
-            user.setWebsite1(links[0].getValue());
-            user.setWebsite2(links[1].getValue());
-            user.setWebsite3(links[2].getValue());
-        } else if (links.length == 4) {
-            user.setWebsite1(links[0].getValue());
-            user.setWebsite2(links[1].getValue());
-            user.setWebsite3(links[2].getValue());
-            user.setWebsite4(links[3].getValue());
-        }
-        this.save(user);
+
     }
 
     public void increaseProfileVisitCount(User user) {

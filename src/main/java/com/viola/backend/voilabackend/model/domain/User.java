@@ -237,26 +237,8 @@ public class User implements UserDetails{
         this.contactInfo = contactInfo;
     }
 
-    // @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @Transient
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public Set<Link> getLinks() {
-        this.links = new HashSet<Link>();
-        if (this.website1 != null && !this.website1.trim().equals("anObject")) {
-            Link link = new Link(this.website1);
-            this.links.add(link);
-        }
-        if (this.website2 != null && !this.website2.trim().equals("anObject")) {
-            Link link = new Link(this.website2);
-            this.links.add(link);
-        }
-        if (this.website3 != null && !this.website3.trim().equals("anObject")) {
-            Link link = new Link(this.website3);
-            this.links.add(link);
-        }
-        if (this.website4 != null && !this.website4.trim().equals("anObject")) {
-            Link link = new Link(this.website4);
-            this.links.add(link);
-        }
         return links;
     }
 
@@ -359,18 +341,7 @@ public class User implements UserDetails{
         if (this.links == null) {
             this.links = new LinkedHashSet<Link>();
         }
-        if(this.website1 == null || this.website1.trim().equals("")) {
-            this.setWebsite1(link.getValue());
-        }
-        else if(this.website2 == null || this.website2.trim().equals("")) {
-            this.setWebsite2(link.getValue());
-        }
-        else if(this.website3 == null || this.website3.trim().equals("")) {
-            this.setWebsite3(link.getValue());
-        } else if(this.website4 == null || this.website4.trim().equals("")) {
-            this.setWebsite4(link.getValue());
-        }
-        //this.links.add(link);
+        this.links.add(link);
     }
 
     public void addCompanyInfo(CompanyInfo companyInfo) {
