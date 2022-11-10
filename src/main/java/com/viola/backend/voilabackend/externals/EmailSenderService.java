@@ -8,6 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service("emailSenderService")
 public class EmailSenderService {
@@ -15,11 +16,14 @@ public class EmailSenderService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    private final String DOMAINURL = "https://voilacard.com/";
-    private final String ADMINURL = "https://voilacard.com/admin/";
-    private final String RESET_PATH = "cardvisit-dashboard/reset-my-password/";
+    @Value("${app.url}")
+    private String domainUrl;
+    @Value("${app.adminUrl}")
+    private String adminUrl;
+    private final String RESET_PATH = "reset-my-password/";
+    
     public boolean sendForgotPasswordEmail(String name, String emailAddress, String token) {
-        String resetLink = DOMAINURL + RESET_PATH + token;
+        String resetLink = domainUrl + RESET_PATH + token;
         MimeMessage email = resetPasswordEmail(name, emailAddress, resetLink);
         javaMailSender.send(email);
         return true;
@@ -912,7 +916,7 @@ public class EmailSenderService {
     }
 
     public boolean sendAdminForgotPasswordEmail(String name, String emailAddress, String token) {
-        String resetLink = ADMINURL + RESET_PATH + token;
+        String resetLink = adminUrl + RESET_PATH + token;
         MimeMessage email = resetPasswordEmail(name, emailAddress, resetLink);
         javaMailSender.send(email);
         return true;
