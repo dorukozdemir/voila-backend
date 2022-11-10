@@ -106,6 +106,8 @@ public class AuthRestController {
         }
     }
 
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/reset")
     public ResponseEntity<String> reset(@RequestBody ResetRequest authRequest) throws Exception {
         String token = authRequest.getToken();
@@ -198,5 +200,18 @@ public class AuthRestController {
     public ResponseEntity<String> adminAuthenticated() throws Exception {
         return ResponseEntity.status(HttpStatus.OK)
             .build();
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/admin/reset")
+    public ResponseEntity<String> adminReset(@RequestBody ResetRequest authRequest) throws Exception {
+        String token = authRequest.getToken();
+        String password = authRequest.getPassword();
+        if (adminService.isForgotTokenValid(token)) {
+            adminService.changePasswordByToken(token, password);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 }
