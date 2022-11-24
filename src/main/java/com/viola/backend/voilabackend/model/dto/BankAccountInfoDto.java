@@ -24,9 +24,17 @@ public class BankAccountInfoDto implements Comparable<BankAccountInfoDto>{
     }
     @Override
     public int compareTo(BankAccountInfoDto o) {
-        if (this.getBankName().toUpperCase().equals(o.getBankName().toUpperCase())) {
-            return this.getIban().compareTo(o.getIban());
-        }
-        return this.getBankName().toUpperCase().compareTo(o.getBankName().toUpperCase());
+        String compareName, thisName;
+        if(o.getIban() == null) {
+            compareName = "";
+        } else {
+            compareName= o.getIban().toUpperCase();
+        } 
+        if(this.getIban() == null) {
+            thisName = "";
+        } else {
+            thisName = this.getIban().toUpperCase();
+        } 
+		return thisName.compareTo(compareName);
     }
 }

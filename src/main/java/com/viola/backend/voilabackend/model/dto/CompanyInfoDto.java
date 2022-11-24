@@ -32,7 +32,17 @@ public class CompanyInfoDto implements Comparable<CompanyInfoDto>{
     }
 	
     public int compareTo(CompanyInfoDto otherCompanyInfo) {
-		String compareName = ((CompanyInfoDto) otherCompanyInfo).getName().toUpperCase();
-		return this.getName().toUpperCase().compareTo(compareName);
+		String compareName, thisName;
+        if(otherCompanyInfo.getName() == null) {
+            compareName = "";
+        } else {
+            compareName= ((CompanyInfoDto) otherCompanyInfo).getName().toUpperCase();
+        } 
+        if(this.getName() == null) {
+            thisName = "";
+        } else {
+            thisName = this.getName().toUpperCase();
+        } 
+		return thisName.compareTo(compareName);
 	}    
 }
