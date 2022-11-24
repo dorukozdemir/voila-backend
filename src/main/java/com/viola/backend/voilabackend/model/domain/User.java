@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -66,6 +65,7 @@ public class User implements UserDetails{
     private String ownerCompany;
     private UserStatus status = UserStatus.ACTIVE;
     private boolean locked = false;
+    private String companyLogoUrl;
 
     public String getOwnerCompany() {
         return ownerCompany;
@@ -471,6 +471,18 @@ public class User implements UserDetails{
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
+
+    @Column(name="company_logo_path")
+    public String getCompanyLogoUrl() {
+        return companyLogoUrl;
+    }
+
+    public void setCompanyLogoUrl(String companyLogoUrl) {
+        this.companyLogoUrl = companyLogoUrl;
+    }
+
+ 
+
     
     @Override
     public boolean equals(Object obj) {
@@ -504,8 +516,4 @@ public class User implements UserDetails{
     public String toString() {
         return this.getFullName();
     }
-
- 
-
-
 }

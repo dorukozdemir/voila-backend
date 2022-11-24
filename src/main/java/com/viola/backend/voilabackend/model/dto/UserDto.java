@@ -14,6 +14,7 @@ public class UserDto {
     private boolean hasCTA = false;
     private String ctaLink;
     private String ctaSentence;
+    private String companyLogoUrl;
 
     public UserDto() {
 
@@ -32,6 +33,7 @@ public class UserDto {
         this.profileToken = user.getProfileToken();
         this.profileVisits = user.getProfileVisits();
         this.profilePhoto = user.getProfilePhoto();
+        this.companyLogoUrl = user.getCompanyLogoUrl();
     }
 
     public String getName() {
@@ -117,6 +119,12 @@ public class UserDto {
         this.ctaSentence = ctaSentence;
     }
 
-    
+    public String getCompanyLogoUrl() {
+        return companyLogoUrl;
+    }
+
+    public void setCompanyLogoUrl(String companyLogoUrl) {
+        this.companyLogoUrl = companyLogoUrl;
+    }
 }
 
