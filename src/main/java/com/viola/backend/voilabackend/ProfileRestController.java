@@ -8,15 +8,19 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.viola.backend.voilabackend.model.domain.Connect;
 import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.domain.UserStatus;
+import com.viola.backend.voilabackend.model.dto.ConnectDto;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
+import com.viola.backend.voilabackend.model.web.ConnectRequest;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageResponse;
 import com.viola.backend.voilabackend.service.AmazonClient;
+import com.viola.backend.voilabackend.service.ConnectService;
 import com.viola.backend.voilabackend.service.ConnectionService;
 import com.viola.backend.voilabackend.service.UrlService;
 import com.viola.backend.voilabackend.service.UserService;
@@ -31,6 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,6 +54,9 @@ public class ProfileRestController {
 
     @Autowired
     private UrlService urlService;
+
+    @Autowired
+    private ConnectService connectService;
 
     @Autowired
     private AmazonClient amazonClient;
@@ -275,5 +283,36 @@ public class ProfileRestController {
         String fileName =  this.amazonClient.uploadFile(file, user.getProfileToken());
         userService.updatePhoto(user, fileName);
         return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin(origins="*")
+    @PostMapping("/connect")
+    public ResponseEntity<String> connect(@RequestBody ConnectRequest connectRequest) {
+        String token = connectRequest.getToken();
+        User user = userService.getByProfileToken(token);
+        if(user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Connect newConnect = new Connect(connectRequest);
+        newConnect.setUser(user);
+        connectService.save(newConnect);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/contacts")
+    public ResponseEntity<List<ConnectDto>> myContacts() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        List<Connect> connects = connectService.getUserConnections(user);
+        if (connects == null || connects.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            List<ConnectDto> connectsDto = new ArrayList<ConnectDto>();      
+            for(Connect c: connects) {
+                connectsDto.add(new ConnectDto(c));
+            }   
+            return ResponseEntity.status(HttpStatus.OK).body(connectsDto);
+        }
     }
 }
