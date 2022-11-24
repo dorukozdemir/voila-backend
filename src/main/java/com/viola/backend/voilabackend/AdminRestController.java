@@ -7,6 +7,8 @@ import com.viola.backend.voilabackend.externals.EmailSenderService;
 import com.viola.backend.voilabackend.model.domain.Admin;
 import com.viola.backend.voilabackend.model.domain.AdminRole;
 import com.viola.backend.voilabackend.model.domain.Company;
+import com.viola.backend.voilabackend.model.domain.Connect;
+import com.viola.backend.voilabackend.model.domain.Connection;
 import com.viola.backend.voilabackend.model.domain.Url;
 import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.domain.UserStatus;
@@ -27,6 +29,8 @@ import com.viola.backend.voilabackend.service.UserService;
 import com.viola.backend.voilabackend.service.AdminService;
 import com.viola.backend.voilabackend.service.AmazonClient;
 import com.viola.backend.voilabackend.service.CompanyService;
+import com.viola.backend.voilabackend.service.ConnectService;
+import com.viola.backend.voilabackend.service.ConnectionService;
 import com.viola.backend.voilabackend.service.UrlService;
 
 import org.springframework.security.core.Authentication;
@@ -65,6 +69,12 @@ public class AdminRestController {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
+    @Autowired
+    private ConnectService connectService;
+
+    @Autowired
+    private ConnectionService connectionService;
 
     @CrossOrigin(origins = "*")
     @GetMapping("/admin/dashboard")
@@ -322,9 +332,10 @@ public class AdminRestController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/admin/url")
-    public ResponseEntity<String> createUrl(@RequestBody UrlCreateRequest urlCreateRequest) throws Exception {
+    public ResponseEntity<List<UrlListItem>> createUrl(@RequestBody UrlCreateRequest urlCreateRequest) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
+        List<Url> urlList = new ArrayList<Url>();
         if (urlCreateRequest.getUrls() == null || urlCreateRequest.getUrls().isEmpty()) {
             return ResponseEntity.status(HttpStatus.LENGTH_REQUIRED).build();
         } else {
@@ -340,10 +351,15 @@ public class AdminRestController {
                         url.setAdmin(admin);
                         url.setCompany(company);
                         urlService.save(url);
+                        urlList.add(url);
                     }
                 }
             }
-            return ResponseEntity.ok().build();
+            List<UrlListItem> list = new ArrayList<UrlListItem>();
+            for (Url u : urlList) {
+                list.add(new UrlListItem(u));
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(list);
         }
     }
 
@@ -447,7 +463,22 @@ public class AdminRestController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         User user = userService.getByProfileToken(profileToken);
+        Url url = new Url();
+        url.setAdmin(admin);
+        url.setCompany(user.getCompany());
+        url.setCreated(user.getCreated());
+        // Delete connections
+        List<Connection> connections = connectionService.getUserConnections(user);
+        for(Connection c : connections) {
+            connectionService.deleteConnection(c);
+        }
         
+        // Delete contacts
+        List<Connect> connects = connectService.getUserConnections(user);
+        for(Connect c : connects) {
+            connectService.deleteConnect(c);
+        }
+        /* 
         if (user == null || user.getStatus().equals(UserStatus.SETUP)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else if(admin.getCompany() != null) {
@@ -461,6 +492,12 @@ public class AdminRestController {
             userService.resetUser(user);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
+        */
+        userService.deleteUser(user);
+        if(!urlService.isUrlExist(profileToken)){
+            urlService.save(url);
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @CrossOrigin(origins = "*")
