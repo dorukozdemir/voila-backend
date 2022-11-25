@@ -467,6 +467,7 @@ public class AdminRestController {
         url.setAdmin(admin);
         url.setCompany(user.getCompany());
         url.setCreated(user.getCreated());
+        url.setToken(profileToken);
         // Delete connections
         List<Connection> connections = connectionService.getUserConnections(user);
         for(Connection c : connections) {
