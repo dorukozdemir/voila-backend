@@ -248,7 +248,7 @@ public class ProfileRestController {
         User otherUser = userService.getByProfileToken(profileToken);
         if (user != null && otherUser == null ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else if(user != null && otherUser != null && otherUser.isLocked()) {
+        } else if(otherUser != null && otherUser.isLocked()) {
             return ResponseEntity.status(HttpStatus.LOCKED).build();
         } else if (user != null && otherUser != null) {
             if (!user.equals(otherUser)) {
