@@ -120,10 +120,9 @@ public class ProfileRestController {
             userService.updateLinks(user, profileUpdateRequest.getLinks());
             profileUpdated = true;
         }
-        if (profileUpdateRequest.getCompanyInfo() != null && profileUpdateRequest.getCompanyInfo().length > 0) {
-            userService.updateCompanyInformation(user, profileUpdateRequest.getCompanyInfo());
-            profileUpdated = true;
-        }
+        userService.updateCompanyInformation(user, profileUpdateRequest.getCompanyInfo());
+        profileUpdated = true;
+        
         if (profileUpdateRequest.getBankAccountInfo() != null && profileUpdateRequest.getBankAccountInfo().length > 0) {
             userService.updateBankInformation(user, profileUpdateRequest.getBankAccountInfo());
             profileUpdated = true;
