@@ -11,6 +11,7 @@ public class CompanyListItem {
     private String authorityName;
     private String adminName;
     private String logo;
+    private int userCount;
     
     public CompanyListItem(Company company) {
         this.id = company.getId();
@@ -69,5 +70,11 @@ public class CompanyListItem {
     }
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+    public int getUserCount() {
+        return userCount;
+    }
+    public void setUserCount(int userCount) {
+        this.userCount = userCount;
     }    
 }

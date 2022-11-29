@@ -220,7 +220,9 @@ public class AdminRestController {
         } else {
             List<CompanyListItem> list = new ArrayList<CompanyListItem>();
             for (Company c : companies) {
-                list.add(new CompanyListItem(c));
+                CompanyListItem ci = new CompanyListItem(c);
+                ci.setUserCount(userService.countByCompany(c));
+                list.add(ci);
             }
             return ResponseEntity.status(HttpStatus.OK).body(list);
         }

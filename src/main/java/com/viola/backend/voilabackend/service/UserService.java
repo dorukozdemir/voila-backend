@@ -417,4 +417,8 @@ public class UserService {
     public void enableUser(User user) {
         updateUserStatus(user, UserStatus.ACTIVE);
     }
+
+    public int countByCompany(Company c) {
+        return userRepository.countByCompany(c);
+    }
 }

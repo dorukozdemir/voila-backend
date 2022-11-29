@@ -1,6 +1,8 @@
 package com.viola.backend.voilabackend.repository;
 
 import java.util.List;
+
+import com.viola.backend.voilabackend.model.domain.Company;
 import com.viola.backend.voilabackend.model.domain.User;
 
 import org.springframework.data.domain.Page;
@@ -20,4 +22,5 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long>, 
     Page<User> findByUsernameContainingOrProfileTokenContainingOrNameContainingOrSurnameContaining(String username,
             String token, String name, String surname, Pageable pagination);
     Page<User> findAll(Specification<User> specification, Pageable pagination);
+    int countByCompany(Company c);
 }
