@@ -100,37 +100,25 @@ public class ProfileRestController {
     public ResponseEntity<String> updateProfile(@RequestBody ProfileRequest profileUpdateRequest) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
-        boolean profileUpdated = false;
+        
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         if (profileUpdateRequest.getPersonal() != null) {
             userService.updatePersonalInformation(user, profileUpdateRequest.getPersonal());
-            profileUpdated = true;
         }
         if (profileUpdateRequest.getSocialMediaAccounts() != null) {
             userService.updateSocialMediaAccounts(user, profileUpdateRequest.getSocialMediaAccounts());
-            profileUpdated = true;
         }
         if (profileUpdateRequest.getContactInfo() != null && profileUpdateRequest.getContactInfo().length > 0) {
             userService.updateContactInformation(user, profileUpdateRequest.getContactInfo());
-            profileUpdated = true;
         }
         if (profileUpdateRequest.getLinks() != null && profileUpdateRequest.getLinks().length > 0) {
             userService.updateLinks(user, profileUpdateRequest.getLinks());
-            profileUpdated = true;
         }
         userService.updateCompanyInformation(user, profileUpdateRequest.getCompanyInfo());
-        profileUpdated = true;
-        
-        if (profileUpdateRequest.getBankAccountInfo() != null && profileUpdateRequest.getBankAccountInfo().length > 0) {
-            userService.updateBankInformation(user, profileUpdateRequest.getBankAccountInfo());
-            profileUpdated = true;
-        }
-        if(profileUpdated) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        userService.updateBankInformation(user, profileUpdateRequest.getBankAccountInfo());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @CrossOrigin(origins = "*")
