@@ -43,7 +43,7 @@ public class UrlService {
     }
 
     public Page<Url> getAllUrls(int start, int size) {
-        Pageable pagination = PageRequest.of(start, size, Sort.by("id").descending());
+        Pageable pagination = PageRequest.of(start, size, Sort.by("created").descending());
         return urlRepository.findAll(pagination);
     }
 }
