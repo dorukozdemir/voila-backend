@@ -116,6 +116,9 @@ public class ProfileRestController {
         if (profileUpdateRequest.getLinks() != null && profileUpdateRequest.getLinks().length > 0) {
             userService.updateLinks(user, profileUpdateRequest.getLinks());
         }
+        if(profileUpdateRequest.getSettings() != null) {
+            userService.updateSettings(user, profileUpdateRequest.getSettings());
+        }
         userService.updateCompanyInformation(user, profileUpdateRequest.getCompanyInfo());
         userService.updateBankInformation(user, profileUpdateRequest.getBankAccountInfo());
         return ResponseEntity.status(HttpStatus.OK).build();

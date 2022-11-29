@@ -32,6 +32,7 @@ import com.viola.backend.voilabackend.model.dto.BankAccountInfoDto;
 import com.viola.backend.voilabackend.model.dto.CompanyInfoDto;
 import com.viola.backend.voilabackend.model.dto.ContactInfoDto;
 import com.viola.backend.voilabackend.model.dto.LinkDto;
+import com.viola.backend.voilabackend.model.dto.SettingsDto;
 import com.viola.backend.voilabackend.model.dto.SocialMediaAccountsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.UserSearch;
@@ -267,6 +268,13 @@ public class UserService {
         save(user);
 	}
 
+    public void updateSettings(User user, SettingsDto settings) {
+        user.setTab1(settings.getTab1());
+        user.setTab2(settings.getTab2());
+        user.setTab3(settings.getTab3());
+        save(user);
+    }
+
     public List<User> getConnections(User user) {
         return userRepository.findAll();
     }
@@ -280,7 +288,6 @@ public class UserService {
             l.setUser(user);
             this.addLink(user, l);
         }
-
     }
 
     public void increaseProfileVisitCount(User user) {

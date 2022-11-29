@@ -14,6 +14,7 @@ public class ProfileDto {
     private LinkDto[] links;
     private BankAccountInfoDto[] bankAccountInfo;
     private SocialMediaAccountsDto socialMediaAccounts;
+    private SettingsDto settings;
 
     public ProfileDto() {
 
@@ -44,12 +45,14 @@ public class ProfileDto {
         if(user.getSocialMediaAccounts() != null) {
             socialMediaAccounts = modelMapper.map(user.getSocialMediaAccounts(), SocialMediaAccountsDto.class);
         }
+        SettingsDto settings = new SettingsDto(user);
         this.setPersonal(userDto);
         this.setCompanyInfo(companies);
         this.setContactInfo(contacts);
         this.setLinks(links);
         this.setBankAccountInfo(bankAccounts);
         this.setSocialMediaAccounts(socialMediaAccounts);
+        this.setSettings(settings);
     }
 
     public UserDto getPersonal() {
@@ -98,6 +101,14 @@ public class ProfileDto {
 
     public void setSocialMediaAccounts(SocialMediaAccountsDto socialMediaAccounts) {
         this.socialMediaAccounts = socialMediaAccounts;
+    }
+
+    public SettingsDto getSettings() {
+        return settings;
+    }
+
+    public void setSettings(SettingsDto settings) {
+        this.settings = settings;
     }
 
     public String jsonString() {
