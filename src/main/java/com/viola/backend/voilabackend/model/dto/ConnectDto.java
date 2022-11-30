@@ -3,6 +3,7 @@ package com.viola.backend.voilabackend.model.dto;
 import com.viola.backend.voilabackend.model.domain.Connect;
 
 public class ConnectDto {
+    private Long id;
     private String nameSurname;
     private String email;
     private String note;
@@ -13,7 +14,8 @@ public class ConnectDto {
 
     }
 
-    public ConnectDto(String nameSurname, String email, String phone, String note, boolean agreementChecked) {
+    public ConnectDto(Long id, String nameSurname, String email, String phone, String note, boolean agreementChecked) {
+        this.id = id;
         this.nameSurname = nameSurname;
         this.email = email;
         this.phone = phone;
@@ -22,11 +24,20 @@ public class ConnectDto {
     }
     
     public ConnectDto(Connect connect) {
+        this.id = connect.getId();
         this.nameSurname = connect.getNameSurname();
         this.email = connect.getEmail();
         this.phone = connect.getPhone();
         this.note = connect.getNote();
         this.agreementChecked = connect.isAgreementChecked();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNameSurname() {
@@ -67,6 +78,6 @@ public class ConnectDto {
 
     public void setAgreementChecked(boolean agreementChecked) {
         this.agreementChecked = agreementChecked;
-    }
+    }    
 }
 

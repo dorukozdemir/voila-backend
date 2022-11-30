@@ -29,4 +29,12 @@ public class ConnectService {
     public void save(Connect connect) {
         connectRepository.save(connect);
     }
+
+    public Connect getConnect(User user, Long id) {
+        List<Connect> connections = connectRepository.findByUserAndId(user, id);
+        if(connections != null && connections.size() > 0) {
+            return connections.get(0);
+        }
+        return null;
+    }
 }

@@ -305,4 +305,21 @@ public class ProfileRestController {
             return ResponseEntity.status(HttpStatus.OK).body(connectsDto);
         }
     }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/connect/{id}")
+    public ResponseEntity<ConnectDto> getConnect(@PathVariable String id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(id == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Long longId = Long.parseLong(id);
+		User user = (User) auth.getPrincipal();
+        Connect connect = connectService.getConnect(user, longId);
+        if (connect == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {   
+            return ResponseEntity.status(HttpStatus.OK).body(new ConnectDto(connect));
+        }
+    }
 }

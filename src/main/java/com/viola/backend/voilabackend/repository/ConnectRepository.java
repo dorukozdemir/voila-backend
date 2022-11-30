@@ -10,4 +10,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ConnectRepository extends JpaRepository<Connect, Long>{
     List<Connect> findByUser(User user);
     List<Connect> findAll();
+    List<Connect> findByUserAndId(User user, Long id);
 }
