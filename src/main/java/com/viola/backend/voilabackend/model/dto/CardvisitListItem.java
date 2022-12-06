@@ -14,7 +14,7 @@ public class CardvisitListItem {
     public CardvisitListItem (User user) {
         this.name = user.getName();
         this.surname = user.getSurname();
-        this.company = "Voila";
+        this.company = user.getCompany() != null ? user.getCompany().getName() : "Voila";
         this.email = user.getUsername();
         this.profileVisits = user.getProfileVisits();
         this.profileToken = user.getProfileToken();
