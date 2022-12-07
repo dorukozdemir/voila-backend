@@ -163,15 +163,19 @@ public class AuthRestController {
         String name = authRequest.getName();
         String surname = authRequest.getSurname();
         String token = authRequest.getToken();
-        User user = userService.getUserByUsername(username);
+        User user = userService.getByProfileToken(token);
         if (token == null || token.trim().equals("")) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
         if (user != null) {
-            if(user.getStatus().equals(UserStatus.ACTIVE)) {
+            if(userService.isUserExist(username) && !user.getUsername().equals(username)) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
+            }
+            if(user.getStatus().equals(UserStatus.ACTIVE)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             } else if(user.getStatus().equals(UserStatus.SETUP)) {
                 user = userService.updateUser(user, username, password, name, surname, token);
+                userService.enableUser(user);
                 final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -180,7 +184,10 @@ public class AuthRestController {
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
             }
         } else {
-            User newUser = userService.createUser(username, password, name, surname, token, "", true);
+            if(userService.isUserExist(username) ) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
+            }
+            User newUser = userService.createUser(username, password, name, surname, token, "");
             final UserDetails userDetails = userDetailsService.loadUserByUsername(newUser.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.status(HttpStatus.CREATED)
