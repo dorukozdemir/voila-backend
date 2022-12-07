@@ -46,4 +46,12 @@ public class UrlService {
         Pageable pagination = PageRequest.of(start, size, Sort.by("created").descending());
         return urlRepository.findAll(pagination);
     }
+
+    public Url getUrlByToken(String token) {
+        List<Url> urls = urlRepository.findByToken(token);
+        if(urls != null && !urls.isEmpty()) {
+            return urls.get(0);
+        }
+        return null;
+    }
 }

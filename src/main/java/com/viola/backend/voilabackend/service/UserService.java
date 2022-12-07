@@ -348,14 +348,21 @@ public class UserService {
 
         Page<User> users = userRepository.findAll(specification, pagination);
         return users;
-        //return userRepository.findByUsernameContainingAndProfileTokenContainingAndNameContainingAndSurnameContaining(search.getEmail(), search.getUrl(), search.getName(), search.getSurname(), pagination);
     }
 
-    public User createUser(String username, String password, String name, String surname, String token, String note, boolean locked) throws UserAlreadyExistException{
+    public User createUser(String username, String password, String name, String surname, String token, String note) throws UserAlreadyExistException{
         User user = getUserByUsername(username);
         if (user != null)
             throw new UserAlreadyExistException();
-        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token, note, locked);
+        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token, note);
+        return userRepository.save(newUser);
+    }
+
+    public User createUser(String username, String password, String name, String surname, String token, String note, boolean locked, boolean photoUploadGranted, Company company) throws UserAlreadyExistException{
+        User user = getUserByUsername(username);
+        if (user != null)
+            throw new UserAlreadyExistException();
+        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token, note, locked, photoUploadGranted, company);
         return userRepository.save(newUser);
     }
 

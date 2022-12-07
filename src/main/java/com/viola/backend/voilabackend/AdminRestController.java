@@ -423,12 +423,16 @@ public class AdminRestController {
         boolean locked = profileUpdateRequest.isLocked();
         boolean photoUploadGranted = profileUpdateRequest.isPhotoUploadGranted();
         User user = userService.getByProfileToken(email);
+        if(admin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         if (user != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         if(!urlService.isUrlExist(token)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        Url url = urlService.getUrlByToken(token);
 
         userService.createUser(email, password, name, surname, token, note, locked, photoUploadGranted, url.getCompany());
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -439,7 +443,7 @@ public class AdminRestController {
     public ResponseEntity<String> createProfileWithAvatar(
     @RequestParam(value = "file") MultipartFile file, @RequestParam(value="name") String name,
         @RequestParam(value="surname") String surname, @RequestParam(value="note") String note, @RequestParam(value="email") String email, 
-        @RequestParam(value="password") String password, @RequestParam(value="locked") boolean locked, @RequestParam(value="token") String token
+        @RequestParam(value="password") String password, @RequestParam(value="locked") boolean locked, @RequestParam(value="token") String token, @RequestParam(value="locked") boolean photoUploadGranted 
     ) throws Exception{
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Admin admin = (Admin) auth.getPrincipal();
@@ -450,8 +454,8 @@ public class AdminRestController {
         if(!urlService.isUrlExist(token)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-        User createdUser = userService.createUser(email, password, name, surname, token, note, locked);
+        Url url = urlService.getUrlByToken(token);
+        User createdUser = userService.createUser(email, password, name, surname, token, note, locked, photoUploadGranted, url.getCompany());
         String filename = amazonClient.uploadFile(file, token);
         userService.updatePhoto(createdUser, filename);
         return ResponseEntity.status(HttpStatus.OK).build();
