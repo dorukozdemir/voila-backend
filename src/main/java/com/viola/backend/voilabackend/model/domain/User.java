@@ -69,6 +69,7 @@ public class User implements UserDetails{
     private String tab1 = "profile";
     private String tab2= "social";
     private String tab3= "company";
+    private boolean photoUploadGranted = false;
 
     public String getOwnerCompany() {
         return ownerCompany;
@@ -87,7 +88,16 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    public User(String username, String password, String name, String surname, String token, String note, boolean locked) {
+    public User(String username, String password, String name, String surname, String token, String note) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.profileToken = token;
+        this.note = note;
+    }
+
+    public User(String username, String password, String name, String surname, String token, String note, boolean locked, boolean photoUploadGranted, Company company) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -95,12 +105,11 @@ public class User implements UserDetails{
         this.profileToken = token;
         this.note = note;
         this.locked = locked;
+        this.photoUploadGranted = photoUploadGranted;
+        this.company = company;
     }
 
     @Id
-    /*@SequenceGenerator(name="cardvisits_id_seq",
-                   sequenceName="cardvisits_id_seq",
-                   allocationSize=1) */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return this.id;
@@ -506,6 +515,14 @@ public class User implements UserDetails{
 
     public void setTab3(String tab3) {
         this.tab3 = tab3;
+    }
+
+    public boolean isPhotoUploadGranted() {
+        return photoUploadGranted;
+    }
+
+    public void setPhotoUploadGranted(boolean photoUploadGranted) {
+        this.photoUploadGranted = photoUploadGranted;
     }
 
     @Override
