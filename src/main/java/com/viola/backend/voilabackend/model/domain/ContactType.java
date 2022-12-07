@@ -3,7 +3,10 @@ package com.viola.backend.voilabackend.model.domain;
 public enum ContactType {
     WHATSAPP("whatsapp"),
     PHONE("phone"),
-    EMAIL("email");
+    EMAIL("email"),
+    MOBILE("mobile"),
+    FIXEDNUM("fixednum"),
+    FAX("fax");
 
     private String text;
 
@@ -19,6 +22,12 @@ public enum ContactType {
                 return PHONE;
             case "email":
                 return EMAIL;
+            case "mobile":
+                return MOBILE;
+            case "fixednum":
+                return FIXEDNUM;
+            case "fax":
+                return FAX;    
             default:
                 return PHONE;     
         }
