@@ -322,4 +322,14 @@ public class ProfileRestController {
             return ResponseEntity.status(HttpStatus.OK).body(new ConnectDto(connect));
         }
     }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/uploadCompanyPhotoS3")
+    public ResponseEntity<String> uploadCompanyPhotoS3(@RequestParam(value = "file") MultipartFile file) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        String fileName =  this.amazonClient.uploadCompanyPhoto(file, user.getProfileToken());
+        userService.updateCompanyPhoto(user, fileName);
+        return ResponseEntity.ok().build();
+    }
 }

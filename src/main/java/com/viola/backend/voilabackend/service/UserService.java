@@ -309,6 +309,11 @@ public class UserService {
         this.save(user);
     }
 
+    public void updateCompanyPhoto(User user, String fileName) {
+        user.setCompanyLogoUrl(fileName);
+        this.save(user);
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

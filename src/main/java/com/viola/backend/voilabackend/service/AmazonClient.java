@@ -59,6 +59,20 @@ public class AmazonClient {
         return fileUrl;
     }
 
+    public String uploadCompanyPhoto(MultipartFile multipartFile, String url) {
+        String fileUrl = "";
+        try {
+            File file = convertMultiPartToFile(multipartFile);
+            String fileName = generateCompanyFileName(multipartFile, url);
+            fileUrl = endpointUrl + "/" +  fileName;
+            uploadFileTos3bucket(fileName, file);
+            file.delete();
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return fileUrl;
+    }
+
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
         File convFile = new File(file.getOriginalFilename());
         FileOutputStream fos = new FileOutputStream(convFile);
@@ -72,6 +86,15 @@ public class AmazonClient {
             final int index = multiPart.getOriginalFilename().lastIndexOf(".");
             String ext = multiPart.getOriginalFilename().substring(index);
             return url + ext;
+        }
+        return "";
+    }
+
+    private String generateCompanyFileName(MultipartFile multiPart, String url) {
+        if(multiPart.getOriginalFilename() != null) {
+            final int index = multiPart.getOriginalFilename().lastIndexOf(".");
+            String ext = multiPart.getOriginalFilename().substring(index);
+            return "company-" + url + ext;
         }
         return "";
     }

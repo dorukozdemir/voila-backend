@@ -421,6 +421,7 @@ public class AdminRestController {
         String email = profileUpdateRequest.getEmail();
         String password = profileUpdateRequest.getPassword();
         boolean locked = profileUpdateRequest.isLocked();
+        boolean photoUploadGranted = profileUpdateRequest.isPhotoUploadGranted();
         User user = userService.getByProfileToken(email);
         if (user != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -429,7 +430,7 @@ public class AdminRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        userService.createUser(email, password, name, surname, token, note, locked);
+        userService.createUser(email, password, name, surname, token, note, locked, photoUploadGranted, url.getCompany());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
