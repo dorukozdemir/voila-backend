@@ -329,10 +329,10 @@ public class UserService {
         if(companyId != null && !companyId.trim().equals("")) {
             company = companyService.getCompanyById(companyId);
         }
-        Specification<User> searchSpecification = searchLike("name", search.getName())
-            .and(searchLike("surname", search.getSurname()))
+        Specification<User> searchSpecification = searchLikeCaseInsensitive("name", search.getName())
+            .and(searchLikeCaseInsensitive("surname", search.getSurname()))
             .and(searchLike("profileToken", search.getUrl())
-            .and(searchLike("username", search.getEmail())));
+            .and(searchLikeCaseInsensitive("username", search.getEmail())));
         Specification<User> specification = null;
         if (companyId != null && !companyId.trim().equals("") && !companyId.equals("0")) {
             specification = findByCompany(company).and(searchSpecification);
@@ -404,6 +404,12 @@ public class UserService {
     private Specification<User> searchLike(String property, String needle) {
         return(root, query, builder) -> {
             return builder.like(root.get(property), "%" + needle + "%");
+        };
+    }
+
+    private Specification<User> searchLikeCaseInsensitive(String property, String needle) {
+        return(root, query, builder) -> {
+            return builder.like(builder.lower(root.get(property)), "%" + needle.toLowerCase() + "%");
         };
     }
 
