@@ -15,6 +15,7 @@ public class UserDto {
     private String ctaLink;
     private String ctaSentence;
     private String companyLogoUrl;
+    private boolean photoUploadGranted;
 
     public UserDto() {
 
@@ -34,6 +35,7 @@ public class UserDto {
         this.profileVisits = user.getProfileVisits();
         this.profilePhoto = user.getProfilePhoto();
         this.companyLogoUrl = user.getCompanyLogoUrl();
+        this.photoUploadGranted = user.isPhotoUploadGranted();
     }
 
     public String getName() {
@@ -125,6 +127,14 @@ public class UserDto {
 
     public void setCompanyLogoUrl(String companyLogoUrl) {
         this.companyLogoUrl = companyLogoUrl;
+    }
+
+    public boolean isPhotoUploadGranted() {
+        return photoUploadGranted;
+    }
+
+    public void setPhotoUploadGranted(boolean photoUploadGranted) {
+        this.photoUploadGranted = photoUploadGranted;
     }
 }
 

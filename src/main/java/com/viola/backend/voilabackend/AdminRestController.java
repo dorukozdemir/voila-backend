@@ -391,6 +391,7 @@ public class AdminRestController {
         String note = profileUpdateRequest.getNote();
         String surname = profileUpdateRequest.getSurname();
         boolean isLocked = profileUpdateRequest.isLocked();
+        boolean photoUploadGranted = profileUpdateRequest.isPhotoUploadGranted();
         User user = userService.getByProfileToken(token);
         boolean profileUpdated = true;
         if (user == null) {
@@ -401,6 +402,7 @@ public class AdminRestController {
         user.setSurname(surname);
         user.setNote(note);
         user.setLocked(isLocked);
+        user.setPhotoUploadGranted(photoUploadGranted);
         userService.save(user);
 
         if (profileUpdated) {

@@ -6,6 +6,7 @@ public class SettingsDto {
     private String tab1;
     private String tab2;
     private String tab3;
+    private boolean photoUploadGranted;
 
     public SettingsDto() {
 
@@ -15,6 +16,7 @@ public class SettingsDto {
         this.tab1 = user.getTab1();
         this.tab2 = user.getTab2();
         this.tab3 = user.getTab3();
+        this.photoUploadGranted = user.isPhotoUploadGranted();
     }
     public String getTab1() {
         return tab1;
@@ -34,5 +36,12 @@ public class SettingsDto {
     public void setTab3(String tab3) {
         this.tab3 = tab3;
     }
-    
+
+    public boolean isPhotoUploadGranted() {
+        return photoUploadGranted;
+    }
+
+    public void setPhotoUploadGranted(boolean photoUploadGranted) {
+        this.photoUploadGranted = photoUploadGranted;
+    }
 }

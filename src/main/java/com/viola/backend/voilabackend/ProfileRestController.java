@@ -328,6 +328,9 @@ public class ProfileRestController {
     public ResponseEntity<String> uploadCompanyPhotoS3(@RequestParam(value = "file") MultipartFile file) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
+        if(user == null || !user.isPhotoUploadGranted()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         String fileName =  this.amazonClient.uploadCompanyPhoto(file, user.getProfileToken());
         userService.updateCompanyPhoto(user, fileName);
         return ResponseEntity.ok().build();

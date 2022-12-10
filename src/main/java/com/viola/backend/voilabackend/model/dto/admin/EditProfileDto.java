@@ -13,7 +13,7 @@ public class EditProfileDto {
     private String note;
     private String email;
     private boolean locked;
-    private boolean isPhotoUploadGranted;
+    private boolean photoUploadGranted;
 
     public EditProfileDto() {
 
@@ -26,7 +26,7 @@ public class EditProfileDto {
         this.profilePhoto = user.getProfilePhoto();
         this.note = user.getNote();
         this.locked = user.isLocked();
-        this.isPhotoUploadGranted = user.isPhotoUploadGranted();
+        this.photoUploadGranted = user.isPhotoUploadGranted();
     }
 
     public String jsonString() {
@@ -92,11 +92,11 @@ public class EditProfileDto {
     }
 
     public boolean isPhotoUploadGranted() {
-        return isPhotoUploadGranted;
+        return photoUploadGranted;
     }
 
-    public void setPhotoUploadGranted(boolean isPhotoUploadGranted) {
-        this.isPhotoUploadGranted = isPhotoUploadGranted;
+    public void setPhotoUploadGranted(boolean photoUploadGranted) {
+        this.photoUploadGranted = photoUploadGranted;
     }
 
     
