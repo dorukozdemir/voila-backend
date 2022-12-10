@@ -335,4 +335,17 @@ public class ProfileRestController {
         userService.updateCompanyPhoto(user, fileName);
         return ResponseEntity.ok().build();
     }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/switchLocked")
+    public ResponseEntity<String> switchLocked(@RequestParam(value = "file") MultipartFile file) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        if(user == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        user = userService.switchLocked(user);
+        return ResponseEntity.ok().build();
+    }
+
 }

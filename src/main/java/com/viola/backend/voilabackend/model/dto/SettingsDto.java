@@ -7,6 +7,7 @@ public class SettingsDto {
     private String tab2;
     private String tab3;
     private boolean photoUploadGranted;
+    private boolean locked;
 
     public SettingsDto() {
 
@@ -17,6 +18,7 @@ public class SettingsDto {
         this.tab2 = user.getTab2();
         this.tab3 = user.getTab3();
         this.photoUploadGranted = user.isPhotoUploadGranted();
+        this.locked = user.isLocked();
     }
     public String getTab1() {
         return tab1;
@@ -43,5 +45,13 @@ public class SettingsDto {
 
     public void setPhotoUploadGranted(boolean photoUploadGranted) {
         this.photoUploadGranted = photoUploadGranted;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 }
