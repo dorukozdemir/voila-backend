@@ -70,6 +70,7 @@ public class User implements UserDetails{
     private String tab2= "social";
     private String tab3= "company";
     private boolean photoUploadGranted = false;
+    private boolean campaignApproved = false;
 
     public String getOwnerCompany() {
         return ownerCompany;
@@ -107,6 +108,17 @@ public class User implements UserDetails{
         this.locked = locked;
         this.photoUploadGranted = photoUploadGranted;
         this.company = company;
+    }
+
+    public User(String username, String password, String name, String surname, String token, String note,
+            boolean campaignApproved) {
+                this.username = username;
+                this.password = password;
+                this.name = name;
+                this.surname = surname;
+                this.profileToken = token;
+                this.note = note;
+                this.campaignApproved = campaignApproved;
     }
 
     @Id
@@ -523,6 +535,14 @@ public class User implements UserDetails{
 
     public void setPhotoUploadGranted(boolean photoUploadGranted) {
         this.photoUploadGranted = photoUploadGranted;
+    }
+
+    public boolean isCampaignApproved() {
+        return campaignApproved;
+    }
+
+    public void setCampaignApproved(boolean campaignApproved) {
+        this.campaignApproved = campaignApproved;
     }
 
     @Override

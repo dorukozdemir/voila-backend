@@ -6,6 +6,7 @@ public class UserRequest implements Request{
     private String token;
     private String name;
     private String surname;
+    private boolean campaignApproved;
 
     public UserRequest() {
 
@@ -57,5 +58,11 @@ public class UserRequest implements Request{
         this.surname = surname;
     }
 
-    
+    public boolean isCampaignApproved() {
+        return campaignApproved;
+    }
+
+    public void setCampaignApproved(boolean campaignApproved) {
+        this.campaignApproved = campaignApproved;
+    }
 }

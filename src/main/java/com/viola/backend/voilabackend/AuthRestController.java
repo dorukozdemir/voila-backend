@@ -163,6 +163,7 @@ public class AuthRestController {
         String name = authRequest.getName();
         String surname = authRequest.getSurname();
         String token = authRequest.getToken();
+        boolean campaignApproved = authRequest.isCampaignApproved();
         User user = userService.getByProfileToken(token);
         if (token == null || token.trim().equals("")) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
@@ -174,7 +175,7 @@ public class AuthRestController {
             if(user.getStatus().equals(UserStatus.ACTIVE)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             } else if(user.getStatus().equals(UserStatus.SETUP)) {
-                user = userService.updateUser(user, username, password, name, surname, token);
+                user = userService.updateUser(user, username, password, name, surname, token, campaignApproved);
                 userService.enableUser(user);
                 final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
@@ -187,7 +188,7 @@ public class AuthRestController {
             if(userService.isUserExist(username) ) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
             }
-            User newUser = userService.createUser(username, password, name, surname, token, "");
+            User newUser = userService.createUser(username, password, name, surname, token, "", campaignApproved);
             final UserDetails userDetails = userDetailsService.loadUserByUsername(newUser.getUsername());
             final String jwt = jwtUtil.generateToken(userDetails);
             return ResponseEntity.status(HttpStatus.CREATED)

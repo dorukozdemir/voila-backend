@@ -366,11 +366,29 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
+    public User createUser(String username, String password, String name, String surname, String token, String note,
+    boolean campaignApproved) throws UserAlreadyExistException{
+        User user = getUserByUsername(username);
+        if (user != null)
+            throw new UserAlreadyExistException();
+        User newUser = new User(username, passwordEncoder.encode(password), name, surname, token, note, campaignApproved);
+        return userRepository.save(newUser);
+}
+
     public User updateUser(User user, String username, String password, String name, String surname, String token) {
         user.setUsername(username);
         user.setName(name);
         user.setSurname(surname);
         user.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(user);
+    }
+
+    public User updateUser(User user, String username, String password, String name, String surname, String token, boolean campaignApproved) {
+        user.setUsername(username);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setCampaignApproved(campaignApproved);
         return userRepository.save(user);
     }
 
@@ -438,5 +456,11 @@ public class UserService {
 
     public int countByCompany(Company c) {
         return userRepository.countByCompany(c);
+    }
+
+    public User switchLocked(User user) {
+        user.setLocked(!user.isLocked());
+        save(user);
+        return user;
     }
 }
