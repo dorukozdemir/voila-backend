@@ -109,7 +109,7 @@ public class AdminRestController {
         UserSearch userSearch = new UserSearch();
         Page<User> users = null;
         if(all != null && !all.trim().equals("")) {
-            users = userService.getAllUsers(start-1, size, all);
+            users = userService.getAllUsers(start-1, size, all, searchCompanyId);
         } else {
             if(name != null && !name.trim().equals("")) {
                 userSearch.setName(name);

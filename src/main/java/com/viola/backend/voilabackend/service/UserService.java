@@ -350,6 +350,31 @@ public class UserService {
         return users;
     }
 
+    /* Search with name and surname concenated and also using companyId */
+    public Page<User> getAllUsers(int start, int size, String all, String companyId) {
+        Pageable pagination = PageRequest.of(start, size, Sort.by("id").descending());
+        Company company = null;
+        if(companyId != null && !companyId.trim().equals("")) {
+            company = companyService.getCompanyById(companyId);
+        }
+        Specification<User> searchSpecification = searchLikeCaseInsensitive("name", all)
+            .or(searchLikeCaseInsensitive("surname", all)
+            .or(searchLike("profileToken", all)
+            .or(searchLikeTwoColumnsCaseInsensitive("name","surname",all ))
+            .or(searchLikeCaseInsensitive("username", all))));
+        Specification<User> specification = null;
+        if (companyId != null && !companyId.trim().equals("") && !companyId.equals("0")) {
+            specification = findByCompany(company).and(searchSpecification);
+        } else if (companyId != null && companyId.equals("0")) {
+            specification = findVoilaCompanies().and(searchSpecification);
+        } else {
+            specification = searchSpecification;
+        }
+
+        Page<User> users = userRepository.findAll(specification, pagination);
+        return users;
+    }
+
     public User createUser(String username, String password, String name, String surname, String token, String note) throws UserAlreadyExistException{
         User user = getUserByUsername(username);
         if (user != null)
@@ -428,6 +453,12 @@ public class UserService {
     private Specification<User> searchLikeCaseInsensitive(String property, String needle) {
         return(root, query, builder) -> {
             return builder.like(builder.lower(root.get(property)), "%" + needle.toLowerCase() + "%");
+        };
+    }
+
+    private Specification<User> searchLikeTwoColumnsCaseInsensitive(String property1, String property2, String needle) {
+        return(root, query, builder) -> {
+            return builder.like(builder.concat(builder.lower(root.get(property1)), builder.concat(" ", builder.lower(root.get(property2)))), "%" + needle.toLowerCase() + "%");
         };
     }
 
