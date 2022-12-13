@@ -338,14 +338,14 @@ public class ProfileRestController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/switchLocked")
-    public ResponseEntity<String> switchLocked(@RequestParam(value = "file") MultipartFile file) {
+    public ResponseEntity<SettingsDto> switchLocked() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
         if(user == null ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         user = userService.switchLocked(user);
-        return ResponseEntity.ok().build();
+        ProfileDto profileDto = new ProfileDto(user);
+        return ResponseEntity.status(HttpStatus.OK).body(profileDto.getSettings());
     }
-
 }
