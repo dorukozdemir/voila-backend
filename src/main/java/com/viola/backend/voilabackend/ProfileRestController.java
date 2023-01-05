@@ -110,6 +110,7 @@ public class ProfileRestController {
         if (profileUpdateRequest.getSocialMediaAccounts() != null) {
             userService.updateSocialMediaAccounts(user, profileUpdateRequest.getSocialMediaAccounts());
         }
+        user = userService.getUserByUsername(user.getUsername());
         if (profileUpdateRequest.getContactInfo() != null && profileUpdateRequest.getContactInfo().length > 0) {
             userService.updateContactInformation(user, profileUpdateRequest.getContactInfo());
         }

@@ -234,7 +234,8 @@ public class UserService {
     }
 
     public void updateCompanyInformation(User user, CompanyInfoDto[] companyInfo) {
-        user.setCompanies(new HashSet<CompanyInfo>());
+        //user.setCompanies(new HashSet<CompanyInfo>());
+        user.getCompanies().clear();
         save(user);
         for(CompanyInfoDto cid : companyInfo) {
             CompanyInfo ci = new CompanyInfo();
@@ -249,7 +250,8 @@ public class UserService {
     }
 
 	public void updateBankInformation(User user, BankAccountInfoDto[] bankAccountInfo) {
-        user.setBankAccounts(new HashSet<BankAccountInfo>());
+        //user.setBankAccounts(new HashSet<BankAccountInfo>());
+        user.getBankAccounts().clear();
         save(user);
         for(BankAccountInfoDto bad : bankAccountInfo) {
             BankAccountInfo bi = new BankAccountInfo();
