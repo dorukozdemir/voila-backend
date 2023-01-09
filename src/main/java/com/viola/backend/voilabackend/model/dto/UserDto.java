@@ -8,6 +8,7 @@ public class UserDto {
     private String bio;
     private String profileToken;
     private int profileVisits;
+    private int profileSaves;
     private String profilePhoto;
     private boolean hasCompanyPhoto = false;
     private String companyPhotoUrl;
@@ -33,6 +34,7 @@ public class UserDto {
         this.bio = user.getBio();
         this.profileToken = user.getProfileToken();
         this.profileVisits = user.getProfileVisits();
+        this.profileSaves = user.getProfileSaves();
         this.profilePhoto = user.getProfilePhoto();
         this.companyLogoUrl = user.getCompanyLogoUrl();
         this.photoUploadGranted = user.isPhotoUploadGranted();
@@ -71,6 +73,14 @@ public class UserDto {
 
     public void setProfileVisits(int profileVisits) {
         this.profileVisits = profileVisits;
+    }
+
+    public int getProfileSaves() {
+        return profileSaves;
+    }
+
+    public void setProfileSaves(int profileSaves) {
+        this.profileSaves = profileSaves;
     }
 
     public String getProfilePhoto() {

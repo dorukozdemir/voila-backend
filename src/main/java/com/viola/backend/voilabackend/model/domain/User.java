@@ -59,6 +59,7 @@ public class User implements UserDetails{
     private String iban;
     private String ibanBank;
     private int profileVisits = 0;
+    private int profileSaves = 0;
     private String profilePhoto = "/CardvisitUI/Dash/media/avatars/blank.png";
     private String note;
     private Company company;
@@ -148,6 +149,7 @@ public class User implements UserDetails{
         this.password = password;
     }
 
+    @Column(name="name_test")
     public String getName() {
         return name;
     }
@@ -454,6 +456,15 @@ public class User implements UserDetails{
         this.profileVisits = profileVisits;
     }
 
+    @Column(name="save_button_clicks")
+    public int getProfileSaves() {
+        return profileSaves;
+    }
+
+    public void setProfileSaves(int profileSaves) {
+        this.profileSaves = profileSaves;
+    }
+
     public String getProfilePhoto() {
         return profilePhoto;
     }
@@ -576,5 +587,5 @@ public class User implements UserDetails{
     @Override
     public String toString() {
         return this.getFullName();
-    }
+    }    
 }
