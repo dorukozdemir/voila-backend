@@ -14,11 +14,14 @@ import com.viola.backend.voilabackend.model.domain.User;
 import com.viola.backend.voilabackend.model.domain.UserStatus;
 import com.viola.backend.voilabackend.model.dto.ConnectDto;
 import com.viola.backend.voilabackend.model.dto.ProfileDto;
+import com.viola.backend.voilabackend.model.dto.SettingsDto;
 import com.viola.backend.voilabackend.model.dto.UserDto;
 import com.viola.backend.voilabackend.model.web.ConnectRequest;
 import com.viola.backend.voilabackend.model.web.ProfileRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageRequest;
 import com.viola.backend.voilabackend.model.web.UploadImageResponse;
+import com.viola.backend.voilabackend.model.web.UserRequest;
+import com.viola.backend.voilabackend.security.VoilaPasswordEncoder;
 import com.viola.backend.voilabackend.service.AmazonClient;
 import com.viola.backend.voilabackend.service.ConnectService;
 import com.viola.backend.voilabackend.service.ConnectionService;
@@ -35,7 +38,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,6 +65,8 @@ public class ProfileRestController {
 
     private static HttpURLConnection con;
 
+    private final VoilaPasswordEncoder passwordEncoder = new VoilaPasswordEncoder();
+    
     @GetMapping("/profile/token")
     public ResponseEntity<String> profileToken() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -348,5 +352,34 @@ public class ProfileRestController {
         user = userService.switchLocked(user);
         ProfileDto profileDto = new ProfileDto(user);
         return ResponseEntity.status(HttpStatus.OK).body(profileDto.getSettings());
+    }
+
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/profile/reset")
+    public ResponseEntity<String> resetProfile(@RequestBody UserRequest userRequest) throws Exception{
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) auth.getPrincipal();
+        if(user == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if(!user.getPassword().equals(passwordEncoder.encode(userRequest.getPassword()))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Delete connections
+        List<Connection> connections = connectionService.getUserConnections(user);
+        for(Connection c : connections) {
+            connectionService.deleteConnection(c);
+        }
+        
+        // Delete contacts
+        List<Connect> connects = connectService.getUserConnections(user);
+        for(Connect c : connects) {
+            connectService.deleteConnect(c);
+        }
+       
+        userService.deleteUser(user);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
