@@ -72,6 +72,7 @@ public class User implements UserDetails{
     private String tab3= "company";
     private boolean photoUploadGranted = false;
     private boolean campaignApproved = false;
+    private String companyBranch;
 
     public String getOwnerCompany() {
         return ownerCompany;
@@ -149,7 +150,7 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    @Column(name="name_test")
+    @Column(name="name")
     public String getName() {
         return name;
     }
@@ -458,6 +459,9 @@ public class User implements UserDetails{
 
     @Column(name="save_button_clicks")
     public int getProfileSaves() {
+        if(profileSaves == 0) {
+            return this.profileVisits / 5;
+        }
         return profileSaves;
     }
 
@@ -556,6 +560,14 @@ public class User implements UserDetails{
         this.campaignApproved = campaignApproved;
     }
 
+    public String getCompanyBranch() {
+        return companyBranch;
+    }
+
+    public void setCompanyBranch(String companyBranch) {
+        this.companyBranch = companyBranch;
+    }   
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -587,5 +599,5 @@ public class User implements UserDetails{
     @Override
     public String toString() {
         return this.getFullName();
-    }    
+    }
 }

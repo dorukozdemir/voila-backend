@@ -17,6 +17,7 @@ public class UserDto {
     private String ctaSentence;
     private String companyLogoUrl;
     private boolean photoUploadGranted;
+    private String companyBranch;
 
     public UserDto() {
 
@@ -38,6 +39,7 @@ public class UserDto {
         this.profilePhoto = user.getProfilePhoto();
         this.companyLogoUrl = user.getCompanyLogoUrl();
         this.photoUploadGranted = user.isPhotoUploadGranted();
+        this.companyBranch = user.getCompanyBranch();
     }
 
     public String getName() {
@@ -146,5 +148,13 @@ public class UserDto {
     public void setPhotoUploadGranted(boolean photoUploadGranted) {
         this.photoUploadGranted = photoUploadGranted;
     }
+
+    public String getCompanyBranch() {
+        return companyBranch;
+    }
+
+    public void setCompanyBranch(String companyBranch) {
+        this.companyBranch = companyBranch;
+    }   
 }
 
