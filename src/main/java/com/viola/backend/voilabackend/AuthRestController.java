@@ -54,7 +54,7 @@ public class AuthRestController {
     @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserRequest authRequest) {
-        User user = userService.getUserByUsername(authRequest.getUsername());
+        User user = userService.getUserByUsername(authRequest.getUsername().trim());
         String token = authRequest.getToken();
         if (user == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"username\": false}");
@@ -69,7 +69,7 @@ public class AuthRestController {
                 userService.updateProfileToken(user, token);
             }
         }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername().trim());
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok()
@@ -79,8 +79,8 @@ public class AuthRestController {
     @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserRequest authRequest) throws Exception {
-        String username = authRequest.getUsername();
-        String password = authRequest.getPassword();
+        String username = authRequest.getUsername().trim();
+        String password = authRequest.getPassword().trim();
         if (userService.isUserExist(username)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"username\": false}");
         } else {
@@ -95,7 +95,7 @@ public class AuthRestController {
     @CrossOrigin(origins = "*")
     @PostMapping("/forgot")
     public ResponseEntity<String> forgot(@RequestBody UserRequest authRequest) throws Exception {
-        String username = authRequest.getUsername();
+        String username = authRequest.getUsername().trim();
         if (userService.isUserExist(username)) {
             User user = userService.getUserByUsername(username);
             userService.createResetPasswordToken(user);
