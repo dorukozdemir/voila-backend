@@ -15,9 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.xml.bind.DatatypeConverter;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 @Service
 public class AmazonClient {
@@ -45,11 +49,23 @@ public class AmazonClient {
         .build();
     }
     
-    public String uploadFile(MultipartFile multipartFile, String url) {
+    public String uploadMultipartFile(MultipartFile multipartFile, String url) {
         String fileUrl = "";
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile, url);
+            fileUrl = endpointUrl + "/" +  fileName;
+            uploadFileTos3bucket(fileName, file);
+            file.delete();
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return fileUrl;
+    }
+
+    public String uploadFile(File file, String fileName) {
+        String fileUrl = "";
+        try {
             fileUrl = endpointUrl + "/" +  fileName;
             uploadFileTos3bucket(fileName, file);
             file.delete();
@@ -109,4 +125,29 @@ public class AmazonClient {
         s3client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
         return "Successfully deleted";
     }
+
+    public static File getImageFromBase64(String base64String, String fileName) {
+        String[] strings = base64String.split(",");
+        String extension;
+        switch (strings[0]) { // check image's extension
+        case "data:image/jpeg;base64":
+          extension = "jpeg";
+          break;
+        case "data:image/png;base64":
+          extension = "png";
+          break;
+        default: // should write cases for more images types
+          extension = "jpg";
+          break;
+        }
+        // convert base64 string to binary data
+        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+        File file = new File(fileName + extension);
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+          outputStream.write(data);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        return file;
+      }
 }

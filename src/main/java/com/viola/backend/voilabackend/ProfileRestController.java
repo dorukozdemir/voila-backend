@@ -1,12 +1,15 @@
 package com.viola.backend.voilabackend;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
 
 import com.viola.backend.voilabackend.model.domain.Connect;
 import com.viola.backend.voilabackend.model.domain.Connection;
@@ -42,6 +45,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import com.google.gson.Gson;
 
@@ -275,8 +282,43 @@ public class ProfileRestController {
     public ResponseEntity<String> uploadPhotoS3(@RequestParam(value = "file") MultipartFile file) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
-        String fileName =  this.amazonClient.uploadFile(file, user.getProfileToken());
+        String fileName =  this.amazonClient.uploadMultipartFile(file, user.getProfileToken());
         userService.updatePhoto(user, fileName);
+        return ResponseEntity.ok().build();
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/uploadBase64PhotoS3")
+    public ResponseEntity<String> uploadBase64PhotoS3(@RequestBody UploadImageRequest uploadImageRequest) {
+        String fileName = "";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+        String[] strings = uploadImageRequest.getImageValue().split(",");
+        String extension;
+        switch (strings[0].trim()) { // check image's extension
+        case "data:image/jpeg;base64":
+          extension = "jpeg";
+          break;
+        case "data:image/png;base64":
+          extension = "png";
+          break;
+        default: // should write cases for more images types
+          extension = "jpg";
+          break;
+        }
+        // convert base64 string to binary data
+        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+        fileName = user.getProfileToken() + "." + extension;
+        File file = new File(fileName);
+        try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+          outputStream.write(data);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
+
+        String fileUrl = this.amazonClient.uploadFile(file, fileName);
+        userService.updatePhoto(user, fileUrl);
         return ResponseEntity.ok().build();
     }
 

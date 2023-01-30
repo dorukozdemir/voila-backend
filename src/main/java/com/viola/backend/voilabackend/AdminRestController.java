@@ -303,7 +303,7 @@ public class AdminRestController {
             Company company = companyService.createCompany(name, companyEmail, phone, authorityEmail, authorityName,
                     admin);
             if (company != null) {
-                String fileName =  this.amazonClient.uploadFile(file, company.getId().toString());
+                String fileName =  this.amazonClient.uploadMultipartFile(file, company.getId().toString());
                 companyService.updateLogo(company, fileName);
                 return ResponseEntity.ok().build();
             } else {
@@ -458,7 +458,7 @@ public class AdminRestController {
         }
         Url url = urlService.getUrlByToken(token);
         User createdUser = userService.createUser(email, password, name, surname, token, note, locked, photoUploadGranted, url.getCompany());
-        String filename = amazonClient.uploadFile(file, token);
+        String filename = amazonClient.uploadMultipartFile(file, token);
         userService.updatePhoto(createdUser, filename);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -580,7 +580,7 @@ public class AdminRestController {
         } else if (!admin.getRole().equals(AdminRole.SUPER_ADMIN) && !admin.getCompany().getId().equals(id)) {
             ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        String fileName =  this.amazonClient.uploadFile(file, idString);
+        String fileName =  this.amazonClient.uploadMultipartFile(file, idString);
         companyService.updateLogo(company, fileName);
         return ResponseEntity.ok().body(fileName);
     }
@@ -629,7 +629,7 @@ public class AdminRestController {
         } else if (!admin.getRole().equals(AdminRole.SUPER_ADMIN) && !user.getCompany().getId().equals(id)) {
             ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        String fileName =  this.amazonClient.uploadFile(file, token);
+        String fileName =  this.amazonClient.uploadMultipartFile(file, token);
         userService.updatePhoto(user, fileName);
         return ResponseEntity.ok().body(fileName);
     }
