@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -219,7 +218,8 @@ public class UserService {
     }
 
     public void updateContactInformation(User user, ContactInfoDto[] contactInfo) {
-        user.setContactInfo(new HashSet<ContactInfo>());
+        // user.setContactInfo(new HashSet<ContactInfo>());
+        user.getContactInfo().clear();
         save(user);
         for(ContactInfoDto contactInfoDto : contactInfo) {
             ContactInfo ci = new ContactInfo();
@@ -282,7 +282,8 @@ public class UserService {
     }
 
     public void updateLinks(User user, LinkDto[] links) {
-        user.setLinks(new HashSet<Link>());
+        // user.setLinks(new HashSet<Link>());
+        user.getLinks().clear();
         save(user);
         for(LinkDto linkDto : links) {
             Link l = new Link();
