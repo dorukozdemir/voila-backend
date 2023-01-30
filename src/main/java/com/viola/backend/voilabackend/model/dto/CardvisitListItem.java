@@ -8,6 +8,7 @@ public class CardvisitListItem {
     private String company;
     private String email;
     private int profileVisits;
+    private int profileSaves;
     private String profileToken;
     private String status;
 
@@ -17,6 +18,7 @@ public class CardvisitListItem {
         this.company = user.getCompany() != null ? user.getCompany().getName() : "Voila";
         this.email = user.getUsername();
         this.profileVisits = user.getProfileVisits();
+        this.profileSaves = user.getProfileSaves();
         this.profileToken = user.getProfileToken();
         this.status = user.getStatus().toString();
     }
@@ -46,6 +48,13 @@ public class CardvisitListItem {
     public void setProfileVisits(int profileVisits) {
         this.profileVisits = profileVisits;
     }
+    public int getProfileSaves() {
+        return profileSaves;
+    }
+
+    public void setProfileSaves(int profileSaves) {
+        this.profileSaves = profileSaves;
+    }
     public String getProfileToken() {
         return profileToken;
     }
@@ -68,6 +77,4 @@ public class CardvisitListItem {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    
 }
